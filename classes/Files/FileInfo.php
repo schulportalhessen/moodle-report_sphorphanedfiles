@@ -1,0 +1,120 @@
+<?php
+
+namespace report_sphorphanedfiles\Files;
+
+use InvalidArgumentException;
+
+/** This class provides an OOP-representation of the metadata which is
+ *  used within the Moodle system for data referencing.
+ * 
+ */
+class FileInfo
+{
+    private const SERIALIZATION_SEPARATOR = "§";
+
+    private $contextId;
+    private $component;
+    private $filearea;
+    private $itemId;
+    private $filepath;
+    private $filename;
+
+    /** Create a FileInfo instance using either a string representation (-> serialization)
+     *  OR a dictionary containing the relevant information.
+     * 
+     *  @param $data The data (string or dictionary) to be used for instance 
+     *               initialization.
+     * 
+     */
+    public function __construct($data)
+    {
+        if (is_array($data)) {
+            $this->setFromArray($data);
+        } else if (is_string($data)) {
+            $this->setFromString($data);
+        } else {
+            throw new InvalidArgumentException();
+        }
+    }
+
+    public static function isSufficientForConstruction(array $data): bool
+    {
+        return isset($data['filearea'])  &&
+            isset($data['itemId'])    &&
+            isset($data['contextId']) &&
+            isset($data['filepath'])  &&
+            isset($data['filename'])  &&
+            isset($data['component']);
+    }
+
+    public function getContextId()
+    {
+        return $this->contextId;
+    }
+
+    public function getComponent()
+    {
+        return $this->component;
+    }
+
+    public function getFileArea()
+    {
+        return $this->filearea;
+    }
+
+    public function getItemId()
+    {
+        return $this->itemId;
+    }
+
+    public function getFilePath()
+    {
+        return $this->filepath;
+    }
+
+    public function getFileName()
+    {
+        return $this->filename;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'contextId' => $this->getContextId(),
+            'component' => $this->getComponent(),
+            'filearea'  => $this->getFileArea(),
+            'itemId'    => $this->getItemId(),
+            'filepath'  => $this->getFilePath(),
+            'filename'  => $this->getFileName()
+        ];
+    }
+
+    public function toString(): string
+    {
+        return implode(FileInfo::SERIALIZATION_SEPARATOR, $this->toArray());
+    }
+
+    public function setFromString($data)
+    {
+        $informationComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
+
+        $this->setFromArray([
+            'contextId' => $informationComponents[0],
+            'component' => $informationComponents[1],
+            'filearea'  => $informationComponents[2],
+            'itemId'    => $informationComponents[3],
+            'filepath'  => $informationComponents[4],
+            'filename'  => $informationComponents[5]
+        ]);
+    }
+
+    public function setFromArray($data)
+    {
+        $this->contextId = $data['contextId'];
+        $this->component = $data['component'];
+        $this->filearea = $data['filearea'];
+        $this->itemId   = $data['itemId'];
+        $this->filepath = $data['filepath'];
+        $this->filename = $data['filename'];
+    }
+}
