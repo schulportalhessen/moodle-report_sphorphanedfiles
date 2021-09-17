@@ -87,7 +87,7 @@ abstract class Handler
     {
         $dbParams = ['id' => $instance->instance];
 
-        if ($page = $this->apiM->database()->getDbM()->get_record($this->getComponentName(), $dbParams, '*')) {
+        if ($page = $this->getManager()->database()->getDbM()->get_record($this->getComponentName(), $dbParams, '*')) {
             return format_module_intro($this->getComponentName(), $page, $instance->id, false);
         }
 
@@ -164,7 +164,7 @@ abstract class Handler
                 $globalConfig
             );
         } else {
-            return $this->apiM->files()->generateFallbackView(
+            return $this->getManager()->files()->generateFallbackView(
                 $orphanedFile,
                 $globalConfig
             );
