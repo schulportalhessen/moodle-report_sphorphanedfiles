@@ -49,11 +49,17 @@ abstract class Handler
      *  Using reflection, the correct name can be determined automagically if
      *  subclasses use the „standard“ naming convention.
      * 
-     *  Naming convention: Use class names postfixed with „Handler“, e.g. 
-     *                     PageHandler --- automagically --> page
+     *  Naming convention: Use class names postfixed with the name of this base class, .i.e. 
+     *                     Handler. For example:
      * 
-     *  Attention: If performance is important, you might override this generic default
-     *             implementation.
+     *                     In case of subclass PageHandler: PageHandler --- automagically --> page
+     * 
+     *  Attention: **Keep in mind that Reflection is not necessarily slow in PHP!**
+     * 
+     *               ---> https://stackoverflow.com/a/54502334
+     * 
+     *             If you really think performance is an issue in the context of this method,
+     *             you **might** override this generic default implementation.
      * 
      * The component's name matching Moodle requirements.
      *  @return string 
@@ -61,9 +67,12 @@ abstract class Handler
      */
     public function getComponentName(): string
     {
+        // Safety in case of renaming. Always use the exact name of the base class, not any
+        // hard-coded string.
+        $theBaseClassName = (new ReflectionClass(self::class))->getShortName();
         $mySimpleName = (new ReflectionClass($this))->getShortName();
 
-        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, "Handler")));
+        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, $theBaseClassName)));
     }
 
     /**
