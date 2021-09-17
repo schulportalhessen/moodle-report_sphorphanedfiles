@@ -24,6 +24,30 @@ class DataFiles
         $this->dbM = $dbM;
     }
 
+    public function getDatabase()
+    {
+        return $this->dbM;
+    }
+
+    protected function createWhereString($elements)
+    {
+        return array_map(function ($element) {
+            return $element . " = :" . $element;
+        }, $elements);
+    }
+
+    protected function prepareStatement($params)
+    {
+        $where = implode(" AND ", $this->createWhereString(array_keys($params)));
+
+        return "SELECT * FROM {files} WHERE {$where}";
+    }
+
+    protected function performQuery($params)
+    {
+        return $this->getDatabase()->get_records_sql($this->prepareStatement($params), $params);
+    }
+
     /**
      * @param int $userId
      * @param int $contextId
@@ -33,22 +57,14 @@ class DataFiles
      */
     public function getFilesOfUserForComponent(int $userId, int $contextId, string $modName)
     {
-        $wheres = ["userid = :userid", "contextid = :contextid", "component = :component"];
-
         $params['userid'] = $userId;
         $params['contextid'] = $contextId;
         $params['component'] = sprintf('mod_%s', $modName);
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
 
-
- /**
+    /**
      * @param int $userId
      * @param int $contextId
      * @param string $modName
@@ -57,21 +73,13 @@ class DataFiles
      */
     public function getFilesOfUserForComponentIntro(int $userId, int $contextId, string $modName)
     {
-        $wheres = ["userid = :userid", "contextid = :contextid", "component = :component",  "filearea = :filearea"];
-
         $params['userid'] = $userId;
         $params['contextid'] = $contextId;
         $params['component'] = sprintf('mod_%s', $modName);
         $params['filearea'] = 'intro';
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
-
 
     /**
      * @param int $userId
@@ -82,20 +90,13 @@ class DataFiles
      */
     public function getFilesForComponent(int $contextId, string $modName)
     {
-        $wheres = ["contextid = :contextid", "component = :component"];
-
         $params['contextid'] = $contextId;
         $params['component'] = sprintf('mod_%s', $modName);
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
 
-        /**
+    /**
      * @param int $userId
      * @param int $contextId
      * @param string $modName
@@ -104,18 +105,11 @@ class DataFiles
      */
     public function getFilesForComponentIntro(int $contextId, string $modName)
     {
-        $wheres = ["contextid = :contextid", "component = :component", "filearea = :filearea"];
-
         $params['contextid'] = $contextId;
         $params['component'] = sprintf('mod_%s', $modName);
         $params['filearea'] = 'intro';
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
 
     /**
@@ -126,24 +120,12 @@ class DataFiles
      */
     public function getFilesForSectionSummary(int $itemId, int $courseContextId)
     {
-        $wheres = [
-            "itemid = :itemid",
-            "component = :component",
-            "filearea = :filearea",
-            "contextid = :contextid"
-        ];
-
         $params['itemid'] = $itemId;
         $params['component'] = 'course';
         $params['filearea'] = 'section';
         $params['contextid'] = $courseContextId;
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
 
     /**
@@ -155,25 +137,12 @@ class DataFiles
      */
     public function getFilesOfUserForSectionSummary(int $userId, int $courseContextId, int $itemId)
     {
-        $wheres = [
-            "itemid = :itemid",
-            "component = :component",
-            "filearea = :filearea",
-            "userid = :userid",
-            "contextid = :contextid"
-        ];
-
         $params['itemid'] = $itemId;
         $params['component'] = 'course';
         $params['filearea'] = 'section';
         $params['userid'] = $userId;
         $params['contextid'] = $courseContextId;
 
-        $whereSql = implode(" AND ", $wheres);
-
-        $sql = "SELECT * FROM {files} WHERE {$whereSql}";
-
-        // Fetch the stats data.
-        return $this->dbM->get_records_sql($sql, $params);
+        return $this->performQuery($params);
     }
 }
