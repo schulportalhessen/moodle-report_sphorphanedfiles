@@ -71,10 +71,10 @@ class IntroHandler extends Handler
      */
     public function canHandle(string $component): bool
     {
-        if (in_array($component, static::$handlerActivities))
+        if (in_array($component, self::$handlerActivities))
             return true;
 
-        if (in_array($component, static::$handlerMaterials))
+        if (in_array($component, self::$handlerMaterials))
             return true;
 
         return false;

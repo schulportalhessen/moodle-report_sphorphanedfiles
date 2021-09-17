@@ -69,8 +69,8 @@ class Factory
 
     public function getHandler(): array
     {
-        if (static::$handlers === null)
-            static::$handlers = [
+        if (self::$handlers === null)
+            self::$handlers = [
                 $this->labelHandler(),
                 $this->pageHandler(),
                 $this->resourceHandler(),
