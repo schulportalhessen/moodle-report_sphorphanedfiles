@@ -19,44 +19,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 class Manager
 {
-    private static $descriptionHandlerActivities = [
-        'assign',
-        'bigbluebuttonbn',
-        'checklist',
-        'choice',
-        'customcert',
-        'data',
-        'lti',
-        'ratingallocate',
-        'feedback',
-        'forum',
-        'geogebra',
-        'glossary',
-        'h5pactivity',
-        'hotpot',
-        'hvp',
-        'lesson',
-        'mootyper',
-        'mootyper',
-        'pdfannotator',
-        'quiz',
-        'realtimequiz',
-        'scorm',
-        'survey',
-        'wiki',
-        'workshop',
-    ];
-
-    private static $descriptionHandlerMaterials = [
-        'book',
-        'folder',
-        'imscp',
-        'lightboxgallery',
-        'url',
-        'edusharing',
-        'unilabel'
-    ];
-
     /**
      * @var moodle_database
      */
@@ -110,33 +72,21 @@ class Manager
 
     public function hasHandlerFor($component): bool
     {
-        if (in_array($component, ["label", "page", "resource"]))
-            return true;
-
-        if (in_array($component, self::$descriptionHandlerActivities))
-            return true;
-
-        if (in_array($component, self::$descriptionHandlerMaterials))
-            return true;
+        foreach ($this->handler()->getHandler() as $handler)
+            if ($handler->canHandle($component)) {
+                return true;
+            }
 
         return false;
     }
 
     public function getHandlerFor($component): Handler
     {
-        switch ($component) {
-            case "label":
-                return $this->handler()->labelHandler();
-            case "page":
-                return $this->handler()->pageHandler();
-            case "resource":
-                return $this->handler()->resourceHandler();
-            default:
-                if ($this->hasHandlerFor($component)) {
-                    return $this->handler()->introHandler();
-                } else {
-                    throw new InvalidArgumentException();
-                }
-        }
+        foreach ($this->handler()->getHandler() as $handler)
+            if ($handler->canHandle($component)) {
+                return $handler;
+            }
+
+        throw new InvalidArgumentException();
     }
 }

@@ -75,6 +75,11 @@ abstract class Handler
         return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, $theBaseClassName)));
     }
 
+    public function canHandle(string $type): bool
+    {
+        return $this->getComponentName() === $type;
+    }
+
     /**
      * Retrieves, i.e. extracts, the intro information of the given instance.
      * 

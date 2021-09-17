@@ -15,6 +15,44 @@ use report_sphorphanedfiles\Files\FileInfo;
  */
 class IntroHandler extends Handler
 {
+    private static $handlerActivities = [
+        'assign',
+        'bigbluebuttonbn',
+        'checklist',
+        'choice',
+        'customcert',
+        'data',
+        'lti',
+        'ratingallocate',
+        'feedback',
+        'forum',
+        'geogebra',
+        'glossary',
+        'h5pactivity',
+        'hotpot',
+        'hvp',
+        'lesson',
+        'mootyper',
+        'mootyper',
+        'pdfannotator',
+        'quiz',
+        'realtimequiz',
+        'scorm',
+        'survey',
+        'wiki',
+        'workshop',
+    ];
+
+    private static $handlerMaterials = [
+        'book',
+        'folder',
+        'imscp',
+        'lightboxgallery',
+        'url',
+        'edusharing',
+        'unilabel'
+    ];
+
     /**
      * @var string
      */
@@ -28,6 +66,19 @@ class IntroHandler extends Handler
         return $this->componentName;
     }
 
+    /**
+     * @override
+     */
+    public function canHandle(string $component): bool
+    {
+        if (in_array($component, static::$handlerActivities))
+            return true;
+
+        if (in_array($component, static::$handlerMaterials))
+            return true;
+
+        return false;
+    }
     /**
      * @param array $viewOrphanedFiles
      * @param int $contextId

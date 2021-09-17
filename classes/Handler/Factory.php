@@ -10,6 +10,8 @@ use report_sphorphanedfiles\Manager;
  */
 class Factory
 {
+    private static $handlers = null;
+
     /**
      * @var Manager
      */
@@ -63,5 +65,19 @@ class Factory
     public function resourceHandler(): ResourceHandler
     {
         return new ResourceHandler($this->apiM);
+    }
+
+    public function getHandler(): array
+    {
+        if (static::$handlers === null)
+            static::$handlers = [
+                $this->labelHandler(),
+                $this->pageHandler(),
+                $this->resourceHandler(),
+                $this->sectionSummaryHandler(),
+                $this->introHandler()
+            ];
+
+        return static::$handlers;
     }
 }
