@@ -40,17 +40,9 @@ Der Checkout mit Wechsel auf den Entwickler-Branch erfolgt demnach durch
 
 ## Kombination des Teilprojekts ins Hauptprojekt
 
-Das Teilprojekt muss nach dem Checkout in das Hauptprojekt **kopiert** werden.
-Dabei werden die GIT-Informationen ebenfalls transferiert, sodass die Arbeit mit
-dem Repository des Teilprojekts innerhalb der Verzeichnisstruktur des Haupt-
-Repositories erfolgen kann.
+Die Integration ins Hauptprojekt erfolgt mittels Einbindung eines entsprechenden
+Docker-Volumes. Genauere Information sind in der Datei
 
-Die korrekte Position des Moduls, d.h. des ausgecheckten Verzeichnisses, ist
+  Docker.md
 
-  moodle-build/vhost-verwaiste/moodle/httpdocs/report/sphorphanedfiles
-
-WICHTIG: Zu beachten ist die **Namensänderung des Verzeichnisses** im Vergleich
-         zu der aus dem Repository ausgecheckten Version.
-
-         Das System ist nur dann lauffähig, wenn die Benennung korrekt
-         eingehalten wird.
+zu finden.
