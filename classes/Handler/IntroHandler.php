@@ -15,7 +15,7 @@ use report_sphorphanedfiles\Files\FileInfo;
  */
 class IntroHandler extends Handler
 {
-    private static $handlerActivities = [
+    private const handlerActivities = [
         'assign',
         'bigbluebuttonbn',
         'checklist',
@@ -43,7 +43,7 @@ class IntroHandler extends Handler
         'workshop',
     ];
 
-    private static $handlerMaterials = [
+    private const handlerMaterials = [
         'book',
         'folder',
         'imscp',
@@ -71,14 +71,15 @@ class IntroHandler extends Handler
      */
     public function canHandle(string $component): bool
     {
-        if (in_array($component, self::$handlerActivities))
+        if (in_array($component, self::handlerActivities))
             return true;
 
-        if (in_array($component, self::$handlerMaterials))
+        if (in_array($component, self::handlerMaterials))
             return true;
 
         return false;
     }
+
     /**
      * @param array $viewOrphanedFiles
      * @param int $contextId
