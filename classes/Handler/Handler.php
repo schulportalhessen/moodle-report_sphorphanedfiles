@@ -20,6 +20,8 @@ use report_sphorphanedfiles\Manager;
  */
 abstract class Handler
 {
+    private const URLPattern = "/mod/%s/view.php?id=%s";
+
     /**
      * @var Manager
      */
@@ -186,7 +188,7 @@ abstract class Handler
 
     public function getModuleURLForInstance($instance)
     {
-        return new moodle_url('/mod/' . $instance->modname . '/view.php?id=' . $instance->id);
+        return new moodle_url(sprintf(self::URLPattern,$instance->modname,$instance->id));
     }
 
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $globalCfg, $instance, $iconHtml): array;
