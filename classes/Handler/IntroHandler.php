@@ -33,7 +33,6 @@ class IntroHandler extends Handler
         'hvp',
         'lesson',
         'mootyper',
-        'mootyper',
         'pdfannotator',
         'quiz',
         'realtimequiz',
