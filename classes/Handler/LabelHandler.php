@@ -29,7 +29,7 @@ class LabelHandler extends Handler
         // FIXME: Refactor
 
         foreach ($orphanedFiles as $file) {
-            $fileInfo = [
+            $formDelete = [
                 'filearea' => $file->filearea,
                 'itemId' => $file->itemid,
                 'contextId' => $contextId,
@@ -38,11 +38,10 @@ class LabelHandler extends Handler
                 'component' => $file->component
             ];
 
-            $preview = $this->getPreviewForFile(new FileInfo($fileInfo), $globalCfg);
+            $preview = $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg);
 
-            $filename = $this->getFileName(new FileInfo($fileInfo), $globalCfg);
+            $filename = $this->getFileName(new FileInfo($formDelete), $globalCfg);
 
-            $formDelete = $fileInfo;
             $viewOrphanedFiles[] = [
                 'modName' => $modName,
                 'instanceId' => $instance->id,
