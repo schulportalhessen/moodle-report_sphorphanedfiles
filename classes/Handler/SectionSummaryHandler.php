@@ -52,7 +52,7 @@ class SectionSummaryHandler extends Handler
         if (!empty($orphanedFiles)) {
             foreach ($orphanedFiles ?? [] as $file) {
                 if ($file->filename !== '.') {
-                    $fileInfo = [
+                    $formDelete = [
                         'filearea' => $file->filearea,
                         'itemId' => $file->itemid,
                         'contextId' => $file->contextid,
@@ -61,7 +61,7 @@ class SectionSummaryHandler extends Handler
                         'component' => $file->component
                     ];
 
-                    $orphanedFile = $this->apiM->files()->getFile($fileInfo);
+                    $orphanedFile = $this->apiM->files()->getFile($formDelete);
 
                     // prepare preview if image
                     if ($orphanedFile && $orphanedFile->is_valid_image()) {
@@ -76,14 +76,11 @@ class SectionSummaryHandler extends Handler
                         );
                     }
 
-                    $filename = $this->getFileName(new FileInfo($fileInfo), $globalCfg);
-
-                    $formDelete = $fileInfo;
                     $viewOrphanedFiles[] = [
                         'modName' => 'course',
                         'instanceId' => 'todo',
                         'contextId' => $courseContextId,
-                        'filename' => $filename,
+                        'filename' => $this->getFileName(new FileInfo($formDelete), $globalCfg),
                         'preview' => $preview,
                         'formDelete' => $formDelete,
                         'content' => $sectionHtml,
@@ -93,6 +90,7 @@ class SectionSummaryHandler extends Handler
                 }
             }
         }
+        
         return $viewOrphanedFiles;
     }
 }

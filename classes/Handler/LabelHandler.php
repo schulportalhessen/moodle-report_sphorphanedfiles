@@ -38,22 +38,19 @@ class LabelHandler extends Handler
                 'component' => $file->component
             ];
 
-            $preview = $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg);
-
-            $filename = $this->getFileName(new FileInfo($formDelete), $globalCfg);
-
             $viewOrphanedFiles[] = [
                 'modName' => $modName,
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
-                'filename' => $filename,
-                'preview' => $preview,
+                'filename' => $this->getFileName(new FileInfo($formDelete), $globalCfg),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg),
                 'formDelete' => $formDelete,
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
             ];
         }
+        
         return $viewOrphanedFiles;
     }
 }

@@ -53,14 +53,12 @@ class ChoiceHandler extends Handler
                 'component' => $file->component
             ];
 
-            $preview = $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg);
-
             $viewOrphanedFiles[] = [
                 'modName' => $modName,
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $file->filename,
-                'preview' => $preview,
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg),
                 'formDelete' => $formDelete,
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
