@@ -41,7 +41,7 @@ class PageHandler extends Handler
         // FIXME: Refactor
 
         foreach ($orphanedFiles as $file) {
-            $formDelete = (new FileInfo())->setFromFileWithContext($file,$contextId);
+            $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
             $orphanedFile = $this->apiM->files()->getFileUsingFileInfo($formDelete);
 
@@ -74,7 +74,7 @@ class PageHandler extends Handler
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
             ];
         }
-        
+
         return $viewOrphanedFiles;
     }
 }

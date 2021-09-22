@@ -82,7 +82,7 @@ class SectionSummaryHandler extends Handler
                 }
             }
         }
-        
+
         return $viewOrphanedFiles;
     }
 }

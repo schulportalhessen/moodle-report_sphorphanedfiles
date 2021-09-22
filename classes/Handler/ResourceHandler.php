@@ -63,7 +63,7 @@ class ResourceHandler extends Handler
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
 
         foreach ($orphanedFiles as $file) {
-            $formDelete = (new FileInfo())->setFromFileWithContext($file,$contextId);
+            $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
             $viewOrphanedFiles[] = [
                 'modName' => $modName,

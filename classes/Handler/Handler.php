@@ -167,7 +167,6 @@ abstract class Handler
 
         if ($orphanedFile && $orphanedFile->is_valid_image()) {
             return $this->getManager()->files()->generateViewFile($orphanedFile);
-        
         } else {
             return $this->getManager()->files()->generateFallbackView($orphanedFile);
         }
@@ -176,12 +175,13 @@ abstract class Handler
     public function getFileName(FileInfo $fileInfo)
     {
         return $this->getManager()->files()->generateFallbackView(
-            $this->getManager()->files()->getFileUsingFileInfo($fileInfo));
+            $this->getManager()->files()->getFileUsingFileInfo($fileInfo)
+        );
     }
 
     public function getModuleURLForInstance($instance)
     {
-        return new moodle_url(sprintf(self::URLPattern,$instance->modname,$instance->id));
+        return new moodle_url(sprintf(self::URLPattern, $instance->modname, $instance->id));
     }
 
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $globalCfg, $instance, $iconHtml): array;
