@@ -58,7 +58,7 @@ class ChoiceHandler extends Handler
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $file->filename,
-                'preview' => $this->getPreviewForFile(new FileInfo($formDelete), $globalCfg),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'formDelete' => $formDelete,
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,

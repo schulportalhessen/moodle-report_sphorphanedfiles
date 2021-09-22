@@ -3,8 +3,8 @@
 namespace report_sphorphanedfiles\Files;
 
 use file_storage;
-use stdClass;
 use stored_file;
+use moodle_url;
 
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\HTML;
@@ -14,6 +14,7 @@ use report_sphorphanedfiles\HTML;
  */
 class Files
 {
+    private const DIRECTORY_SEPARATOR = "/";
     /**
      * @var file_storage
      */
@@ -60,65 +61,54 @@ class Files
 
     protected function createPathForFileWithItem(stored_file $storedFile)
     {
-        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
-            DIRECTORY_SEPARATOR . $storedFile->get_component() .
-            DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() .
-            DIRECTORY_SEPARATOR . $storedFile->get_filename();
+        return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filename();
     }
 
     protected function createPathForFile(stored_file $storedFile)
     {
-        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
-            DIRECTORY_SEPARATOR . $storedFile->get_component() .
-            DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
+        return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
     }
 
-    protected function createURLForFile(stored_file $storedFile, $globalCfg)
+    protected function createURLForFile(stored_file $storedFile)
     {
-        return file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $this->createPathForFile($storedFile),
-            false
-        );
+        return new moodle_url('/pluginfile.php' . $this->createPathForFile($storedFile));
     }
 
-    protected function createURLForFileWithItem(stored_file $storedFile, $globalCfg)
+    protected function createURLForFileWithItem(stored_file $storedFile)
     {
-        return file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $this->createPathForFileWithItem($storedFile),
-            false
-        );
+        return new moodle_url('/pluginfile.php' . $this->createPathForFileWithItem($storedFile));
     }
 
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return string
      */
-    public function generateViewFile(stored_file $storedFile, $globalCfg)
+    public function generateViewFile(stored_file $storedFile)
     {
-        return HTML::createImage($this->createURLForFile($storedFile, $globalCfg));
+        return HTML::createImage($this->createURLForFile($storedFile));
     }
 
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return string
      */
-    public function generateViewFileForWithItemId(stored_file $storedFile, $globalCfg)
+    public function generateViewFileForWithItemId(stored_file $storedFile)
     {
-        return HTML::createImage($this->createURLForFileWithItem($storedFile, $globalCfg));
+        return HTML::createImage($this->createURLForFileWithItem($storedFile));
     }
 
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return string
      */
-    public function generateFallbackView(stored_file $storedFile, $globalCfg)
+    public function generateFallbackView(stored_file $storedFile)
     {
-        return HTML::createLinkInNewTab($this->createURLForFile($storedFile, $globalCfg), $storedFile->get_filename());
+        return HTML::createLinkInNewTab($this->createURLForFile($storedFile), $storedFile->get_filename());
     }
 
     public function deleteFileByUserInCourse(Security $security, FileInfo $fileInfo, $user, $course): bool

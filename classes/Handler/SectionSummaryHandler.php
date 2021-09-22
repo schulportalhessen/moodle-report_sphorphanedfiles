@@ -80,7 +80,7 @@ class SectionSummaryHandler extends Handler
                         'modName' => 'course',
                         'instanceId' => 'todo',
                         'contextId' => $courseContextId,
-                        'filename' => $this->getFileName(new FileInfo($formDelete), $globalCfg),
+                        'filename' => $this->getFileName(new FileInfo($formDelete)),
                         'preview' => $preview,
                         'formDelete' => $formDelete,
                         'content' => $sectionHtml,

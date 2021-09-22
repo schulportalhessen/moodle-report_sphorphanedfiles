@@ -161,29 +161,22 @@ abstract class Handler
         );
     }
 
-    public function getPreviewForFile(FileInfo $fileInfo, $globalConfig)
+    public function getPreviewForFile(FileInfo $fileInfo)
     {
         $orphanedFile = $this->getManager()->files()->getFileUsingFileInfo($fileInfo);
 
         if ($orphanedFile && $orphanedFile->is_valid_image()) {
-            return $this->getManager()->files()->generateViewFile(
-                $orphanedFile,
-                $globalConfig
-            );
+            return $this->getManager()->files()->generateViewFile($orphanedFile);
+        
         } else {
-            return $this->getManager()->files()->generateFallbackView(
-                $orphanedFile,
-                $globalConfig
-            );
+            return $this->getManager()->files()->generateFallbackView($orphanedFile);
         }
     }
 
-    public function getFileName(FileInfo $fileInfo, $globalConfig)
+    public function getFileName(FileInfo $fileInfo)
     {
         return $this->getManager()->files()->generateFallbackView(
-            $this->getManager()->files()->getFileUsingFileInfo($fileInfo),
-            $globalConfig
-        );
+            $this->getManager()->files()->getFileUsingFileInfo($fileInfo));
     }
 
     public function getModuleURLForInstance($instance)

@@ -72,7 +72,7 @@ class PageHandler extends Handler
                 'modurl' => $this->getModuleURLForInstance($instance),
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
-                'filename' => $this->getFileName(new FileInfo($formDelete), $globalCfg),
+                'filename' => $this->getFileName(new FileInfo($formDelete)),
                 'preview' => $preview,
                 'formDelete' => $formDelete,
                 'content' => $htmlContent,
