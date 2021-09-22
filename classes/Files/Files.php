@@ -3,7 +3,6 @@
 namespace report_sphorphanedfiles\Files;
 
 use file_storage;
-use html_writer;
 use stdClass;
 use stored_file;
 
@@ -61,17 +60,35 @@ class Files
 
     protected function createPathForFileWithItem(stored_file $storedFile)
     {
-        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() . 
-               DIRECTORY_SEPARATOR . $storedFile->get_component() . 
-               DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() . 
-               DIRECTORY_SEPARATOR . $storedFile->get_filename();
+        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() .
+            DIRECTORY_SEPARATOR . $storedFile->get_filename();
     }
 
     protected function createPathForFile(stored_file $storedFile)
     {
-        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() . 
-               DIRECTORY_SEPARATOR . $storedFile->get_component() . 
-               DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
+        return DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
+    }
+
+    protected function createURLForFile(stored_file $storedFile, $globalCfg)
+    {
+        return file_encode_url(
+            $globalCfg->wwwroot . '/pluginfile.php',
+            $this->createPathForFile($storedFile),
+            false
+        );
+    }
+
+    protected function createURLForFileWithItem(stored_file $storedFile, $globalCfg)
+    {
+        return file_encode_url(
+            $globalCfg->wwwroot . '/pluginfile.php',
+            $this->createPathForFileWithItem($storedFile),
+            false
+        );
     }
 
     /**
@@ -81,15 +98,7 @@ class Files
      */
     public function generateViewFile(stored_file $storedFile, $globalCfg)
     {
-        $imagepath = $this->createPathForFile($storedFile);
-
-        $imageUrl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $imagepath,
-            false
-        );
-
-        return HTML::createImage($imageUrl);
+        return HTML::createImage($this->createURLForFile($storedFile, $globalCfg));
     }
 
     /**
@@ -99,15 +108,7 @@ class Files
      */
     public function generateViewFileForWithItemId(stored_file $storedFile, $globalCfg)
     {
-        $imagePath = $this->createPathForFileWithItem($storedFile);
-
-        $imageUrl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $imagePath,
-            false
-        );
-
-        return HTML::createImage($imageUrl);
+        return HTML::createImage($this->createURLForFileWithItem($storedFile, $globalCfg));
     }
 
     /**
@@ -117,15 +118,7 @@ class Files
      */
     public function generateFallbackView(stored_file $storedFile, $globalCfg)
     {
-        $path = $this->createPathForFile($storedFile);
-
-        $pathUrl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $path,
-            false
-        );
-
-        return HTML::createLinkInNewTab($pathUrl, $storedFile->get_filename());
+        return HTML::createLinkInNewTab($this->createURLForFile($storedFile, $globalCfg), $storedFile->get_filename());
     }
 
     public function deleteFileByUserInCourse(Security $security, FileInfo $fileInfo, $user, $course): bool
