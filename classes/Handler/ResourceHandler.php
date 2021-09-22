@@ -16,6 +16,24 @@ use report_sphorphanedfiles\Files\FileInfo;
 class ResourceHandler extends Handler
 {
     /**
+     * @override
+     */
+    public function enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent): array
+    {
+        //
+        // Unklar:
+        // Remove file area content, because content files can´t be orphaned in mod resource
+        //
+        return array_filter(
+            parent::enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent),
+            function ($file, $key) {
+                return $file->filearea === 'intro';
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
+    }
+
+    /**
      * @param array $viewOrphanedFiles
      * @param int $contextId
      * @param stdClass $user
@@ -43,14 +61,6 @@ class ResourceHandler extends Handler
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
 
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
-
-        //
-        // Unklar:
-        // Remove file area content, because content files can´t be orphaned in mod resource
-        //
-        $orphanedFiles = array_filter($orphanedFiles, function ($file, $key) {
-            return $file->filearea === 'intro';
-        }, ARRAY_FILTER_USE_BOTH);
 
         foreach ($orphanedFiles as $file) {
             $formDelete = [
