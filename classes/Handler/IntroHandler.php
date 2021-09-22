@@ -138,14 +138,7 @@ class IntroHandler extends Handler
         if (!empty($orphanedFiles)) {
             foreach ($orphanedFiles ?? [] as $file) {
                 if ($file->filename !== '.') {
-                    $formDelete = [
-                        'filearea' => $file->filearea,
-                        'itemId' => $file->itemid,
-                        'contextId' => $contextId,
-                        'filepath' => $file->filepath,
-                        'filename' => $file->filename,
-                        'component' => $file->component
-                    ];
+                    $formDelete = (new FileInfo())->setFromFileWithContext($file,$contextId);
 
                     $viewOrphanedFiles[] = [
                         'modName' => $this->getComponentName(),
@@ -155,7 +148,7 @@ class IntroHandler extends Handler
                         'contextId' => $contextId,
                         'filename' => $this->getFileName(new FileInfo($formDelete)),
                         'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                        'formDelete' => $formDelete,
+                        'formDelete' => $formDelete->toArray(),
                         'content' => $htmlContent,
                         'userAllowedToDelete' => $userAllowedToDelete,
                         'iconHtml' => $iconHtml,

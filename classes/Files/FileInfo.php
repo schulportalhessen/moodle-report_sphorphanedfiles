@@ -20,20 +20,26 @@ class FileInfo
     private $filename;
 
     /** Create a FileInfo instance using either a string representation (-> serialization)
-     *  OR a dictionary containing the relevant information.
+     *  OR a dictionary OR another FileInfo instance containing the relevant information.
      * 
      *  @param $data The data (string or dictionary) to be used for instance 
      *               initialization.
      * 
      */
-    public function __construct($data)
+    public function __construct($data = null)
     {
-        if (is_array($data)) {
-            $this->setFromArray($data);
-        } else if (is_string($data)) {
-            $this->setFromString($data);
-        } else {
-            throw new InvalidArgumentException();
+        // The world would be simpler, if method and constructor overloading based on
+        // parameter signatures would be possible in PHP :-)
+        if (!is_null($data)) {
+            if (is_array($data)) {
+                $this->setFromArray($data);
+            } else if (is_string($data)) {
+                $this->setFromString($data);
+            } else if ($data instanceof FileInfo) {
+                $this->setFromArray($data->toArray());
+            } else {
+                throw new InvalidArgumentException();
+            }
         }
     }
 
@@ -116,5 +122,26 @@ class FileInfo
         $this->itemId   = $data['itemId'];
         $this->filepath = $data['filepath'];
         $this->filename = $data['filename'];
+    }
+
+    public function setFromFileWithContext($file, $contextId): FileInfo
+    {
+        $this->setFromArray([
+            'contextId' => $contextId,
+            'component' => $file->component,
+            'filearea'  => $file->filearea,
+            'itemId'    => $file->itemid,
+            'filepath'  => $file->filepath,
+            'filename'  => $file->filename
+        ]);
+
+        return $this;
+    }
+
+    public function setFromFile($file): FileInfo
+    {
+        $this->setFromFileWithContext($file, $file->contextid);
+
+        return $this;
     }
 }

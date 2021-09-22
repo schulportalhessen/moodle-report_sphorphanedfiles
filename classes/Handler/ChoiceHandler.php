@@ -44,14 +44,7 @@ class ChoiceHandler extends Handler
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
 
         foreach ($orphanedFiles as $file) {
-            $formDelete = [
-                'filearea' => $file->filearea,
-                'itemId' => $file->itemid,
-                'contextId' => $contextId,
-                'filepath' => $file->filepath,
-                'filename' => $file->filename,
-                'component' => $file->component
-            ];
+            $formDelete = (new FileInfo())->setFromFileWithContext($file,$contextId);
 
             $viewOrphanedFiles[] = [
                 'modName' => $modName,
@@ -59,7 +52,7 @@ class ChoiceHandler extends Handler
                 'contextId' => $contextId,
                 'filename' => $file->filename,
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                'formDelete' => $formDelete,
+                'formDelete' => $formDelete->toArray(),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'filesize' => Misc::convertByteInMegabyte($file->filesize)
