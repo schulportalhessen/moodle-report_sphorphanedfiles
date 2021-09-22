@@ -25,7 +25,7 @@ class Factory
 
     public function dataFiles(): DataFiles
     {
-        return new DataFiles($this->dbM);
+        return new DataFiles($this->getDbM());
     }
 
     /**
