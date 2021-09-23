@@ -107,55 +107,27 @@ class IntroHandler extends Handler
         $htmlContent = $this->getIntro($instance);
         $name = $instance->name;
 
-        $allowedToViewDeleteAllFiles = $this->apiM->security()->allowedToViewDeleteAllFiles(
-            $courseId,
-            $user
-        );
 
-        $userAllowedToDelete = false;
+        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $orphanedFiles = $this->enumerateOrphanedFilesInIntroFromString($user, $contextId, $this->getComponentName(), $courseId, $htmlContent);
 
-        if ($allowedToViewDeleteAllFiles) {
-            $files = $this->apiM->database()->dataFiles()->getFilesForComponentIntro(
-                $contextId,
-                $this->getComponentName()
-            );
-            $userAllowedToDelete = true;
-        } else {
-            $userId = $user->id;
-            $files = $this->apiM->database()->dataFiles()->getFilesOfUserForComponentIntro(
-                $userId,
-                $contextId,
-                $this->getComponentName()
-            );
-        }
+        foreach ($orphanedFiles as $file) {
+            $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-        $orphanedFiles = $this->apiM->parser()->extractOrphanedFilesFromString(
-            $htmlContent,
-            $files ?? [],
-            $contextId
-        );
-
-        if (!empty($orphanedFiles)) {
-            foreach ($orphanedFiles ?? [] as $file) {
-                if ($file->filename !== '.') {
-                    $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-
-                    $viewOrphanedFiles[] = [
-                        'modName' => $this->getComponentName(),
-                        'name' => $name,
-                        'modurl' => $this->getModuleURLForInstance($instance),
-                        'instanceId' => $instance->id,
-                        'contextId' => $contextId,
-                        'filename' => $this->getFileName(new FileInfo($formDelete)),
-                        'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                        'formDelete' => $formDelete->toArray(),
-                        'content' => $htmlContent,
-                        'userAllowedToDelete' => $userAllowedToDelete,
-                        'iconHtml' => $iconHtml,
-                        'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-                    ];
-                }
-            }
+            $viewOrphanedFiles[] = [
+                'modName' => $this->getComponentName(),
+                'name' => $name,
+                'modurl' => $this->getModuleURLForInstance($instance),
+                'instanceId' => $instance->id,
+                'contextId' => $contextId,
+                'filename' => $this->getFileName(new FileInfo($formDelete)),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
+                'formDelete' => $formDelete->toArray(),
+                'content' => $htmlContent,
+                'userAllowedToDelete' => $userAllowedToDelete,
+                'iconHtml' => $iconHtml,
+                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
+            ];
         }
 
         return $viewOrphanedFiles;

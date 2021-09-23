@@ -12,7 +12,7 @@ class SectionSummaryHandler extends Handler
 {
     public function getViewOrphanedFiles(
         $viewOrphanedFiles,
-        $courseContextId,
+        $contextId,
         $sectionInfo,
         $user,
         $courseId,
@@ -25,48 +25,25 @@ class SectionSummaryHandler extends Handler
 
         // FIXME: Refactor
 
-        $allowedToViewDeleteAllFiles = $this->apiM->security()->allowedToViewDeleteAllFiles(
-            $courseId,
-            $user
-        );
+        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
 
-        $userAllowedToDelete = false;
+        $orphanedFiles = $this->enumerateOrphanedFilesInIntroFromString($user, $contextId, $fileItemIdSectionInfo, $courseId, $sectionHtml);
 
-        if ($allowedToViewDeleteAllFiles) {
-            $files = $this->apiM->database()->dataFiles()->getFilesForSectionSummary(
-                $fileItemIdSectionInfo,
-                $courseContextId
-            );
-            $userAllowedToDelete = true;
-        } else {
-            $userId = $user->id;
-            $files = $this->apiM->database()->dataFiles()->getFilesOfUserForSectionSummary(
-                $userId,
-                $courseContextId,
-                $fileItemIdSectionInfo
-            );
-        }
 
-        $orphanedFiles = $this->apiM->parser()->extractOrphanedFilesFromString($sectionHtml, $files);
+        foreach ($orphanedFiles as $file) {
+            $formDelete = (new FileInfo())->setFromFile($file);
 
-        if (!empty($orphanedFiles)) {
-            foreach ($orphanedFiles ?? [] as $file) {
-                if ($file->filename !== '.') {
-                    $formDelete = (new FileInfo())->setFromFile($file);
-
-                    $viewOrphanedFiles[] = [
-                        'modName' => 'course',
-                        'instanceId' => 'todo',
-                        'contextId' => $courseContextId,
-                        'filename' => $this->getFileName(new FileInfo($formDelete)),
-                        'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
-                        'formDelete' => $formDelete->toArray(),
-                        'content' => $sectionHtml,
-                        'userAllowedToDelete' => $userAllowedToDelete,
-                        'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-                    ];
-                }
-            }
+            $viewOrphanedFiles[] = [
+                'modName' => 'course',
+                'instanceId' => 'todo',
+                'contextId' => $contextId,
+                'filename' => $this->getFileName(new FileInfo($formDelete)),
+                'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
+                'formDelete' => $formDelete->toArray(),
+                'content' => $sectionHtml,
+                'userAllowedToDelete' => $userAllowedToDelete,
+                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
+            ];
         }
 
         return $viewOrphanedFiles;

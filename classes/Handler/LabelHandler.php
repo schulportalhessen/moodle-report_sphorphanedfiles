@@ -23,7 +23,6 @@ class LabelHandler extends Handler
         $modName = $instance->modname;
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
 
         foreach ($orphanedFiles as $file) {

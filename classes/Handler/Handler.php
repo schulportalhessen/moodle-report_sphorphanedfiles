@@ -114,6 +114,17 @@ abstract class Handler
         return $this->getManager()->security()->allowedToViewDeleteAllFiles($course, $user);
     }
 
+    public function postFilter(array $data): array
+    {
+        return array_filter(
+            $data,
+            function ($file, $key) {
+                return $file->filename !== '.';
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
+    }
+
     /**
      * Enumerates all files the given user is allowed to perform Moodle actions on, the
      * special file „.“ is filtered and therefore not an element of the returned array.
@@ -133,13 +144,29 @@ abstract class Handler
             $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponent($user->id, $context, $module) ?? [];
         }
 
-        return array_filter(
-            $result,
-            function ($file, $key) {
-                return $file->filename !== '.';
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
+        return $this->postFilter($result);
+    }
+
+    public function enumerateFilesForUserInContextForModuleInCourseIntro($user, $context, $module, $course): array
+    {
+        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
+            $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
+        } else {
+            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponentIntro($user->id, $context, $module) ?? [];
+        }
+
+        return $this->postFilter($result);
+    }
+
+    public function enumerateFilesForUserInSectionSummary($user, $course, $courseContextId, $fileItemIdSectionInfo): array
+    {
+        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
+            $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $courseContextId) ?? [];
+        } else {
+            $result = $this->apiM->database()->dataFiles()->getFilesOfUserForSectionSummary($user->id, $courseContextId, $fileItemIdSectionInfo) ?? [];
+        }
+
+        return $this->postFilter($result);
     }
 
     /**
@@ -157,6 +184,24 @@ abstract class Handler
         return $this->getManager()->parser()->extractOrphanedFilesFromString(
             $htmlContent,
             $this->enumerateFilesForUserInContextForModuleInCourse($user, $context, $module, $course),
+            $context
+        );
+    }
+
+    public function enumerateOrphanedFilesInIntroFromString($user, $context, $module, $course, $htmlContent): array
+    {
+        return $this->getManager()->parser()->extractOrphanedFilesFromString(
+            $htmlContent,
+            $this->enumerateFilesForUserInContextForModuleInCourseIntro($user, $context, $module, $course),
+            $context
+        );
+    }
+
+    public function enumerateOrphanedFilesInSectionSummary($user, $context, $fileItemIdSectionInfo, $course, $htmlContent): array
+    {
+        return $this->getManager()->parser()->extractOrphanedFilesFromString(
+            $htmlContent,
+            $this->enumerateFilesForUserInSectionSummary($user, $course, $context, $fileItemIdSectionInfo),
             $context
         );
     }
