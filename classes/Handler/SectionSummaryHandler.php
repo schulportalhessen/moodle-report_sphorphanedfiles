@@ -8,14 +8,20 @@ use report_sphorphanedfiles\Files\FileInfo;
 /**
  * Class SectionSummaryHandler 
  */
-class SectionSummaryHandler extends Handler
+class SectionSummaryHandler extends ItemHandler
 {
     /**
      * @override
      */
-    protected function generateViewFile($orphanedFile)
+    protected function enumerateFiles($user, $context, $course, $fileItemIdSectionInfo): array
     {
-        return $this->apiM->files()->generateViewFileForWithItemId($orphanedFile);
+        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
+            $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $context) ?? [];
+        } else {
+            $result = $this->apiM->database()->dataFiles()->getFilesOfUserForSectionSummary($user->id, $context, $fileItemIdSectionInfo) ?? [];
+        }
+
+        return $this->postFilter($result);
     }
 
     public function getViewOrphanedFiles(
@@ -30,7 +36,7 @@ class SectionSummaryHandler extends Handler
         $fileItemIdSectionInfo = $sectionInfo->id;
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-        $orphanedFiles = $this->enumerateOrphanedFilesInIntroFromString($user, $contextId, $fileItemIdSectionInfo, $courseId, $sectionHtml);
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $fileItemIdSectionInfo);
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);

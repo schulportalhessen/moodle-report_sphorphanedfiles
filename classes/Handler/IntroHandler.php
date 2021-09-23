@@ -80,6 +80,20 @@ class IntroHandler extends Handler
     }
 
     /**
+     * @override
+     */
+    protected function enumerateFiles($user, $context, $course, $module): array
+    {
+        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
+            $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
+        } else {
+            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponentIntro($user->id, $context, $module) ?? [];
+        }
+
+        return $this->postFilter($result);
+    }
+
+    /**
      * @param array $viewOrphanedFiles
      * @param int $contextId
      * @param stdClass $user
@@ -99,16 +113,18 @@ class IntroHandler extends Handler
         $iconHtml
     ): array {
 
-        // FIXME: Das ist nicht die optimale passende Stelle für die Instanzvariablen-
-        //        zuweisung.
+        // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
+        //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
+        //        Interface
         $this->componentName = $instance->modname;
 
         $htmlContent = $this->getIntro($instance);
+
         $name = $instance->name;
 
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-        $orphanedFiles = $this->enumerateOrphanedFilesInIntroFromString($user, $contextId, $this->getComponentName(), $courseId, $htmlContent);
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);

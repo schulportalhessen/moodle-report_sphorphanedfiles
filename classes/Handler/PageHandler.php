@@ -9,7 +9,7 @@ use report_sphorphanedfiles\Files\FileInfo;
  * Class PageHandler
  * @package report_sphorphanedfiles\Handler
  */
-class PageHandler extends Handler
+class PageHandler extends ItemHandler
 {
     public function getViewOrphanedFiles(
         $viewOrphanedFiles,
@@ -19,23 +19,21 @@ class PageHandler extends Handler
         $instance,
         $iconHtml
     ): array {
+        $htmlContent = $this->getIntro($instance);
 
-        $htmlContent = '';
         $modName = $instance->modname;
+
+
         $name = $instance->name;
 
         $dbparams = ['id' => $instance->instance];
-
-        //$htmlContent .= format_module_intro('page', $page, $instance->id, false);
-        $htmlContent = $this->getIntro($instance);
 
         // page is different to other mod
         $page = $this->apiM->database()->getDbM()->get_record('page', $dbparams, '*');
         $htmlContent .= '<h4>Seiteninhalt</h4>' . file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $contextId, 'mod_page', 'content', $page->revision);
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-
-        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
@@ -47,7 +45,7 @@ class PageHandler extends Handler
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
-                'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'formDelete' => $formDelete->toArray(),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
