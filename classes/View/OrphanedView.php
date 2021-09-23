@@ -11,6 +11,7 @@ use html_writer;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
+use report_sphorphanedfiles\HTML;
 
 /**
  * Class OrphanedView
@@ -100,6 +101,54 @@ class OrphanedView
         }
     }
 
+    public function listOrphansForSection($sectionInfo)
+    {
+        $courseContextId = context_course::instance($this->courseId)->id;
+
+        $viewOrphanedFiles = [];
+        $viewOrphanedFiles = $this->apiM->handler()->sectionSummaryHandler()->getViewOrphanedFiles(
+            $viewOrphanedFiles,
+            $courseContextId,
+            $sectionInfo,
+            $this->user,
+            $this->courseId,
+            "" // Intentionally left blank: In case of a section summary, there is no iconHtml information
+        );
+
+        $modInfo = $sectionInfo->modinfo;
+
+        foreach ($modInfo->instances as $instances) {
+            foreach ($instances as $instance) {
+                if ($sectionInfo->id === $instance->section) {
+                    if ($instance->deletioninprogress !== '1') {
+                        if ($this->apiM->handler()->hasHandlerFor($instance)) {
+                            $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)
+                                ->bind($this->user, $this->courseId, $instance, $this->page)
+                                ->addOrphans($viewOrphanedFiles);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $viewOrphanedFiles;
+    }
+
+    public function renderOrphans($sectionInfo)
+    {
+        $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
+
+        if (!empty($viewOrphanedFiles)) {
+            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'moduleContent'], 'report_sphorphanedfiles');
+            $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool'], 'report_sphorphanedfiles', 'header.');
+
+            echo $this->output->render_from_template(
+                'report_sphorphanedfiles/sectionTable',
+                ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]
+            );
+        }
+    }
+
     /**
      * @throws coding_exception
      * @throws dml_exception
@@ -132,75 +181,20 @@ class OrphanedView
                 'allowedToViewDeleteAllFiles' => $allowedToViewDeleteAllFiles,
                 'afterDeletion' => $this->afterDeletion,
                 'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
-                'translation' => Misc::translate(['isallowedtodeleteallfiles','description'],'report_sphorphanedfiles')
+                'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description'], 'report_sphorphanedfiles')
             ]
         );
 
         $courseInfo = get_fast_modinfo($course);
         $sectionCounter = 0;
 
-        $formatsectionname = '';
-        if (get_string_manager()->string_exists('sectionname', 'format_' . $course->format)) {
-            $formatsectionname = get_string('sectionname', 'format_' . $course->format);
-        }
-
-
         foreach ($courseInfo->get_section_info_all() as $sectionInfo) {
             echo '<div class="border shadow p-1">';
-            $url = (new moodle_url('/course/view.php', array('id' => $courseInfo->courseid))) . '#section-' . $sectionCounter;
-            $sectionname = $sectionInfo->name;
-            $anzuzeigenderText = '';
-            if (is_null($sectionname) || $sectionname === '') {
-                $anzuzeigenderText = $formatsectionname . ' ' . $sectionCounter;
-            } else {
-                $anzuzeigenderText = $sectionname;
-            }
 
-            $linktext = html_writer::link($url, $anzuzeigenderText);
-            $linktext2 = html_writer::link($url, '📑', ['target' => '_blank']);
-            echo html_writer::tag('h3', '(' . $sectionCounter . ') ' . $linktext . ' ' .  $linktext2, ['class' => 'orphandfilesh3']);
+            echo HTML::createSectionHeading($sectionInfo, $course, $sectionCounter++);
 
-            $sectionCounter++;
-            $modInfo = $sectionInfo->modinfo;
-            $viewOrphanedFiles = [];
+            $this->renderOrphans($sectionInfo);
 
-            // section info orphaned files
-            $courseContext = context_course::instance($this->courseId);
-            $courseContextId = $courseContext->id;
-
-            // CHECKME: Ist das außerhalb der Schleife notwendig? Falls ja: Das sollte in den Dispatcher wandern.
-            $viewOrphanedFiles = $this->apiM->handler()->sectionSummaryHandler()->getViewOrphanedFiles(
-                $viewOrphanedFiles,
-                $courseContextId,
-                $sectionInfo,
-                $this->user,
-                $this->courseId,
-                "" // Bewusste Setzung: Keine iconHtml-Informationen festsetzen, da hier nicht vorhanden.
-            );
-
-            foreach ($modInfo->instances as $instances) {
-                foreach ($instances as $instance) {
-                    if ($sectionInfo->id === $instance->section) {
-                        if ($instance->deletioninprogress !== '1') {
-                            if ($this->apiM->handler()->hasHandlerFor($instance)) {
-                                $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)
-                                    ->bind($this->user, $this->courseId, $instance, $this->page)
-                                    ->addOrphans($viewOrphanedFiles);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!empty($viewOrphanedFiles)) {
-                $translations = Misc::translate(['isallowedtodeleteallfiles','description','moduleContent'],'report_sphorphanedfiles');
-                $translations['header'] = Misc::translate(['modName','content','filename','preview','tool'],'report_sphorphanedfiles','header.');
-                
-                echo $this->output->render_from_template(
-                    'report_sphorphanedfiles/sectionTable',
-                    ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]
-                );
-            }
             echo "</div><br /><br /><br />";
         }
 

@@ -3,6 +3,7 @@
 namespace report_sphorphanedfiles;
 
 use html_writer;
+use moodle_url;
 
 class HTML
 {
@@ -39,5 +40,30 @@ class HTML
                 'class' => 'iconlarge activityicon'
             ]
         );
+    }
+
+    public static function createSectionHeading($sectionInfo, $course, $sectionCounter)
+    {
+        $courseInfo = get_fast_modinfo($course);
+        $formatsectionname = '';
+
+        if (get_string_manager()->string_exists('sectionname', 'format_' . $course->format)) {
+            $formatsectionname = get_string('sectionname', 'format_' . $course->format);
+        }
+
+        $url = (new moodle_url('/course/view.php', array('id' => $courseInfo->courseid))) . '#section-' . $sectionCounter;
+
+        $sectionname = $sectionInfo->name;
+        $anzuzeigenderText = '';
+        if (is_null($sectionname) || $sectionname === '') {
+            $anzuzeigenderText = $formatsectionname . ' ' . $sectionCounter;
+        } else {
+            $anzuzeigenderText = $sectionname;
+        }
+
+        $linktext = html_writer::link($url, $anzuzeigenderText);
+        $linktext2 = html_writer::link($url, '📑', ['target' => '_blank']);
+
+        return html_writer::tag('h3', '(' . $sectionCounter . ') ' . $linktext . ' ' .  $linktext2, ['class' => 'orphandfilesh3']);
     }
 }
