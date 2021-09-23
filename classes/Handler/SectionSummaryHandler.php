@@ -10,6 +10,14 @@ use report_sphorphanedfiles\Files\FileInfo;
  */
 class SectionSummaryHandler extends Handler
 {
+    /**
+     * @override
+     */
+    protected function generateViewFile($orphanedFile)
+    {
+        return $this->apiM->files()->generateViewFileForWithItemId($orphanedFile);
+    }
+
     public function getViewOrphanedFiles(
         $viewOrphanedFiles,
         $contextId,
@@ -21,13 +29,8 @@ class SectionSummaryHandler extends Handler
         $sectionHtml = $sectionInfo->summary;
         $fileItemIdSectionInfo = $sectionInfo->id;
 
-
-        // FIXME: Refactor
-
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-
         $orphanedFiles = $this->enumerateOrphanedFilesInIntroFromString($user, $contextId, $fileItemIdSectionInfo, $courseId, $sectionHtml);
-
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
@@ -37,7 +40,7 @@ class SectionSummaryHandler extends Handler
                 'instanceId' => 'todo',
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
-                'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'formDelete' => $formDelete->toArray(),
                 'content' => $sectionHtml,
                 'userAllowedToDelete' => $userAllowedToDelete,
