@@ -3,7 +3,6 @@
 namespace report_sphorphanedfiles;
 
 use moodle_database;
-use InvalidArgumentException;
 
 use report_sphorphanedfiles\Database\Factory as DatabaseFactory;
 use report_sphorphanedfiles\Parser\Parser;
@@ -68,25 +67,5 @@ class Manager
     public function handler(): HandlerFactory
     {
         return new HandlerFactory($this);
-    }
-
-    public function hasHandlerFor($component): bool
-    {
-        foreach ($this->handler()->getHandler() as $handler)
-            if ($handler->canHandle($component)) {
-                return true;
-            }
-
-        return false;
-    }
-
-    public function getHandlerFor($component): Handler
-    {
-        foreach ($this->handler()->getHandler() as $handler)
-            if ($handler->canHandle($component)) {
-                return $handler;
-            }
-
-        throw new InvalidArgumentException();
     }
 }

@@ -3,7 +3,7 @@
 namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Manager;
-
+use InvalidArgumentException;
 /**
  * if we have time chain of responsibility
  * Class Factory
@@ -79,5 +79,25 @@ class Factory
             ];
 
         return static::$handlers;
+    }
+
+    public function hasHandlerFor($component): bool
+    {
+        foreach ($this->getHandler() as $handler)
+            if ($handler->canHandle($component)) {
+                return true;
+            }
+
+        return false;
+    }
+
+    public function getHandlerFor($component): Handler
+    {
+        foreach ($this->getHandler() as $handler)
+            if ($handler->canHandle($component)) {
+                return $handler;
+            }
+
+        throw new InvalidArgumentException();
     }
 }
