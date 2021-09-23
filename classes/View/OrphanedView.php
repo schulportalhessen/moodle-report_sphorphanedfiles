@@ -10,7 +10,7 @@ use html_writer;
 
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
-use report_sphorphanedfiles\HTML;
+use report_sphorphanedfiles\Misc;
 
 /**
  * Class OrphanedView
@@ -125,22 +125,14 @@ class OrphanedView
 
         echo $this->output->header();
 
-        $deleteMessage = get_string('deleteMessage', 'report_sphorphanedfiles');
-
-
-        $translations = [
-            'isallowedtodeleteallfiles' => get_string('isallowedtodeleteallfiles', 'report_sphorphanedfiles'),
-            'description' => get_string('description', 'report_sphorphanedfiles')
-        ];
-
         echo $this->output->render_from_template(
             'report_sphorphanedfiles/report',
             [
                 'title' => $title,
                 'allowedToViewDeleteAllFiles' => $allowedToViewDeleteAllFiles,
                 'afterDeletion' => $this->afterDeletion,
-                'deleteMessage' => $deleteMessage,
-                'translation' => $translations
+                'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
+                'translation' => Misc::translate(['isallowedtodeleteallfiles','description'],'report_sphorphanedfiles')
             ]
         );
 
@@ -201,18 +193,9 @@ class OrphanedView
             }
 
             if (!empty($viewOrphanedFiles)) {
-                $translations = [
-                    'header' => [
-                        'modName' => get_string('header.modName', 'report_sphorphanedfiles'),
-                        'content' => get_string('header.content', 'report_sphorphanedfiles'),
-                        'filename' => get_string('header.filename', 'report_sphorphanedfiles'),
-                        'preview' => get_string('header.preview', 'report_sphorphanedfiles'),
-                        'tool' => get_string('header.tool', 'report_sphorphanedfiles'),
-                    ],
-                    'isallowedtodeleteallfiles' => get_string('isallowedtodeleteallfiles', 'report_sphorphanedfiles'),
-                    'description' => get_string('description', 'report_sphorphanedfiles'),
-                    'moduleContent' => get_string('moduleContent', 'report_sphorphanedfiles')
-                ];
+                $translations = Misc::translate(['isallowedtodeleteallfiles','description','moduleContent'],'report_sphorphanedfiles');
+                $translations['header'] = Misc::translate(['modName','content','filename','preview','tool'],'report_sphorphanedfiles','header.');
+                
                 echo $this->output->render_from_template(
                     'report_sphorphanedfiles/sectionTable',
                     ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]

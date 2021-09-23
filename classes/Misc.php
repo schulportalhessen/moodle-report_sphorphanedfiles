@@ -18,4 +18,12 @@ class Misc
         $filesizeInMegabyte = $filesizeInKilobyte / 1024;
         return number_format($filesizeInMegabyte, 2, ',', '');
     }
+
+    public static function translate($data, $translationFile, $prefix = "")
+    {
+        foreach ($data as $item)
+            $result[$item] = get_string($prefix . $item, $translationFile);
+
+        return $result;
+    }
 }
