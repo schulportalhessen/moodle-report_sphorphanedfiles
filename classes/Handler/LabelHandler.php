@@ -26,8 +26,6 @@ class LabelHandler extends Handler
 
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
 
-        // FIXME: Refactor
-
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 

@@ -38,26 +38,8 @@ class PageHandler extends Handler
 
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
 
-        // FIXME: Refactor
-
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-
-            $orphanedFile = $this->apiM->files()->getFileUsingFileInfo($formDelete);
-
-            // prepare preview if image
-            $preview = '';
-            if ($orphanedFile && $orphanedFile->is_valid_image()) {
-                $preview = $this->apiM->files()->generateViewFileForWithItemId(
-                    $orphanedFile,
-                    $globalCfg
-                );
-            } else {
-                $preview = $this->apiM->files()->generateFallbackView(
-                    $orphanedFile,
-                    $globalCfg
-                );
-            }
 
             $viewOrphanedFiles[] = [
                 'modName' => $modName,
@@ -66,7 +48,7 @@ class PageHandler extends Handler
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
-                'preview' => $preview,
+                'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
                 'formDelete' => $formDelete->toArray(),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,

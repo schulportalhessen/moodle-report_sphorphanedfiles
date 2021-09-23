@@ -172,6 +172,17 @@ abstract class Handler
         }
     }
 
+    public function getPreviewForFileWithItemId(FileInfo $fileInfo)
+    {
+        $orphanedFile = $this->getManager()->files()->getFileUsingFileInfo($fileInfo);
+
+        if ($orphanedFile && $orphanedFile->is_valid_image()) {
+            return $this->apiM->files()->generateViewFileForWithItemId($orphanedFile);
+        } else {
+            return $this->apiM->files()->generateFallbackView($orphanedFile);
+        }
+    }
+
     public function getFileName(FileInfo $fileInfo)
     {
         return $this->getManager()->files()->generateFallbackView(

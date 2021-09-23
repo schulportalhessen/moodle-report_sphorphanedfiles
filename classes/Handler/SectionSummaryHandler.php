@@ -53,27 +53,13 @@ class SectionSummaryHandler extends Handler
             foreach ($orphanedFiles ?? [] as $file) {
                 if ($file->filename !== '.') {
                     $formDelete = (new FileInfo())->setFromFile($file);
-                    $orphanedFile = $this->apiM->files()->getFileUsingFileInfo($formDelete);
-
-                    // prepare preview if image
-                    if ($orphanedFile && $orphanedFile->is_valid_image()) {
-                        $preview = $this->apiM->files()->generateViewFileForWithItemId(
-                            $orphanedFile,
-                            $globalCfg
-                        );
-                    } else {
-                        $preview = $this->apiM->files()->generateFallbackView(
-                            $orphanedFile,
-                            $globalCfg
-                        );
-                    }
 
                     $viewOrphanedFiles[] = [
                         'modName' => 'course',
                         'instanceId' => 'todo',
                         'contextId' => $courseContextId,
                         'filename' => $this->getFileName(new FileInfo($formDelete)),
-                        'preview' => $preview,
+                        'preview' => $this->getPreviewForFileWithItemId(new FileInfo($formDelete)),
                         'formDelete' => $formDelete->toArray(),
                         'content' => $sectionHtml,
                         'userAllowedToDelete' => $userAllowedToDelete,
