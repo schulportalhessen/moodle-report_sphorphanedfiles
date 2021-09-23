@@ -16,7 +16,6 @@ class SectionSummaryHandler extends Handler
         $sectionInfo,
         $user,
         $courseId,
-        $globalCfg,
         $iconHtml
     ): array {
         $sectionHtml = $sectionInfo->summary;

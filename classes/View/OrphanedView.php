@@ -42,11 +42,6 @@ class OrphanedView
     private $user;
 
     /**
-     * @var stdClass
-     */
-    private $globalCfg;
-
-    /**
      * @var Manager
      */
     private $apiM;
@@ -65,14 +60,13 @@ class OrphanedView
      * @param stdClass $user
      * @param stdClass $globalCfg
      */
-    public function __construct($db, int $courseId, $page, $output, $user, $globalCfg)
+    public function __construct($db, int $courseId, $page, $output, $user)
     {
         $this->db = $db;
         $this->courseId = $courseId;
         $this->page = $page;
         $this->output = $output;
         $this->user = $user;
-        $this->globalCfg = $globalCfg;
         $this->apiM = new Manager($this->db);
     }
 
@@ -188,7 +182,6 @@ class OrphanedView
                 $sectionInfo,
                 $this->user,
                 $this->courseId,
-                $this->globalCfg,
                 "" // Bewusste Setzung: Keine iconHtml-Informationen festsetzen, da hier nicht vorhanden.
             );
 
@@ -208,7 +201,6 @@ class OrphanedView
                                     $context->id,
                                     $this->user,
                                     $this->courseId,
-                                    $this->globalCfg,
                                     $instance,
                                     $iconHtml
                                 );

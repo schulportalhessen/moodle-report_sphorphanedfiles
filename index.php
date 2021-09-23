@@ -14,10 +14,9 @@ $courseId = required_param('id', PARAM_INT);
 $page = $PAGE;
 $output = $OUTPUT;
 $user = $USER;
-$globalCfg = $CFG;
 $db = $DB;
 
-$orphanedViewInstance = new OrphanedView($db, $courseId, $page, $output, $user, $globalCfg);
+$orphanedViewInstance = new OrphanedView($db, $courseId, $page, $output, $user);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $orphanedViewInstance->deleteOrphanedFile();

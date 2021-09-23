@@ -240,5 +240,5 @@ abstract class Handler
         return new moodle_url(sprintf(self::URLPattern, $instance->modname, $instance->id));
     }
 
-    abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $globalCfg, $instance, $iconHtml): array;
+    abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $instance, $iconHtml): array;
 }

@@ -15,7 +15,6 @@ class LabelHandler extends Handler
         $contextId,
         $user,
         $courseId,
-        $globalCfg,
         $instance,
         $iconHtml
     ): array {
