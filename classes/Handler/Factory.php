@@ -81,20 +81,20 @@ class Factory
         return static::$handlers;
     }
 
-    public function hasHandlerFor($component): bool
+    public function hasHandlerFor($instance): bool
     {
         foreach ($this->getHandler() as $handler)
-            if ($handler->canHandle($component)) {
+            if ($handler->canHandle($instance->modname)) {
                 return true;
             }
 
         return false;
     }
 
-    public function getHandlerFor($component): Handler
+    public function getHandlerFor($instance): Handler
     {
         foreach ($this->getHandler() as $handler)
-            if ($handler->canHandle($component)) {
+            if ($handler->canHandle($instance->modname)) {
                 return $handler;
             }
 

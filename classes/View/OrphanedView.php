@@ -192,8 +192,8 @@ class OrphanedView
                         $context = $instance->context;
 
                         if ($instance->deletioninprogress !== '1') {
-                            if ($this->apiM->handler()->hasHandlerFor($instance->modname)) {
-                                $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance->modname)->getViewOrphanedFiles(
+                            if ($this->apiM->handler()->hasHandlerFor($instance)) {
+                                $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)->getViewOrphanedFiles(
                                     $viewOrphanedFiles,
                                     $context->id,
                                     $this->user,
