@@ -10,6 +10,7 @@ use html_writer;
 
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
+use report_sphorphanedfiles\HTML;
 
 /**
  * Class OrphanedView
@@ -189,10 +190,6 @@ class OrphanedView
                 foreach ($instances as $instance) {
                     if ($sectionInfo->id === $instance->section) {
                         $context = $instance->context;
-                        $url = $this->page->theme->image_url('icon', $instance->modname)->out();
-                        $style = 'width: 20px; height: 20px; margin-right: 4px;';
-                        $cssclass = 'iconlarge activityicon';
-                        $iconHtml = \html_writer::tag('img', '', array('src' => $url, 'style' => $style, 'class' => $cssclass));
 
                         if ($instance->deletioninprogress !== '1') {
                             if ($this->apiM->hasHandlerFor($instance->modname)) {
@@ -202,7 +199,7 @@ class OrphanedView
                                     $this->user,
                                     $this->courseId,
                                     $instance,
-                                    $iconHtml
+                                    HTML::createIconForInstance($instance,$this->page)
                                 );
                             }
                         }
