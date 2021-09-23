@@ -189,18 +189,11 @@ class OrphanedView
             foreach ($modInfo->instances as $instances) {
                 foreach ($instances as $instance) {
                     if ($sectionInfo->id === $instance->section) {
-                        $context = $instance->context;
-
                         if ($instance->deletioninprogress !== '1') {
                             if ($this->apiM->handler()->hasHandlerFor($instance)) {
-                                $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)->getViewOrphanedFiles(
-                                    $viewOrphanedFiles,
-                                    $context->id,
-                                    $this->user,
-                                    $this->courseId,
-                                    $instance,
-                                    HTML::createIconForInstance($instance,$this->page)
-                                );
+                                $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)
+                                    ->bind($this->user, $this->courseId, $instance, $this->page)
+                                    ->addOrphans($viewOrphanedFiles);
                             }
                         }
                     }

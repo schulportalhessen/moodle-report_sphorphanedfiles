@@ -3,12 +3,10 @@
 namespace report_sphorphanedfiles\Handler;
 
 use cm_info;
-use ReflectionClass;
 
-use moodle_url;
 
 use report_sphorphanedfiles\Files\FileInfo;
-use report_sphorphanedfiles\Manager;
+use report_sphorphanedfiles\HTML;
 
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
@@ -20,6 +18,58 @@ use report_sphorphanedfiles\Manager;
  */
 abstract class Handler extends BaseHandler
 {
+    private $user;
+    private $course;
+    private $instance;
+    private $page;
+
+    public function bind($user, $course, $instance, $page): Handler
+    {
+        $this->user = $user;
+        $this->course = $course;
+        $this->instance = $instance;
+        $this->page = $page;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    public function getIconHTML()
+    {
+        return HTML::createIconForInstance($this->getInstance(), $this->getPage());
+    }
+
+    public function addOrphans($orphans)
+    {
+        return $this->getViewOrphanedFiles(
+            $orphans,
+            $this->getInstance()->context->id,
+            $this->getUser(),
+            $this->getCourse(),
+            $this->getInstance(),
+            $this->getIconHTML()
+        );
+    }
+
     /**
      * Retrieves, i.e. extracts, the intro information of the given instance.
      * 
