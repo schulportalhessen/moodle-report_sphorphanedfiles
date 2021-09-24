@@ -21,14 +21,9 @@ class PageHandler extends ItemHandler
         $htmlContent = $this->getIntro($instance);
 
         $modName = $instance->modname;
-
-
         $name = $instance->name;
 
-        $dbparams = ['id' => $instance->instance];
-
-        // page is different to other mod
-        $page = $this->apiM->database()->getDbM()->get_record('page', $dbparams, '*');
+        $page = $this->getManager()->database()->dataFiles()->getPage($instance);
         $htmlContent .= '<h4>Seiteninhalt</h4>' . file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $contextId, 'mod_page', 'content', $page->revision);
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);

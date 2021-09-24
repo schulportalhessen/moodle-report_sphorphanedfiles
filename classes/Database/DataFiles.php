@@ -244,4 +244,14 @@ class DataFiles
 
         return $this->performQuery($params);
     }
+
+    public function getCourse($courseId)
+    {
+        return $this->getDatabase()->get_record('course', ['id' => $courseId], '*', MUST_EXIST);
+    }
+
+    public function getPage($instance)
+    {
+        return $this->getDatabase()->get_record('page', ['id' => $instance->instance], '*');
+    }
 }

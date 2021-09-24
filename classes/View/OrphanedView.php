@@ -52,7 +52,7 @@ class OrphanedView
         $this->user = $user;
         $this->apiM = new Manager($db);
 
-        $course = $this->apiM->database()->getDbM()->get_record('course', ['id' => $courseId], '*', MUST_EXIST);
+        $course = $this->apiM->database()->dataFiles()->getCourse($courseId);
 
         $this->page = new Page($page, $course, $courseId, $output);
     }
