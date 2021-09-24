@@ -97,7 +97,6 @@ class IntroHandler extends Handler
      * @param int $contextId
      * @param stdClass $user
      * @param int $courseId
-     * @param stdClass $globalCfg
      * @param cm_info $instance
      * @param cm_info $iconHtml
      * @return array

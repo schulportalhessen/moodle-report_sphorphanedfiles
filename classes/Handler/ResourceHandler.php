@@ -37,7 +37,6 @@ class ResourceHandler extends Handler
      * @param int $contextId
      * @param stdClass $user
      * @param int $courseId
-     * @param stdClass $globalCfg
      * @param cm_info $instance
      * @return array
      * @throws dml_exception

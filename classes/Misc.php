@@ -6,7 +6,6 @@ class Misc
 {
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return float
      */
     public static function convertByteInMegabyte(int $byte)

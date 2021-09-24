@@ -59,7 +59,6 @@ class OrphanedView
      * @param moodle_page $page
      * @param bootstrap_renderer $output
      * @param stdClass $user
-     * @param stdClass $globalCfg
      */
     public function __construct($db, int $courseId, $page, $output, $user)
     {
