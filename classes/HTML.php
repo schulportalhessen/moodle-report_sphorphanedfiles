@@ -7,7 +7,7 @@ use moodle_url;
 
 class HTML
 {
-    public static function createImage($url)
+    public static function createImage(string $url): string
     {
         return html_writer::tag(
             'div',
@@ -22,7 +22,7 @@ class HTML
         );
     }
 
-    public static function createLinkInNewTab($url, $description)
+    public static function createLinkInNewTab(string $url, string $description): string
     {
         return html_writer::tag(
             'div',
@@ -30,7 +30,7 @@ class HTML
         );
     }
 
-    public static function createIconForInstance($instance, $page)
+    public static function createIconForInstance($instance, $page): string
     {
         return html_writer::empty_tag(
             'img',
@@ -42,7 +42,7 @@ class HTML
         );
     }
 
-    public static function createSectionHeading($sectionInfo, $course, $sectionCounter)
+    public static function createSectionHeading($sectionInfo, $course, $sectionCounter): string
     {
         $courseInfo = get_fast_modinfo($course);
         $formatsectionname = '';
