@@ -9,7 +9,6 @@ use report_sphorphanedfiles\Parser\Parser;
 use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\Handler\Factory as HandlerFactory;
-use report_sphorphanedfiles\Handler\Handler;
 
 defined('MOODLE_INTERNAL') || die();
 

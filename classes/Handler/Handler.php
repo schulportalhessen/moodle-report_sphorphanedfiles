@@ -4,10 +4,9 @@ namespace report_sphorphanedfiles\Handler;
 
 use cm_info;
 
-
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
-
+use report_sphorphanedfiles\Misc;
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
  * handler implementations for different Moodle objects -- which should be scanned
@@ -120,5 +119,17 @@ abstract class Handler extends BaseHandler
         } else {
             return parent::getPreviewForFile($fileInfo);
         }
+    }
+
+    protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array
+    {
+        $result = $formDelete->addFileReferenceInformation($data);
+
+        $result['modurl'] = $this->getModuleURLForInstance($instance);
+        $result['filename'] = $this->getFileName(new FileInfo($formDelete));
+        $result['preview'] = $this->getPreviewForFile(new FileInfo($formDelete));
+        $result['filesize'] = Misc::convertByteInMegabyte((int)$file->filesize);
+
+        return $result;
     }
 }

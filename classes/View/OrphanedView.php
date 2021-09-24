@@ -6,7 +6,6 @@ use stdClass;
 use moodle_database;
 use moodle_url;
 use context_course;
-use html_writer;
 
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
@@ -184,9 +183,6 @@ class OrphanedView
                 'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description'], 'report_sphorphanedfiles')
             ]
         );
-
-
-        echo "!!!!!" . $_POST['fileID'] . "?????";
 
         $courseInfo = get_fast_modinfo($course);
         $sectionCounter = 0;

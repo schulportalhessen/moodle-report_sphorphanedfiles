@@ -2,7 +2,6 @@
 
 namespace report_sphorphanedfiles\Handler;
 
-use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
 
 /**
@@ -38,18 +37,14 @@ class PageHandler extends ItemHandler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
+            $viewOrphanedFiles[] = $this->getSkeleton($formDelete,$file,$instance,[
                 'modName' => $modName,
                 'name' => $name,
-                'modurl' => $this->getModuleURLForInstance($instance),
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
-                'filename' => $this->getFileName(new FileInfo($formDelete)),
-                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'iconHtml' => $iconHtml,
-                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
             ]);
         }
 
