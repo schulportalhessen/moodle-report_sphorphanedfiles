@@ -5,6 +5,8 @@ namespace report_sphorphanedfiles;
 use html_writer;
 use moodle_url;
 
+use report_sphorphanedfiles\View\Page;
+
 class HTML
 {
     public static function createImage(string $url): string
@@ -30,12 +32,12 @@ class HTML
         );
     }
 
-    public static function createIconForInstance($instance, $page): string
+    public static function createIconForInstance($instance, Page $page): string
     {
         return html_writer::empty_tag(
             'img',
             [
-                'src' => $page->theme->image_url('icon', $instance->modname)->out(),
+                'src' => $page->getIconURL($instance),
                 'style' => 'width: 20px; height: 20px; margin-right: 4px;',
                 'class' => 'iconlarge activityicon'
             ]
