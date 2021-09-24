@@ -43,8 +43,20 @@ class FileInfo
         }
     }
 
+    protected const FILEREFERENCEKEY = 'fileID';
+
+    public function addFileReferenceInformation(array $data): array
+    {
+        $data[self::FILEREFERENCEKEY] = $this->toString();
+
+        return $data;
+    }
+
     public static function isSufficientForConstruction(array $data): bool
     {
+        if (isset($data[self::FILEREFERENCEKEY]))
+            return true;
+
         return isset($data['filearea'])  &&
             isset($data['itemId'])    &&
             isset($data['contextId']) &&
@@ -116,12 +128,16 @@ class FileInfo
 
     public function setFromArray($data)
     {
-        $this->contextId = $data['contextId'];
-        $this->component = $data['component'];
-        $this->filearea = $data['filearea'];
-        $this->itemId   = $data['itemId'];
-        $this->filepath = $data['filepath'];
-        $this->filename = $data['filename'];
+        if (isset($data[self::FILEREFERENCEKEY])) {
+            $this->setFromString($data[self::FILEREFERENCEKEY]);
+        } else {
+            $this->contextId = $data['contextId'];
+            $this->component = $data['component'];
+            $this->filearea = $data['filearea'];
+            $this->itemId   = $data['itemId'];
+            $this->filepath = $data['filepath'];
+            $this->filename = $data['filename'];
+        }
     }
 
     public function setFromFileWithContext($file, $contextId): FileInfo

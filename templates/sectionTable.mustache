@@ -48,12 +48,7 @@
             <td>
                 {{#userAllowedToDelete}}
                     <form action="#" method="POST">
-                        <input type="hidden" name="filearea" value="{{formDelete.filearea}}">
-                        <input type="hidden" name="itemId" value="{{formDelete.itemId}}">
-                        <input type="hidden" name="contextId" value="{{formDelete.contextId}}">
-                        <input type="hidden" name="filepath" value="{{formDelete.filepath}}">
-                        <input type="hidden" name="filename" value="{{formDelete.filename}}">
-                        <input type="hidden" name="component" value="{{formDelete.component}}">
+                        <input type="hidden" name="fileID" value="{{fileID}}">
                         <div>
                             <button class="btn btn-sm btn-danger p-1"><i class="fa fa-trash fa-fw h4 m-b-0"></i>
                             </button>

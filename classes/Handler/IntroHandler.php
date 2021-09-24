@@ -129,7 +129,7 @@ class IntroHandler extends Handler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = [
+            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => $this->getComponentName(),
                 'name' => $name,
                 'modurl' => $this->getModuleURLForInstance($instance),
@@ -137,12 +137,11 @@ class IntroHandler extends Handler
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                'formDelete' => $formDelete->toArray(),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'iconHtml' => $iconHtml,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-            ];
+            ]);
         }
 
         return $viewOrphanedFiles;

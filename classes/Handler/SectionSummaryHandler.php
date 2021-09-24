@@ -41,17 +41,16 @@ class SectionSummaryHandler extends ItemHandler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 
-            $viewOrphanedFiles[] = [
+            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => 'course',
                 'instanceId' => 'todo',
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                'formDelete' => $formDelete->toArray(),
                 'content' => $sectionHtml,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-            ];
+            ]);
         }
 
         return $viewOrphanedFiles;

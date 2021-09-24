@@ -185,6 +185,9 @@ class OrphanedView
             ]
         );
 
+
+        echo "!!!!!" . $_POST['fileID'] . "?????";
+
         $courseInfo = get_fast_modinfo($course);
         $sectionCounter = 0;
 

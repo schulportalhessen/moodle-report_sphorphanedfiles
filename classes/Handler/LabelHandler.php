@@ -28,17 +28,16 @@ class LabelHandler extends Handler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = [
+            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => $modName,
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                'formDelete' => $formDelete->toArray(),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-            ];
+            ]);
         }
 
         return $viewOrphanedFiles;
