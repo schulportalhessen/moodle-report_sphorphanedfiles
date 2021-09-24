@@ -66,4 +66,13 @@ class HTML
 
         return html_writer::tag('h3', '(' . $sectionCounter . ') ' . $linktext . ' ' .  $linktext2, ['class' => 'orphandfilesh3']);
     }
+
+    public static function createSectionOverview(int $distance, string $head, string $body): string
+    {
+        return html_writer::tag(
+            'div',
+            $head . $body,
+            ['class' => 'border shadow p-1']
+        ) . str_repeat(html_writer::empty_tag('br'), $distance);
+    }
 }

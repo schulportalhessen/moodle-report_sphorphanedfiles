@@ -132,7 +132,7 @@ class OrphanedView
         return $viewOrphanedFiles;
     }
 
-    public function renderOrphans($sectionInfo, $usingTemplate)
+    public function createOrphansList($sectionInfo, $usingTemplate): string
     {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
 
@@ -140,11 +140,13 @@ class OrphanedView
             $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'moduleContent'], 'report_sphorphanedfiles');
             $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool'], 'report_sphorphanedfiles', 'header.');
 
-            echo $this->output->render_from_template(
+            return $this->output->render_from_template(
                 $usingTemplate,
                 ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]
             );
         }
+
+        return "";
     }
 
     /**
@@ -187,17 +189,15 @@ class OrphanedView
         $sectionCounter = 0;
 
         foreach ($courseInfo->get_section_info_all() as $sectionInfo) {
-            echo '<div class="border shadow p-1">';
-
-            echo HTML::createSectionHeading($sectionInfo, $course, $sectionCounter++);
-
             //
             // Classic View: 'report_sphorphanedfiles/sectionTable'
             // Multi Selection: 'report_sphorphanedfiles/sectionTableMultipleSelection'
             //
-            $this->renderOrphans($sectionInfo,'report_sphorphanedfiles/sectionTableMultipleSelection');
-
-            echo "</div><br /><br /><br />";
+            echo HTML::createSectionOverview(
+                3,
+                HTML::createSectionHeading($sectionInfo, $course, $sectionCounter++),
+                $this->createOrphansList($sectionInfo, 'report_sphorphanedfiles/sectionTableMultipleSelection')
+            );
         }
 
         echo $this->output->footer();
