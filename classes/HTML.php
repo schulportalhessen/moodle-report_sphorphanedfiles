@@ -71,4 +71,16 @@ class HTML
             ['class' => 'border shadow p-1']
         ) . str_repeat(html_writer::empty_tag('br'), $distance);
     }
+
+    public static function createList(array $data, bool $ordered = false)
+    {
+        return html_writer::tag(
+            $ordered ? 'ol' : 'ul',
+            implode(
+                array_map(function ($element) {
+                    return html_writer::tag('li', $element);
+                }, $data)
+            )
+        );
+    }
 }
