@@ -133,7 +133,7 @@ class OrphanedView
         return $viewOrphanedFiles;
     }
 
-    public function renderOrphans($sectionInfo)
+    public function renderOrphans($sectionInfo, $usingTemplate)
     {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
 
@@ -142,7 +142,7 @@ class OrphanedView
             $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool'], 'report_sphorphanedfiles', 'header.');
 
             echo $this->output->render_from_template(
-                'report_sphorphanedfiles/sectionTable',
+                $usingTemplate,
                 ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]
             );
         }
@@ -192,7 +192,11 @@ class OrphanedView
 
             echo HTML::createSectionHeading($sectionInfo, $course, $sectionCounter++);
 
-            $this->renderOrphans($sectionInfo);
+            //
+            // Classic View: 'report_sphorphanedfiles/sectionTable'
+            // Multi Selection: 'report_sphorphanedfiles/sectionTableMultipleSelection'
+            //
+            $this->renderOrphans($sectionInfo,'report_sphorphanedfiles/sectionTableMultipleSelection');
 
             echo "</div><br /><br /><br />";
         }
