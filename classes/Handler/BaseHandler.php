@@ -50,8 +50,8 @@ abstract class BaseHandler
      *  Using reflection, the correct name can be determined automagically if
      *  subclasses use the „standard“ naming convention.
      * 
-     *  Naming convention: Use class names postfixed with the name of this base class, .i.e. 
-     *                     Handler. For example:
+     *  Naming convention: Use class names suffixed with the last part of the name of this base
+     *                     class, .i.e. Handler. For example:
      * 
      *                     In case of subclass PageHandler: PageHandler --- automagically --> page
      * 
@@ -68,12 +68,15 @@ abstract class BaseHandler
      */
     public function getComponentName(): string
     {
-        // Safety in case of renaming. Always use the exact name of the base class, not any
-        // hard-coded string.
-        $theBaseClassName = (new ReflectionClass(self::class))->getShortName();
+        // Safety in case of class renaming. Always use the exact name of the suffix of the 
+        // base class, defined by the first occurence of an uppercase character when
+        // scanned from right to left, not any hard-coded string.
+        $reversedBaseClassName = strrev((new ReflectionClass(self::class))->getShortName());
+        $suffix = strrev(substr($reversedBaseClassName, 0, strcspn($reversedBaseClassName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') + 1));
+
         $mySimpleName = (new ReflectionClass($this))->getShortName();
 
-        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, 'Handler')));
+        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, $suffix)));
     }
 
     public function canHandle(string $type): bool
