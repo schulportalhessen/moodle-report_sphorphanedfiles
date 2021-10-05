@@ -29,6 +29,3 @@ $plugin->release = '0.2.0';
 $plugin->version = 2021081200;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->dependencies = [
-    'block_sph' => ANY_VERSION,
-];
