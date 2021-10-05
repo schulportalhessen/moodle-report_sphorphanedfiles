@@ -73,7 +73,7 @@ abstract class BaseHandler
         $theBaseClassName = (new ReflectionClass(self::class))->getShortName();
         $mySimpleName = (new ReflectionClass($this))->getShortName();
 
-        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, $theBaseClassName)));
+        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, 'Handler')));
     }
 
     public function canHandle(string $type): bool
