@@ -102,7 +102,7 @@ class OrphanedView
             $sectionInfo,
             $this->user,
             $this->courseId,
-            "" // Intentionally left blank: In case of a section summary, there is no iconHtml information
+            '' // Intentionally left blank: In case of a section summary, there is no iconHtml information
         );
 
         $modInfo = $sectionInfo->modinfo;
@@ -181,7 +181,7 @@ class OrphanedView
             echo HTML::createSectionOverview(
                 3,
                 HTML::createSectionHeading($sectionInfo, $this->getPage()->getCourse(), $sectionCounter++),
-                $this->createOrphansList($sectionInfo, 'report_sphorphanedfiles/sectionTableMultipleSelection')
+                $this->createOrphansList($sectionInfo, 'report_sphorphanedfiles/sectionTable')
             );
         }
 
