@@ -37,12 +37,16 @@ class SectionSummaryHandler extends ItemHandler
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $fileItemIdSectionInfo);
+        echo "<h3> Anzahl verwaister Dateien: </h3>";
 
+        $modName = 'Sectionsummary';
+        echo "$modName : ".  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 
             $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => 'course',
+                'name' => "$modName",
                 'instanceId' => 'todo',
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
