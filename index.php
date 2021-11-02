@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 global $CFG;
-$isactiv = $CFG->report_sphorphanedfiles_isactiv;
-if ($isactiv) {
+$isactive = $CFG->report_sphorphanedfiles_isactive;
+if ($isactive) {
     $orphanedViewInstance->init();
 } else {
     echo "is not activ";
