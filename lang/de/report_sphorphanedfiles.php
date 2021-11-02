@@ -41,5 +41,5 @@ $string['description'] = 'Wenn eine Lehrende Person in einem Editor eine Datei h
     Dieser Report ermöglicht das Auffinden solcher verwaisten Dateien innerhalb des Kurses.';
 $string['moduleContent'] = 'Beschreibung, ...';   
 
-$string['isactive'] = 'Bereicht aktivieren';
+$string['isactive'] = 'Bericht aktivieren';
 $string['configisactive'] = 'Wenn aktiviert kann der Bericht bei vorhandenen Berechtigungen im der Kursnavigation aufgerufen werden.';
