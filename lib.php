@@ -36,6 +36,7 @@ defined('MOODLE_INTERNAL') || die;
  */
 function report_sphorphanedfiles_extend_navigation_course($navigation, $course, $context)
 {
+    global $CFG;
     $page = $GLOBALS['PAGE'];
     $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
 
@@ -48,11 +49,15 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
         $key = $child->key;
         break;
     }
+    
+    $isactiv = $CFG->report_sphorphanedfiles_isactiv;
+    if ($isactiv){
+        $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
+        $orphanedNode->add_node($node,  $key);
+    }
 
-    $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
-    $orphanedNode->add_node($node,  $key);
 
-    if (true || has_capability('moodle/sphorphanedfiles:view', $context)) {
+    if ( has_capability('moodle/sphorphanedfiles:view', $context) ) {
         $navigation->add(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::TYPE_SETTING, null,
             null, new pix_icon('i/report', ''));
     }

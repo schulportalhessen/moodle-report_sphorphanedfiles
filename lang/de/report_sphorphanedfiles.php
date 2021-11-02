@@ -40,3 +40,6 @@ $string['description'] = 'Wenn eine Lehrende Person in einem Editor eine Datei h
     Ebenfalls wird unnötiger Speicherplatz belegt. Daher sollten diese Dateien von den kursverantwortlichen Lehrenden gelöscht werden.
     Dieser Report ermöglicht das Auffinden solcher verwaisten Dateien innerhalb des Kurses.';
 $string['moduleContent'] = 'Beschreibung, ...';   
+
+$string['isactive'] = 'Bereicht aktivieren';
+$string['configisactive'] = 'Wenn aktiviert kann der Bericht bei vorhandenen Berechtigungen im der Kursnavigation aufgerufen werden.';
