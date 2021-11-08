@@ -15,10 +15,11 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
- *
  * @package     report_sphorphanedfiles
- * @copyright   SPH <andreas.schenkel@schulportal.hessen.de>
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Stefan Buchhofer
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @author      Markus Heizenreder-Reitz
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
