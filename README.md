@@ -1,33 +1,14 @@
-# Wichtige Anmerkungen für die Nutzung auf Entwicklerebene
-
-Um den Start in die Entwicklung für dieses Modul zu vereinfachen, befinden sich im
-Verzeichnis
-
-  README
-
-ausführliche Erläuterungen, wie dieses Plugin unter Verwendung von
-
-  Microsoft Visual Studio Code
-
-gehandhabt werden kann. Das Lesen der Einstiegsdatei (ggf. ergänzt um die Lektüre der 
-weiteren Dokumente)
-
-    VisualStudioCode.md
-
-wird empfohlen.
-
-
-
-
-
-
-
-# Automatisch generierter Text nachfolgend
-# Orphaned files #
+# Report Orphaned files #
 
 TODO Describe the plugin shortly here.
 
 TODO Provide more detailed description here.
+
+## Changelog ##
+
+[[v1.0.0]] first release for betatesting
+
+
 
 ## Installing via uploaded ZIP file ##
 
