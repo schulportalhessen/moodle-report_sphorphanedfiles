@@ -45,25 +45,31 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
 
     $collection = $orphanedNode->children;
 
-    foreach ($collection->getIterator() as $child){
+    foreach ($collection->getIterator() as $child) {
         $key = $child->key;
         break;
     }
-    
-   if ($CFG->report_sphorphanedfiles_isactive == true) {
+
+    if ($CFG->report_sphorphanedfiles_isactive == true) {
         $isactive = true;
     } else {
         $isactive = false;
     }
 
-  if ($isactive){
+    if ($isactive) {
         $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
         $orphanedNode->add_node($node,  $key);
     }
 
 
-    if (true || has_capability('moodle/sphorphanedfiles:view', $context) ) {
-        $navigation->add(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::TYPE_SETTING, null,
-            null, new pix_icon('i/report', ''));
+    if (true || has_capability('moodle/sphorphanedfiles:view', $context)) {
+        $navigation->add(
+            get_string('pluginname', 'report_sphorphanedfiles'),
+            $url,
+            navigation_node::TYPE_SETTING,
+            null,
+            null,
+            new pix_icon('i/report', '')
+        );
     }
 }
