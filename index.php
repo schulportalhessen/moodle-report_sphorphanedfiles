@@ -10,17 +10,23 @@ use report_sphorphanedfiles\View\OrphanedView;
  * 
  * FIXME: Move to method call. 
  */
+
 $courseId = required_param('id', PARAM_INT);
 $page = $PAGE;
 $output = $OUTPUT;
 $user = $USER;
-$globalCfg = $CFG;
 $db = $DB;
 
-$orphanedViewInstance = new OrphanedView($db, $courseId, $page, $output, $user, $globalCfg);
+$orphanedViewInstance = new OrphanedView($db, $courseId, $page, $output, $user);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $orphanedViewInstance->deleteOrphanedFile();
 }
 
-$orphanedViewInstance->init();
+global $CFG;
+$isactive = $CFG->report_sphorphanedfiles_isactive;
+if ($isactive) {
+    $orphanedViewInstance->init();
+} else {
+    echo "is not activ";
+}

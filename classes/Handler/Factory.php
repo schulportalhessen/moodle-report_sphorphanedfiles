@@ -3,13 +3,15 @@
 namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Manager;
-
+use InvalidArgumentException;
 /**
  * if we have time chain of responsibility
  * Class Factory
  */
 class Factory
 {
+    private static $handlers = null;
+
     /**
      * @var Manager
      */
@@ -63,5 +65,39 @@ class Factory
     public function resourceHandler(): ResourceHandler
     {
         return new ResourceHandler($this->apiM);
+    }
+
+    public function getHandler(): array
+    {
+        if (self::$handlers === null)
+            self::$handlers = [
+                $this->labelHandler(),
+                $this->pageHandler(),
+                $this->resourceHandler(),
+                $this->sectionSummaryHandler(),
+                $this->introHandler()
+            ];
+
+        return static::$handlers;
+    }
+
+    public function hasHandlerFor($instance): bool
+    {
+        foreach ($this->getHandler() as $handler)
+            if ($handler->canHandle($instance->modname)) {
+                return true;
+            }
+
+        return false;
+    }
+
+    public function getHandlerFor($instance): Handler
+    {
+        foreach ($this->getHandler() as $handler)
+            if ($handler->canHandle($instance->modname)) {
+                return $handler;
+            }
+
+        throw new InvalidArgumentException();
     }
 }

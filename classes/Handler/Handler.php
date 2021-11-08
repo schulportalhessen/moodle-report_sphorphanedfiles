@@ -3,13 +3,10 @@
 namespace report_sphorphanedfiles\Handler;
 
 use cm_info;
-use ReflectionClass;
-
-use moodle_url;
 
 use report_sphorphanedfiles\Files\FileInfo;
-use report_sphorphanedfiles\Manager;
-
+use report_sphorphanedfiles\HTML;
+use report_sphorphanedfiles\Misc;
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
  * handler implementations for different Moodle objects -- which should be scanned
@@ -18,52 +15,58 @@ use report_sphorphanedfiles\Manager;
  * All functionality common to any kind of handler should reside inside this class
  * to avoid code redundancy.
  */
-abstract class Handler
+abstract class Handler extends BaseHandler
 {
-    /**
-     * @var Manager
-     */
-    protected $apiM;
+    private $user;
+    private $course;
+    private $instance;
+    private $page;
 
-    /**
-     * Initialize, i.e. bind, the class to the corresponding Manager instance.
-     * 
-     * @param Manager $apiM The Manager instance to be used by this instance.
-     */
-    public function __construct(Manager $apiM)
+    public function bind($user, $course, $instance, $page): Handler
     {
-        $this->apiM = $apiM;
+        $this->user = $user;
+        $this->course = $course;
+        $this->instance = $instance;
+        $this->page = $page;
+
+        return $this;
     }
 
-    /** 
-     *  Return the Manager instance this handler is bound to.
-     * 
-     *  @return Manager The bound Manager instance.
-     */
-    public function getManager(): Manager
+    public function getUser()
     {
-        return $this->apiM;
+        return $this->user;
     }
 
-    /** Returns the component's name as required in the context of the Moodle system.
-     *  Using reflection, the correct name can be determined automagically if
-     *  subclasses use the „standard“ naming convention.
-     * 
-     *  Naming convention: Use class names postfixed with „Handler“, e.g. 
-     *                     PageHandler --- automagically --> page
-     * 
-     *  Attention: If performance is important, you might override this generic default
-     *             implementation.
-     * 
-     * The component's name matching Moodle requirements.
-     *  @return string 
-     * 
-     */
-    public function getComponentName(): string
+    public function getCourse()
     {
-        $mySimpleName = (new ReflectionClass($this))->getShortName();
+        return $this->course;
+    }
 
-        return strtolower(substr($mySimpleName, 0, strpos($mySimpleName, "Handler")));
+    public function getInstance()
+    {
+        return $this->instance;
+    }
+
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    public function getIconHTML()
+    {
+        return HTML::createIconForInstance($this->getInstance(), $this->getPage());
+    }
+
+    public function addOrphans($orphans)
+    {
+        return $this->getViewOrphanedFiles(
+            $orphans,
+            $this->getInstance()->context->id,
+            $this->getUser(),
+            $this->getCourse(),
+            $this->getInstance(),
+            $this->getIconHTML()
+        );
     }
 
     /**
@@ -78,7 +81,7 @@ abstract class Handler
     {
         $dbParams = ['id' => $instance->instance];
 
-        if ($page = $this->apiM->database()->getDbM()->get_record($this->getComponentName(), $dbParams, '*')) {
+        if ($page = $this->getManager()->database()->getDbM()->get_record($this->getComponentName(), $dbParams, '*')) {
             return format_module_intro($this->getComponentName(), $page, $instance->id, false);
         }
 
@@ -86,30 +89,9 @@ abstract class Handler
     }
 
     /**
-     * Checks if the given users is allowed to delete (all) files in this course.
-     * 
-     * @param $user   The user for which the check should be performed.
-     * @param $course The course for which to check.
-     * 
-     * @return true if user has appropriate rights, false otherwise.
+     * @override
      */
-    public function isUserAllowedToViewDeleteAllFilesForCourse($user, $course): bool
-    {
-        return $this->getManager()->security()->allowedToViewDeleteAllFiles($course, $user);
-    }
-
-    /**
-     * Enumerates all files the given user is allowed to perform Moodle actions on, the
-     * special file „.“ is filtered and therefore not an element of the returned array.
-     * 
-     * @param $user The user for which the enumeration has to be generated.
-     * 
-     * 
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     * 
-     */
-    public function enumerateFilesForUserInContextForModuleInCourse($user, $context, $module, $course): array
+    protected function enumerateFiles($user, $context, $course, $module): array
     {
         if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
             $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
@@ -117,63 +99,37 @@ abstract class Handler
             $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponent($user->id, $context, $module) ?? [];
         }
 
-        return array_filter(
-            $result,
-            function ($file, $key) {
-                return $file->filename !== '.';
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
+        return $this->postFilter($result);
+    }
+
+    protected function generateViewFile($orphanedFile)
+    {
+        return $this->getManager()->files()->generateViewFile($orphanedFile);
     }
 
     /**
-     * Enumerates all files that are orphaned with respect to the given HTML content.
-     * 
-     * @param $user The user for which the enumeration has to be generated.
-     * 
-     * 
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     * 
+     * @override
      */
-    public function enumerateOrphanedFilesFromString($user, $context, $module, $course, $htmlContent): array
-    {
-        return $this->getManager()->parser()->extractOrphanedFilesFromString(
-            $htmlContent,
-            $this->enumerateFilesForUserInContextForModuleInCourse($user, $context, $module, $course),
-            $context
-        );
-    }
-
-    public function getPreviewForFile(FileInfo $fileInfo, $globalConfig)
+    public function getPreviewForFile(FileInfo $fileInfo)
     {
         $orphanedFile = $this->getManager()->files()->getFileUsingFileInfo($fileInfo);
 
         if ($orphanedFile && $orphanedFile->is_valid_image()) {
-            return $this->getManager()->files()->generateViewFile(
-                $orphanedFile,
-                $globalConfig
-            );
+            return $this->generateViewFile($orphanedFile);
         } else {
-            return $this->apiM->files()->generateFallbackView(
-                $orphanedFile,
-                $globalConfig
-            );
+            return parent::getPreviewForFile($fileInfo);
         }
     }
 
-    public function getFileName(FileInfo $fileInfo, $globalConfig)
+    protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array
     {
-        return $this->getManager()->files()->generateFallbackView(
-            $this->getManager()->files()->getFileUsingFileInfo($fileInfo),
-            $globalConfig
-        );
-    }
+        $result = $formDelete->addFileReferenceInformation($data);
 
-    public function getModuleURLForInstance($instance)
-    {
-        return new moodle_url('/mod/' . $instance->modname . '/view.php?id=' . $instance->id);
-    }
+        $result['modurl'] = $this->getModuleURLForInstance($instance);
+        $result['filename'] = $this->getFileName(new FileInfo($formDelete));
+        $result['preview'] = $this->getPreviewForFile(new FileInfo($formDelete));
+        $result['filesize'] = Misc::convertByteInMegabyte((int)$file->filesize);
 
-    abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $globalCfg, $instance, $iconHtml): array;
+        return $result;
+    }
 }

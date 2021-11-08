@@ -3,17 +3,18 @@
 namespace report_sphorphanedfiles\Files;
 
 use file_storage;
-use html_writer;
-use stdClass;
 use stored_file;
+use moodle_url;
 
 use report_sphorphanedfiles\Security\Security;
+use report_sphorphanedfiles\HTML;
 
 /**
  * Class Files
  */
 class Files
 {
+    private const DIRECTORY_SEPARATOR = "/";
     /**
      * @var file_storage
      */
@@ -58,77 +59,56 @@ class Files
         return $this->getFile($fileInfo->toArray());
     }
 
-    /**
-     * @param stored_file $storedFile
-     * @param stdClass $globalCfg
-     * @return string
-     */
-    public function generateViewFile(stored_file $storedFile, $globalCfg)
+    protected function createPathForFileWithItem(stored_file $storedFile)
     {
-        $imagepath = '/' . $storedFile->get_contextid() .
-            '/' . $storedFile->get_component() .
-            '/' . $storedFile->get_filearea() .
-            $storedFile->get_filepath() .
-            $storedFile->get_filename();
-        $imageurl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $imagepath,
-            false
-        );
+        return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filename();
+    }
 
-        return html_writer::tag(
-            'div',
-            html_writer::empty_tag('img', array('height' => '100px', 'src' => $imageurl)),
-            array('class' => 'courseimage')
-        );
+    protected function createPathForFile(stored_file $storedFile)
+    {
+        return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
+    }
+
+    protected function createURLForFile(stored_file $storedFile)
+    {
+        return new moodle_url('/pluginfile.php' . $this->createPathForFile($storedFile));
+    }
+
+    protected function createURLForFileWithItem(stored_file $storedFile)
+    {
+        return new moodle_url('/pluginfile.php' . $this->createPathForFileWithItem($storedFile));
     }
 
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return string
      */
-    public function generateViewFileForWithItemId(stored_file $storedFile, $globalCfg)
+    public function generateViewFile(stored_file $storedFile)
     {
-        $imagePath = DIRECTORY_SEPARATOR . $storedFile->get_contextid() . DIRECTORY_SEPARATOR .
-            $storedFile->get_component() . DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
-            $storedFile->get_filepath() . $storedFile->get_itemid() . DIRECTORY_SEPARATOR .
-            $storedFile->get_filename();
-
-        $imageUrl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $imagePath,
-            false
-        );
-        return html_writer::tag(
-            'div',
-            html_writer::empty_tag('img', ['height' => '100px', 'src' => $imageUrl]),
-            ['class' => 'courseimage']
-        );
+        return HTML::createImage($this->createURLForFile($storedFile));
     }
 
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return string
      */
-    public function generateFallbackView(stored_file $storedFile, $globalCfg)
+    public function generateViewFileForWithItemId(stored_file $storedFile)
     {
-        $path = '/' . $storedFile->get_contextid() .
-            '/' . $storedFile->get_component() .
-            '/' . $storedFile->get_filearea() .
-            $storedFile->get_filepath() .
-            $storedFile->get_filename();
-        $pathUrl = file_encode_url(
-            $globalCfg->wwwroot . '/pluginfile.php',
-            $path,
-            false
-        );
+        return HTML::createImage($this->createURLForFileWithItem($storedFile));
+    }
 
-        return html_writer::tag(
-            'div',
-            html_writer::link($pathUrl, $storedFile->get_filename(), ['target' => '_blank'])
-        );
+    /**
+     * @param stored_file $storedFile
+     * @return string
+     */
+    public function generateFallbackView(stored_file $storedFile)
+    {
+        return HTML::createLinkInNewTab($this->createURLForFile($storedFile), $storedFile->get_filename());
     }
 
     public function deleteFileByUserInCourse(Security $security, FileInfo $fileInfo, $user, $course): bool

@@ -6,7 +6,6 @@ class Misc
 {
     /**
      * @param stored_file $storedFile
-     * @param stdClass $globalCfg
      * @return float
      */
     public static function convertByteInMegabyte(int $byte)
@@ -17,5 +16,13 @@ class Misc
         $filesizeInKilobyte = $byte / 1024;
         $filesizeInMegabyte = $filesizeInKilobyte / 1024;
         return number_format($filesizeInMegabyte, 2, ',', '');
+    }
+
+    public static function translate($data, $translationFile, $prefix = "")
+    {
+        foreach ($data as $item)
+            $result[$item] = get_string($prefix . $item, $translationFile);
+
+        return $result;
     }
 }

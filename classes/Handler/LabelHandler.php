@@ -15,46 +15,33 @@ class LabelHandler extends Handler
         $contextId,
         $user,
         $courseId,
-        $globalCfg,
         $instance,
         $iconHtml
     ): array {
         $htmlContent = $instance->content;
+        
         $modName = $instance->modname;
+        $name = $instance->name;
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-
-        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent);
-
-        // FIXME: Refactor
-
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
+        echo "$modName: ".  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
-            $fileInfo = [
-                'filearea' => $file->filearea,
-                'itemId' => $file->itemid,
-                'contextId' => $contextId,
-                'filepath' => $file->filepath,
-                'filename' => $file->filename,
-                'component' => $file->component
-            ];
+            $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $preview = $this->getPreviewForFile(new FileInfo($fileInfo), $globalCfg);
-
-            $filename = $this->getFileName(new FileInfo($fileInfo), $globalCfg);
-
-            $formDelete = $fileInfo;
-            $viewOrphanedFiles[] = [
+            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => $modName,
+                'name' => '',
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
-                'filename' => $filename,
-                'preview' => $preview,
-                'formDelete' => $formDelete,
+                'filename' => $this->getFileName(new FileInfo($formDelete)),
+                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-            ];
+            ]);
         }
+
         return $viewOrphanedFiles;
     }
 }

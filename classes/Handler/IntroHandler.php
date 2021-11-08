@@ -6,7 +6,6 @@ use stdClass;
 use cm_info;
 use dml_exception;
 
-use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
 
 /**
@@ -15,6 +14,43 @@ use report_sphorphanedfiles\Files\FileInfo;
  */
 class IntroHandler extends Handler
 {
+    private const handlerActivities = [
+        'assign',
+        'bigbluebuttonbn',
+        'checklist',
+        'choice',
+        'customcert',
+        'data',
+        'lti',
+        'ratingallocate',
+        'feedback',
+        'forum',
+        'geogebra',
+        'glossary',
+        'h5pactivity',
+        'hotpot',
+        'hvp',
+        'lesson',
+        'mootyper',
+        'pdfannotator',
+        'quiz',
+        'realtimequiz',
+        'scorm',
+        'survey',
+        'wiki',
+        'workshop',
+    ];
+
+    private const handlerMaterials = [
+        'book',
+        'folder',
+        'imscp',
+        'lightboxgallery',
+        'url',
+        'edusharing',
+        'unilabel'
+    ];
+
     /**
      * @var string
      */
@@ -29,11 +65,38 @@ class IntroHandler extends Handler
     }
 
     /**
+     * @override
+     */
+    public function canHandle(string $component): bool
+    {
+        if (in_array($component, self::handlerActivities))
+            return true;
+
+        if (in_array($component, self::handlerMaterials))
+            return true;
+
+        return false;
+    }
+
+    /**
+     * @override
+     */
+    protected function enumerateFiles($user, $context, $course, $module): array
+    {
+        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
+            $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
+        } else {
+            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponentIntro($user->id, $context, $module) ?? [];
+        }
+
+        return $this->postFilter($result);
+    }
+
+    /**
      * @param array $viewOrphanedFiles
      * @param int $contextId
      * @param stdClass $user
      * @param int $courseId
-     * @param stdClass $globalCfg
      * @param cm_info $instance
      * @param cm_info $iconHtml
      * @return array
@@ -44,82 +107,39 @@ class IntroHandler extends Handler
         $contextId,
         $user,
         $courseId,
-        $globalCfg,
         $instance,
         $iconHtml
     ): array {
 
-        // FIXME: Das ist nicht die optimale passende Stelle für die Instanzvariablen-
-        //        zuweisung.
+        // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
+        //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
+        //        Interface
         $this->componentName = $instance->modname;
 
         $htmlContent = $this->getIntro($instance);
+
         $name = $instance->name;
 
-        $allowedToViewDeleteAllFiles = $this->apiM->security()->allowedToViewDeleteAllFiles(
-            $courseId,
-            $user
-        );
 
-        $userAllowedToDelete = false;
+        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
-        if ($allowedToViewDeleteAllFiles) {
-            $files = $this->apiM->database()->dataFiles()->getFilesForComponentIntro(
-                $contextId,
-                $this->getComponentName()
-            );
-            $userAllowedToDelete = true;
-        } else {
-            $userId = $user->id;
-            $files = $this->apiM->database()->dataFiles()->getFilesOfUserForComponentIntro(
-                $userId,
-                $contextId,
-                $this->getComponentName()
-            );
+        $componentName = $this->getComponentName();
+        echo $componentName . ': '.  count($orphanedFiles) . '<br />';
+        foreach ($orphanedFiles as $file) {
+            $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
+    
+            $viewOrphanedFiles[] = $this->getSkeleton($formDelete,$file,$instance,[
+                'modName' => $componentName,
+                'name' => $name,
+                'instanceId' => $instance->id,
+                'contextId' => $contextId,
+                'content' => $htmlContent,
+                'userAllowedToDelete' => $userAllowedToDelete,
+                'iconHtml' => $iconHtml,
+            ]);
         }
 
-        $orphanedFiles = $this->apiM->parser()->extractOrphanedFilesFromString(
-            $htmlContent,
-            $files ?? [],
-            $contextId
-        );
-
-        if (!empty($orphanedFiles)) {
-            foreach ($orphanedFiles ?? [] as $file) {
-                if ($file->filename !== '.') {
-                    $fileInfo = [
-                        'filearea' => $file->filearea,
-                        'itemId' => $file->itemid,
-                        'contextId' => $contextId,
-                        'filepath' => $file->filepath,
-                        'filename' => $file->filename,
-                        'component' => $file->component
-                    ];
-
-                    $preview = $this->getPreviewForFile(new FileInfo($fileInfo), $globalCfg);
-
-                    $filename = $this->getFileName(new FileInfo($fileInfo), $globalCfg);
-
-                    $modurl = $this->getModuleURLForInstance($instance);
-                    
-                    $formDelete = $fileInfo;
-                    $viewOrphanedFiles[] = [
-                        'modName' => $this->getComponentName(),
-                        'name' => $name,
-                        'modurl' => $modurl,
-                        'instanceId' => $instance->id,
-                        'contextId' => $contextId,
-                        'filename' => $filename,
-                        'preview' => $preview,
-                        'formDelete' => $formDelete,
-                        'content' => $htmlContent,
-                        'userAllowedToDelete' => $userAllowedToDelete,
-                        'iconHtml' => $iconHtml,
-                        'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-                    ];
-                }
-            }
-        }
         return $viewOrphanedFiles;
     }
 }

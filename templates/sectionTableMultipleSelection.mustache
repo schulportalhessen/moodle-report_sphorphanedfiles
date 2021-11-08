@@ -23,7 +23,7 @@
 }}
 
 <form action="deleteResult.php" method="POST">
-<table class="table table-hover table-bordered">
+  <table class="table table-hover table-bordered">
     <thead class='orphandfilesth'>
     <tr>
         <th width="150px" scope="col">{{translation.header.modName}}</th>
@@ -33,14 +33,13 @@
     </tr>
     </thead>
     <tbody>
-
     {{#orphanedFiles}}
         <tr>
-            <td>{{{iconHtml}}} {{name}}</td>
+            <td><a href='{{{modurl}}}'>{{{iconHtml}}}{{name}}</a></td>
             <td><details><summary>Quelltext:</summary><textarea style="width: 100%;" rows="4">{{content}}</textarea></details> <details><summary>{{translation.moduleContent}}:</summary>{{{content}}}</details></td>
             <td><div class='row ml-0'>
                 <div>
-                  <input type="checkbox" name="selectedItems[]" >
+                  <input type="checkbox" name="fileIDList[]" value="{{fileID}}">
                 </div>
                 <div class='ml-1'>{{{filename}}}</div>
                 <div class='ml-1'>({{{filesize}}} MB)</div>
@@ -50,12 +49,7 @@
             <td>
                 {{#userAllowedToDelete}}
                     <form action="#" method="POST">
-                        <input type="hidden" name="filearea" value="{{formDelete.filearea}}">
-                        <input type="hidden" name="itemId" value="{{formDelete.itemId}}">
-                        <input type="hidden" name="contextId" value="{{formDelete.contextId}}">
-                        <input type="hidden" name="filepath" value="{{formDelete.filepath}}">
-                        <input type="hidden" name="filename" value="{{formDelete.filename}}">
-                        <input type="hidden" name="component" value="{{formDelete.component}}">
+                        <input type="hidden" name="fileID" value="{{fileID}}">
                         <div>
                             <button class="btn btn-sm btn-danger p-1"><i class="fa fa-trash fa-fw h4 m-b-0"></i>
                             </button>
@@ -68,18 +62,7 @@
             </td>
         </tr>
     {{/orphanedFiles}}
-
-
-    
-
-
-
-
-
-
-
     </tbody>
-</table>
-        <button class="btn btn-sm btn-danger p-1"><i class="fa fa-trash fa-fw h4 m-b-0"></i>
-        </button>
-    </form>
+  </table>
+  <button type="submit">Auswahl löschen</button>
+</form>
