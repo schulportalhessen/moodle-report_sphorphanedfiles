@@ -6,7 +6,7 @@ TODO Provide more detailed description here.
 
 ## Changelog ##
 
-[[v1.0.0]] first release for betatesting
+[v1.0.0] first release for betatesting
 
 
 
