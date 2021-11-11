@@ -34,7 +34,8 @@ $string['header.preview'] = '';
 $string['header.tool'] = 'delete orphanded';
 $string['isallowedtodeleteallfiles'] = 'is allowed to delet all files';
 $string['description'] = 'This report shows orphaned files that are not used in activitys or resources.';
-$string['moduleContent'] = 'Description, ...';  
+$string['header.moduleContent'] = 'Description, ...';
+$string['header.code'] = 'Sourcecode:'; 
 
 $string['isactive'] = 'Activate report';
 $string['configisactive'] = 'When activate the report can be started in the coursenavigation.';
