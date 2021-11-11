@@ -2,9 +2,12 @@
 
 namespace report_sphorphanedfiles\Handler;
 
+use report_sphorphanedfiles\Files\FileInfo;
+use report_sphorphanedfiles\HTML;
+
 abstract class ItemHandler extends Handler
 {
-    protected $implementationmode = 'item'; 
+    protected $implementationmode = 'item';
 
     /**
      * @override
@@ -19,10 +22,35 @@ abstract class ItemHandler extends Handler
     }
 
     /**
+     * @override
+     */
+    public function getFileName(FileInfo $fileInfo)
+    {
+        if ($this->implementationmode == 'item') {
+            // contentmodus
+            if ($fileInfo->getFileArea() == 'content' ) 
+            // return "hallo.jpg";
+            $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingFileInfo($fileInfo));
+            return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
+
+        } else {
+            // Hier steht die Adaption
+            // Intro-Modus
+
+                 return $this->getManager()->files()->generateFallbackView(
+                $this->getManager()->files()->getFileUsingFileInfo($fileInfo)
+            );
+        }
+    }
+
+
+
+
+    /**
      * Set the value of implementationmode
      *
      * @return  self
-     */ 
+     */
     public function setImplementationmode($implementationmode)
     {
         $this->implementationmode = $implementationmode;
