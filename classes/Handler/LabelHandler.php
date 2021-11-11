@@ -25,7 +25,7 @@ class LabelHandler extends Handler
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
-        echo "$modName: ".  count($orphanedFiles) . '<br />';
+        echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 

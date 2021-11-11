@@ -29,10 +29,11 @@ class PageHandler extends ItemHandler
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
+        echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete,$file,$instance,[
+            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
                 'modName' => $modName,
                 'name' => $name,
                 'instanceId' => $instance->id,
