@@ -17,7 +17,6 @@
 /**
  * @package     report_sphorphanedfiles
  * @copyright   Schulportal Hessen (SPH)
- * @author      Stefan Buchhofer
  * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
  * @author      Markus Heizenreder-Reitz
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'report_sphorphanedfiles';
 $plugin->release = '1.0.0';
-$plugin->version = 2021110800;
+$plugin->version = 2021110801;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_ALPHA;
