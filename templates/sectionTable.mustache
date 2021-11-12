@@ -35,7 +35,14 @@
     {{#orphanedFiles}}
         <tr>
             <td><a href='{{{modurl}}}'>{{{iconHtml}}}{{name}}</a></td>
-            <td><details><summary>Quelltext:</summary><textarea style="width: 100%;" rows="4">{{content}}</textarea></details> <details><summary>{{translation.moduleContent}}:</summary>{{{content}}}</details></td>
+            <td><details>
+                    <summary>{{translation.header.code}}:</summary>
+                    <textarea style="width: 100%;" rows="4">{{content}}</textarea>
+                </details> 
+                <details>
+                    <summary>{{translation.header.moduleContent}}:</summary>{{{content}}}
+                    </details>
+            </td>
            <td><div class='row ml-0'>
                 <div>
                   <input type="checkbox" name="selectedItems[]" style="display:none;">

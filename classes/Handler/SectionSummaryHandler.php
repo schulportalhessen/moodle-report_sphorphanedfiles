@@ -40,7 +40,7 @@ class SectionSummaryHandler extends ItemHandler
         echo "<h3> Anzahl verwaister Dateien: </h3>";
 
         $modName = 'Sectionsummary';
-        echo "$modName : ".  count($orphanedFiles) . '<br />';
+        echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 

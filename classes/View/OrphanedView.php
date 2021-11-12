@@ -129,8 +129,8 @@ class OrphanedView
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
 
         if (!empty($viewOrphanedFiles)) {
-            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'moduleContent'], 'report_sphorphanedfiles');
-            $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool'], 'report_sphorphanedfiles', 'header.');
+            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description'], 'report_sphorphanedfiles');
+            $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'], 'report_sphorphanedfiles', 'header.');
 
             return $this->getPage()->getOutput()->render_from_template(
                 $usingTemplate,
@@ -174,14 +174,16 @@ class OrphanedView
         $sectionCounter = 0;
 
         foreach ($this->getPage()->getCourseInfo()->get_section_info_all() as $sectionInfo) {
-            //
+
             // Classic View: 'report_sphorphanedfiles/sectionTable'
             // Multi Selection: 'report_sphorphanedfiles/sectionTableMultipleSelection'
-            //
+            $mustache_name = 'report_sphorphanedfiles/sectionTable';
+
+            // $mustache_name = 'report_sphorphanedfiles/sectionTableMultipleSelection';
             echo HTML::createSectionOverview(
                 3,
                 HTML::createSectionHeading($sectionInfo, $this->getPage()->getCourse(), $sectionCounter++),
-                $this->createOrphansList($sectionInfo, 'report_sphorphanedfiles/sectionTable')
+                $this->createOrphansList($sectionInfo, $mustache_name)
             );
         }
 

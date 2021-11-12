@@ -79,7 +79,7 @@ class Files
         return new moodle_url('/pluginfile.php' . $this->createPathForFile($storedFile));
     }
 
-    protected function createURLForFileWithItem(stored_file $storedFile)
+    public function createURLForFileWithItem(stored_file $storedFile)
     {
         return new moodle_url('/pluginfile.php' . $this->createPathForFileWithItem($storedFile));
     }
