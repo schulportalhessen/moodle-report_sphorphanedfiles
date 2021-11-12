@@ -26,18 +26,15 @@ abstract class ItemHandler extends Handler
      */
     public function getFileName(FileInfo $fileInfo)
     {
-        if ($this->implementationmode == 'item') {
-            // contentmodus
-            if ($fileInfo->getFileArea() == 'content' ) 
-            // return "hallo.jpg";
-            $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingFileInfo($fileInfo));
-            return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
-
+        if ('item' === $this->implementationmode) {
+            // Content-Modus
+            if ($fileInfo->getFileArea() === 'content') {
+                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingFileInfo($fileInfo));
+                return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
+            }
         } else {
-            // Hier steht die Adaption
             // Intro-Modus
-
-                 return $this->getManager()->files()->generateFallbackView(
+            return $this->getManager()->files()->generateFallbackView(
                 $this->getManager()->files()->getFileUsingFileInfo($fileInfo)
             );
         }
