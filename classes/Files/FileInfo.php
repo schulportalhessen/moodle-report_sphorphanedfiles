@@ -4,9 +4,9 @@ namespace report_sphorphanedfiles\Files;
 
 use InvalidArgumentException;
 
-/** This class provides an OOP-representation of the metadata which is
- *  used within the Moodle system for data referencing.
- * 
+/** 
+ * This class provides an OOP-representation of the metadata which is
+ * used within the Moodle system for data referencing.
  */
 class FileInfo
 {
@@ -24,7 +24,6 @@ class FileInfo
      * 
      *  @param $data The data (string or dictionary) to be used for instance 
      *               initialization.
-     * 
      */
     public function __construct($data = null)
     {
@@ -54,10 +53,11 @@ class FileInfo
 
     public static function isSufficientForConstruction(array $data): bool
     {
-        if (isset($data[self::FILEREFERENCEKEY]))
+        if (isset($data[self::FILEREFERENCEKEY])) {
             return true;
+        }
 
-        return isset($data['filearea'])  &&
+        return isset($data['filearea']) &&
             isset($data['itemId'])    &&
             isset($data['contextId']) &&
             isset($data['filepath'])  &&
@@ -75,7 +75,10 @@ class FileInfo
         return $this->component;
     }
 
-    public function getFileArea()
+    /**
+     * @return
+     */
+    public function getFileArea(): ?string
     {
         return $this->filearea;
     }
@@ -114,15 +117,15 @@ class FileInfo
 
     public function setFromString($data)
     {
-        $informationComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
+        $infoComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
 
         $this->setFromArray([
-            'contextId' => $informationComponents[0],
-            'component' => $informationComponents[1],
-            'filearea'  => $informationComponents[2],
-            'itemId'    => $informationComponents[3],
-            'filepath'  => $informationComponents[4],
-            'filename'  => $informationComponents[5]
+            'contextId' => $infoComponents[0],
+            'component' => $infoComponents[1],
+            'filearea'  => $infoComponents[2],
+            'itemId'    => $infoComponents[3],
+            'filepath'  => $infoComponents[4],
+            'filename'  => $infoComponents[5]
         ]);
     }
 
