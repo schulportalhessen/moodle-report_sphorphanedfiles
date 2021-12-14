@@ -5,6 +5,11 @@ TODO Describe the plugin shortly here.
 TODO Provide more detailed description here.
 
 ## Changelog ##
+[v1.0.x] 
+
+- added missing languagefiles
+- correct capability for editing teacher instead of teacher  
+
 [v1.0.2] releasecanditade  
 [v1.0.1]   
 [v1.0.0] first release for betatesting  

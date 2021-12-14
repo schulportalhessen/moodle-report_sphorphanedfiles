@@ -17,7 +17,7 @@
 /**
  * Plugin capabilities are defined here.
  *
- * @package     report_sph_orphaned_files
+ * @package     report_sphorphanedfiles
  * @category    access
  * @copyright   SPH <andreas.schenkel@schulportal.hessen.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,8 +31,7 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
-            'teacher' => CAP_ALLOW,
-            'student' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
         ],
     ],
 ];

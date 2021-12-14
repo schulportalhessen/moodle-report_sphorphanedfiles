@@ -37,5 +37,7 @@ $string['description'] = 'This report shows orphaned files that are not used in 
 $string['header.moduleContent'] = 'Description, ...';
 $string['header.code'] = 'Sourcecode:'; 
 
+$string['sphorphanedfiles:view'] = 'Capability to view menuitem linking to the report.'; 
+
 $string['isactive'] = 'Activate report';
 $string['configisactive'] = 'When activate the report can be started in the coursenavigation.';

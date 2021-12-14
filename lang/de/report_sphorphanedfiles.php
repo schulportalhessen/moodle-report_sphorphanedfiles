@@ -42,5 +42,7 @@ $string['description'] = 'Wenn eine Lehrende Person in einem Editor eine Datei h
 $string['header.moduleContent'] = 'Beschreibung, ...';   
 $string['header.code'] = 'Quelltext:'; 
 
+$string['sphorphanedfiles:view'] = 'Berechtigung zum Anzeigen des Menüeintrags zum Report.'; 
+
 $string['isactive'] = 'Bericht aktivieren';
 $string['configisactive'] = 'Wenn aktiviert kann der Bericht bei vorhandenen Berechtigungen im der Kursnavigation aufgerufen werden.';
