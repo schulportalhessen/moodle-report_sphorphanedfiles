@@ -5,10 +5,12 @@ TODO Describe the plugin shortly here.
 TODO Provide more detailed description here.
 
 ## Changelog ##
-[v1.0.x] 
+[v1.0.3] 
 
 - added missing languagefiles
-- correct capability for editing teacher instead of teacher  
+- correct capability for editing teacher instead of teacher
+- supports courseformat gridlayout that is storing imagefiles in section summary
+- solved problem with capability
 
 [v1.0.2] releasecanditade  
 [v1.0.1]   
