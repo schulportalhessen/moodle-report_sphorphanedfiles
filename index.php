@@ -24,9 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 global $CFG;
+
 $isactive = $CFG->report_sphorphanedfiles_isactive;
-if ($isactive) {
-    $orphanedViewInstance->init();
+$isactiveforadmin = $CFG->report_sphorphanedfiles_isactiveforadmin;
+
+// $hascapability = has_capability('report/sphorphanedfiles:view',$context);
+
+if ($isactive || $isactiveforadmin) {
+    $orphanedViewInstance->init($isactive, $isactiveforadmin);
 } else {
-    echo "is not activ";
+    echo "Report is not activated or missing capability";
 }
