@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-    //$options = array('all' => get_string('allcourses', 'report_sphorphanedfiles'), 'own' => get_string('owncourses', 'report_sphorphanedfiles'));
 
     $settings->add(new admin_setting_configcheckbox(
         'report_sphorphanedfiles_isactive',
@@ -34,5 +33,11 @@ if ($ADMIN->fulltree) {
         0
     ));
 
+    $settings->add(new admin_setting_configcheckbox(
+        'report_sphorphanedfiles_isactiveforadmin',
+        get_string('isactiveforadmin', 'report_sphorphanedfiles'),
+        get_string('configisactiveforadmin', 'report_sphorphanedfiles'),
+        0
+    ));
 
 }
