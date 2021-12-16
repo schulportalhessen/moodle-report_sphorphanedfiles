@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die;
 
 /**
  * This function extends the navigation with the report items
+ * 
+ * This functon only works for teacher. Student do not get menuitem added. D not know the reason
  *
  * @param navigation_node $navigation The navigation node to extend
  * @param stdClass $course The course to object for the report
@@ -47,6 +49,7 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
 
     foreach ($collection->getIterator() as $child) {
         $key = $child->key;
+        // Add break-condition in order to add menuitem
         break;
     }
 
@@ -56,20 +59,19 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
         $isactive = false;
     }
 
-    if ($isactive) {
+    if ($CFG->report_sphorphanedfiles_isactiveforadmin == true) {
+        $isactiveforadmin = true;
+    } else {
+        $isactiveforadmin = false;
+    }
+
+    $hascapability = has_capability('report/sphorphanedfiles:view',$context);
+    
+    // Only show node if report is activated AND user has capability OR report is
+    // Do not know if this is a bug but report-node is not shown für student by default.
+    if (($isactive && $hascapability) || ($isactiveforadmin && is_siteadmin())) {
         $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
         $orphanedNode->add_node($node,  $key);
     }
 
-
-    if (true || has_capability('moodle/sphorphanedfiles:view', $context)) {
-        $navigation->add(
-            get_string('pluginname', 'report_sphorphanedfiles'),
-            $url,
-            navigation_node::TYPE_SETTING,
-            null,
-            null,
-            new pix_icon('i/report', '')
-        );
-    }
 }
