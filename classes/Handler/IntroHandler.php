@@ -125,7 +125,7 @@ class IntroHandler extends Handler
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         $componentName = $this->getComponentName();
-        echo $componentName . ': '.  count($orphanedFiles) . '<br />';
+        // echo $componentName . ': '.  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
     

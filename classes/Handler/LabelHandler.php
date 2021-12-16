@@ -21,17 +21,18 @@ class LabelHandler extends Handler
         $htmlContent = $instance->content;
         
         $modName = $instance->modname;
-        $name = $instance->name;
+        
+        $translationForLabel = 'Lable/Textfeld';
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
-        echo "$modName: " .  count($orphanedFiles) . '<br />';
+        // echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
             $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => $modName,
-                'name' => '',
+                'name' => $translationForLabel,
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
