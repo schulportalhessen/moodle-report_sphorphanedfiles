@@ -65,6 +65,10 @@
                 {{^userAllowedToDelete}}
                     No
                 {{/userAllowedToDelete}}
+                {{#isGridlayoutFile}}      
+                    {{translation.isgridlayoutfilehint}}
+                    <br>
+                {{/isGridlayoutFile}} 
             </td>
         </tr>
     {{/orphanedFiles}}
