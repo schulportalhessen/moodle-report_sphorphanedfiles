@@ -1,9 +1,13 @@
 # Report Orphaned files #
 
-This plugin is a report to show files that are stored in moodle but not in use.
+This plugin is a report to show files that are stored in moodle but are not in use.
+
+
 Example:
+
 A teacher adds a material "label" into a moodlecourse and uploads an image to this label. Then the teacher recognize that this was the wrong image and selects the image and deletes the image. Now the teacher adds the correct image.
 The problem is, that the first uploades image ist still stored in this label. This can be seen by clicking at the "manage files" icon where unused files are indicated at the bottom of the shown dialog.
+
 
 This report only shows orphaned files that are stored by a teacher in the intro-field of added moodle activity or moodle material. The files that are added by students are not checked.
 
