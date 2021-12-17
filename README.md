@@ -11,10 +11,12 @@ The problem is, that the first uploades image ist still stored in this label. Th
 
 This report only shows orphaned files that are stored by a teacher in the intro-field of added moodle activity or moodle material. The files that are added by students are not checked.
 
-## Capabilitys
+## Capabilitys 
+(README_capability.png)
 A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "teacher". 
 
 ## Settings in websiteadministration
+(README_settings.png)
 
 - report_sphorphanedfiles_isactive: Activate report
 
