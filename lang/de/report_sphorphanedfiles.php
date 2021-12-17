@@ -39,8 +39,16 @@ $string['description'] = 'Wenn eine Lehrende Person in einem Editor eine Datei h
     dann aber bei der Weitergabe von Kursinhalten an andere Lehrende mit weitergegeben werden würden.
     Ebenfalls wird unnötiger Speicherplatz belegt. Daher sollten diese Dateien von den kursverantwortlichen Lehrenden gelöscht werden.
     Dieser Report ermöglicht das Auffinden solcher verwaisten Dateien innerhalb des Kurses.';
+
+$string['isgridlayoutfilehint'] = 'Dieses File wurde eventuell für das GridLayout genutzt und ist aber aktuell nicht in Verwendung.';
+
 $string['header.moduleContent'] = 'Beschreibung, ...';   
 $string['header.code'] = 'Quelltext:'; 
 
+$string['sphorphanedfiles:view'] = 'Berechtigung zum Anzeigen des Menüeintrags zum Report.'; 
+
 $string['isactive'] = 'Bericht aktivieren';
 $string['configisactive'] = 'Wenn aktiviert kann der Bericht bei vorhandenen Berechtigungen im der Kursnavigation aufgerufen werden.';
+
+$string['isactiveforadmin'] = 'Bericht für Siteadmin aktivieren';
+$string['configisactiveforadmin'] = 'Wenn aktiviert kann ein Siteadmin den Bericht auch dann aufrufen, wenn für normale Nutzende der Bereicht ausgeschaltet ist.';

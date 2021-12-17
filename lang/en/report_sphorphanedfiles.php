@@ -31,11 +31,18 @@ $string['header.modName'] = 'Module';
 $string['header.content'] = 'Content';
 $string['header.filename'] = 'Filename';
 $string['header.preview'] = '';
-$string['header.tool'] = 'delete orphanded';
+$string['header.tool'] = 'delete orphanded without request!';
 $string['isallowedtodeleteallfiles'] = 'is allowed to delet all files';
 $string['description'] = 'This report shows orphaned files that are not used in activitys or resources.';
+$string['isgridlayoutfilehint'] = 'This file maybe was used by gridlayout-plugin but seems to be not in use.';
+
 $string['header.moduleContent'] = 'Description, ...';
 $string['header.code'] = 'Sourcecode:'; 
 
+$string['sphorphanedfiles:view'] = 'Capability to view menuitem linking to the report.'; 
+
 $string['isactive'] = 'Activate report';
 $string['configisactive'] = 'When activate the report can be started in the coursenavigation.';
+
+$string['isactiveforadmin'] = 'Activate report for siteadmin';
+$string['configisactiveforadmin'] = 'When activate an admin can start report in the coursenavigation regardless status isactive for normal users.';

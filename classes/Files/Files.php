@@ -61,10 +61,19 @@ class Files
 
     protected function createPathForFileWithItem(stored_file $storedFile)
     {
-        return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+        if ($storedFile->get_filepath() === '/'){
+            return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
             self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_itemid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() .
             self::DIRECTORY_SEPARATOR . $storedFile->get_filename();
+        } else {
+            return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
+            self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() . 
+            $storedFile->get_filepath() . $storedFile->get_filename();
+        }
     }
 
     protected function createPathForFile(stored_file $storedFile)

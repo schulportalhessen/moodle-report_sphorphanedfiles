@@ -1,10 +1,40 @@
 # Report Orphaned files #
 
-TODO Describe the plugin shortly here.
+This plugin is a report to show files that are stored in moodle but are not in use.
 
-TODO Provide more detailed description here.
+
+Example:
+
+A teacher adds a material "label" into a moodlecourse and uploads an image to this label. Then the teacher recognize that this was the wrong image and selects the image and deletes the image. Now the teacher adds the correct image.
+The problem is, that the first uploades image ist still stored in this label. This can be seen by clicking at the "manage files" icon where unused files are indicated at the bottom of the shown dialog.
+
+
+This report only shows orphaned files that are stored by a teacher in the intro-field of added moodle activity or moodle material. The files that are added by students are not checked.
+
+## Capabilitys 
+(README_capability.png)
+A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "teacher". 
+
+## Settings in websiteadministration
+(README_settings.png)
+
+- report_sphorphanedfiles_isactive: Activate report
+
+When activate the report can be started in the coursenavigation.
+
+- report_sphorphanedfiles_isactiveforadmin: Activate report for siteadmin 
+
+When activate an admin can start report in the coursenavigation regardless status isactive for normal users.
+
 
 ## Changelog ##
+[v1.0.3] 
+
+- added missing languagefiles
+- correct capability for editing teacher instead of teacher
+- supports courseformat gridlayout that is storing imagefiles in section summary
+- solved problem with capability
+
 [v1.0.2] releasecanditade  
 [v1.0.1]   
 [v1.0.0] first release for betatesting  
@@ -36,7 +66,8 @@ to complete the installation from the command line.
 
 ## License ##
 
-SPH <andreas.schenkel@schulportal.hessen.de>
+Entwickelt für das Schulportal Hessen (SPH)
+<andreas.schenkel@schulportal.hessen.de>
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

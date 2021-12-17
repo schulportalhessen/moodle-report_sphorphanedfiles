@@ -39,6 +39,13 @@ class OrphanedView
     private $afterDeletion = false;
 
     /**
+     * indicates if a course uses gridformat-plugin
+     * 
+     * @var bool
+     */
+    private $courseFormatGridEnabled = false;
+
+    /**
      * OrphanedView constructor.
      * @param moodle_database $db
      * @param int $courseId
@@ -128,13 +135,20 @@ class OrphanedView
     {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
 
-        if (!empty($viewOrphanedFiles)) {
-            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description'], 'report_sphorphanedfiles');
+        $cleanedViewOrphanedFiles = []; 
+        foreach ($viewOrphanedFiles ?? [] as $viewOrphanedFile){
+            if (!($this->courseFormatGridEnabled && isset($viewOrphanedFile['isGridlayoutFile']) && $viewOrphanedFile['isGridlayoutFile'])) {
+                $cleanedViewOrphanedFiles[] = $viewOrphanedFile;
+            }
+        }
+
+        if (!empty($cleanedViewOrphanedFiles)) {
+            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles');
             $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'], 'report_sphorphanedfiles', 'header.');
 
             return $this->getPage()->getOutput()->render_from_template(
                 $usingTemplate,
-                ['orphanedFiles' => $viewOrphanedFiles, 'translation' => $translations]
+                ['orphanedFiles' => $cleanedViewOrphanedFiles, 'translation' => $translations],
             );
         }
 
@@ -142,13 +156,27 @@ class OrphanedView
     }
 
     /**
+     * @param bool $isactive    true, if report is activated 
+     * @param bool $isactiveforadmin    true, if report is activated for siteadmin, regardless of $isactive is false
      * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
      * @throws require_login_exception
      */
-    public function init()
+    public function init($isactive, $isactiveforadmin)
     {
+        $showReport = ($isactive && has_capability('report/sphorphanedfiles:view', context_course::instance($this->courseId)));
+        $showReport =  $showReport || ($isactiveforadmin && is_siteadmin());
+
+        if (!$showReport){
+                echo 'report inactive or missing capability: you are not allowed to view this page';
+                return;
+        }
+
+        if ( isset($this->getPage()->getCourse()->format) && $this->getPage()->getCourse()->format === 'grid' ) {
+            $this->courseFormatGridEnabled = true;
+        }
+
         // validate if the user is logged in and allowed to view the course
         // this method throws an exception if the user is not allowed
         $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
@@ -159,7 +187,6 @@ class OrphanedView
         );
 
         echo $this->getPage()->getOutput()->header();
-
         echo $this->getPage()->getOutput()->render_from_template(
             'report_sphorphanedfiles/report',
             [
@@ -167,7 +194,7 @@ class OrphanedView
                 'allowedToViewDeleteAllFiles' => $allowedToViewDeleteAllFiles,
                 'afterDeletion' => $this->afterDeletion,
                 'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
-                'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description'], 'report_sphorphanedfiles')
+                'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')
             ]
         );
 
