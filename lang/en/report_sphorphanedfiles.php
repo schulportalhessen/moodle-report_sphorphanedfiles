@@ -46,3 +46,26 @@ $string['configisactive'] = 'When activate the report can be started in the cour
 
 $string['isactiveforadmin'] = 'Activate report for siteadmin';
 $string['configisactiveforadmin'] = 'When activate an admin can start report in the coursenavigation regardless status isactive for normal users.';
+
+$string['handleractivitiescore'] = 'Zu überprüfende Beschreibung bei Core-Aktivitäten';
+$string['confighandleractivitiescore'] = 'Nicht alle <b>Core-Aktivitäten</b> verfügen über ein Beschreibungsfeld 8z.B. label). 
+    Diese kommaseparierte Liste der Core-Module wird bezüglich der Beschreibung auf verwaiste Dateien geprüft. 
+    Gegebenenfalls hier Core-Module ergänzen oder entfernen.';
+
+$string['handleractivitiesplugin'] = 'Zu überprüfende Beschreibung bei Plugin-Aktivitäten';
+$string['confighandleractivitiesplugin'] = 'Nicht alle <b>Plugin-Aktivitäten</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft. 
+    <b>Neue Plugins</b> müssen hier in der Liste ergänzt werden, wenn die Beschreibung unterstützt wird und nach verwaisten Dateien geprüft werden soll.';
+
+$string['handlermaterialscore'] = 'Zu überprüfende Beschreibung bei Core-Materialien';
+$string['confighandlermaterialscore'] = 'Nicht alle <b>Core-Materialien</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft.
+    Gegebenenfalls hier Core-Module ergänzen oder entfernen.';
+
+$string['handlermaterialsplugin'] = 'Zu überprüfende Beschreibung bei Plugin-Materialien';
+$string['confighandlermaterialsplugin'] = 'Nicht alle <b>Plugin-Materialien</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft.
+    <b>Neue Plugins</b> müssen hier in der Liste ergänzt werden, wenn die Beschreibung unterstützt wird und nach verwaisten Dateien geprüft werden soll.';
+
+
+

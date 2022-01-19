@@ -52,3 +52,23 @@ $string['configisactive'] = 'Wenn aktiviert kann der Bericht bei vorhandenen Ber
 
 $string['isactiveforadmin'] = 'Bericht für Siteadmin aktivieren';
 $string['configisactiveforadmin'] = 'Wenn aktiviert kann ein Siteadmin den Bericht auch dann aufrufen, wenn für normale Nutzende der Bereicht ausgeschaltet ist.';
+
+$string['handleractivitiescore'] = 'Zu überprüfende Beschreibung bei <b>Core-Aktivitäten</b>';
+$string['confighandleractivitiescore'] = 'Nicht alle <b>Core-Aktivitäten</b> verfügen über ein Beschreibungsfeld 8z.B. label). 
+    Diese kommaseparierte Liste der Core-Module wird bezüglich der Beschreibung auf verwaiste Dateien geprüft. 
+    Gegebenenfalls hier Core-Module ergänzen oder entfernen.';
+
+$string['handleractivitiesplugin'] = 'Zu überprüfende Beschreibung bei <b>Plugin-Aktivitäten</b>';
+$string['confighandleractivitiesplugin'] = 'Nicht alle <b>Plugin-Aktivitäten</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft. 
+    <b>Neue Plugins</b> müssen hier in der Liste ergänzt werden, wenn die Beschreibung unterstützt wird und nach verwaisten Dateien geprüft werden soll.';
+
+$string['handlermaterialscore'] = 'Zu überprüfende Beschreibung bei <b>Core-Materialien</b>';
+$string['confighandlermaterialscore'] = 'Nicht alle <b>Core-Materialien</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft.
+    Gegebenenfalls hier Core-Module ergänzen oder entfernen.';
+
+$string['handlermaterialsplugin'] = 'Zu überprüfende Beschreibung bei <b>Plugin-Materialien</b>';
+$string['confighandlermaterialsplugin'] = 'Nicht alle <b>Plugin-Materialien</b> verfügen über ein Beschreibungsfeld. 
+    Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft.
+    <b>Neue Plugins</b> müssen hier in der Liste ergänzt werden, wenn die Beschreibung unterstützt wird und nach verwaisten Dateien geprüft werden soll.';

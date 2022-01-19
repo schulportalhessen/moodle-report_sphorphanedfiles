@@ -40,4 +40,55 @@ if ($ADMIN->fulltree) {
         0
     ));
 
+
+    // Setting for IntroHandler - only use IntroHandler for Activities that have intro 
+    $moodleactivitiescore = 'assign,choice,customcert,data,lti,feedback,forum,glossary,h5pactivity,hotpot,lesson,quiz,scorm,survey,wiki,workshop';
+    $configsetting = new  admin_setting_configtext_trim_lower(
+        'report_sphorphanedfiles_handleractivitiescore',
+        new lang_string('handleractivitiescore', 'report_sphorphanedfiles'),
+        new lang_string('confighandleractivitiescore', 'report_sphorphanedfiles'),
+        $moodleactivitiescore,
+        true,
+        true
+    );
+    $configsetting->set_force_ltr(true);
+    $settings->add($configsetting);
+
+    $moodleactivitiesplugins = 'bigbluebuttonbn,board,checklist,ratingallocate,geogebra,hvp,mootyper,mindmap,pdfannotator,realtimequiz';
+    $configsetting = new  admin_setting_configtext_trim_lower(
+        'report_sphorphanedfiles_handleractivitiesplugin',
+        new lang_string('handleractivitiesplugin', 'report_sphorphanedfiles'),
+        new lang_string('confighandleractivitiesplugin', 'report_sphorphanedfiles'),
+        $moodleactivitiesplugins,
+        true,
+        true
+    );
+    $configsetting->set_force_ltr(true);
+    $settings->add($configsetting);
+
+    // do not add 'label' to this list
+    $moodlematerialscore = 'book,folder,imscp,url';
+    $configsetting = new  admin_setting_configtext_trim_lower(
+        'report_sphorphanedfiles_handlermaterialscore',
+        new lang_string('handlermaterialscore', 'report_sphorphanedfiles'),
+        new lang_string('confighandlermaterialscore', 'report_sphorphanedfiles'),
+        $moodlematerialscore,
+        true,
+        true
+    );
+    $configsetting->set_force_ltr(true);
+    $settings->add($configsetting);
+
+    $moodlematerialsplugins = 'lightboxgallery,edusharing,unilabel';
+    $configsetting = new  admin_setting_configtext_trim_lower(
+        'report_sphorphanedfiles_handlermaterialsplugin',
+        new lang_string('handlermaterialsplugin', 'report_sphorphanedfiles'),
+        new lang_string('confighandlermaterialsplugin', 'report_sphorphanedfiles'),
+        $moodlematerialsplugins,
+        true,
+        true
+    );
+    $configsetting->set_force_ltr(true);
+    $settings->add($configsetting);
+
 }
