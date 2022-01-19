@@ -14,42 +14,6 @@ use report_sphorphanedfiles\Files\FileInfo;
  */
 class IntroHandler extends Handler
 {
-    private const handlerActivities = [
-        'assign',
-        'bigbluebuttonbn',
-        'checklist',
-        'choice',
-        'customcert',
-        'data',
-        'lti',
-        'ratingallocate',
-        'feedback',
-        'forum',
-        'geogebra',
-        'glossary',
-        'h5pactivity',
-        'hotpot',
-        'hvp',
-        'lesson',
-        'mootyper',
-        'pdfannotator',
-        'quiz',
-        'realtimequiz',
-        'scorm',
-        'survey',
-        'wiki',
-        'workshop',
-    ];
-
-    private const handlerMaterials = [
-        'book',
-        'folder',
-        'imscp',
-        'lightboxgallery',
-        'url',
-        'edusharing',
-        'unilabel'
-    ];
 
     /**
      * @var string
@@ -69,12 +33,21 @@ class IntroHandler extends Handler
      */
     public function canHandle(string $component): bool
     {
-        if (in_array($component, self::handlerActivities))
-            return true;
+        global $CFG;
 
-        if (in_array($component, self::handlerMaterials))
+        if (isset($CFG->report_sphorphanedfiles_handleractivitiescore) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handleractivitiescore))) {
             return true;
-
+        }
+        if (isset($CFG->report_sphorphanedfiles_handleractivitiesplugin) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handleractivitiesplugin))) {
+            return true;
+        }
+        if (isset($CFG->report_sphorphanedfiles_handlermaterialscore) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handlermaterialscore))) {
+            return true;
+        }
+        if (isset($CFG->report_sphorphanedfiles_handlermaterialsplugin) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handlermaterialsplugin))) {
+            return true;
+        }
+    
         return false;
     }
 
@@ -120,7 +93,6 @@ class IntroHandler extends Handler
 
         $name = $instance->name;
 
-
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
@@ -128,8 +100,8 @@ class IntroHandler extends Handler
         // echo $componentName . ': '.  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-    
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete,$file,$instance,[
+
+            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
                 'modName' => $componentName,
                 'name' => $name,
                 'instanceId' => $instance->id,

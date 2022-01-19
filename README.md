@@ -28,6 +28,12 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 
 ## Changelog ##
+
+[v1.0.4] January 2022
+
+- IntroHandler improvement: Implemented setting to be able to add new plugins the list of plugins that should be checked for orphaned files in the intro (description).
+
+
 [v1.0.3] 
 
 - added missing languagefiles
