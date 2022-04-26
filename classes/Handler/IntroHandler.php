@@ -103,7 +103,7 @@ class IntroHandler extends Handler
 
             $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
                 'modName' => $componentName,
-                'name' => $name,
+                'name' => $name." id=".$instance->id,
                 'instanceId' => $instance->id,
                 'contextId' => $contextId,
                 'content' => $htmlContent,
