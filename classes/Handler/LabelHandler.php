@@ -22,7 +22,7 @@ class LabelHandler extends Handler
         
         $modName = $instance->modname;
         
-        $translationForLabel = 'Lable/Textfeld';
+        $translationForLabel = 'Label/Textfeld';
 
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);

@@ -52,21 +52,16 @@ class SectionSummaryHandler extends ItemHandler
         $courseId,
         $iconHtml
     ): array {
-        $sectionHtml = $sectionInfo->summary;
-        $fileItemIdSectionInfo = $sectionInfo->id;
-
+        $sectionHtml = file_rewrite_pluginfile_urls($sectionInfo->summary, 'pluginfile.php',  $contextId, 'course', 'section', $sectionInfo->id);
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
-        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $fileItemIdSectionInfo);
-        // echo "<h3> Anzahl verwaister Dateien: </h3>";
-
-        $name = 'Summary/Beschreibung';
-        // echo "$modName: " .  count($orphanedFiles) . '<br />';
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $sectionInfo->id);
+        $translationForLabel = 'Summary/Beschreibung';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 
             $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => 'course',
-                'name' => "$name",
+                'name' => "$translationForLabel",
                 'instanceId' => 'todo',
                 'contextId' => $contextId,
                 'filename' => $this->getFileLink(new FileInfo($formDelete)),
