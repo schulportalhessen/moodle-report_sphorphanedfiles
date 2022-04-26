@@ -28,6 +28,14 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 
 ## Changelog ##
+[v1.0.6]
+
+- supports section summary
+- shows the id of a mod eg.     Our forum id=7
+- label does not have a special modulname so use label or the correct translation for label in column "modul"
+- uses correct languagestings for summary, section and also adds the section number für orhaned files in sectionsummarys
+  
+
 [v1.0.5] 
 
 - 20220210 fix: setting error
