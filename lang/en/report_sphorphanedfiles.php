@@ -66,6 +66,3 @@ $string['handlermaterialsplugin'] = 'Zu überprüfende Beschreibung bei Plugin-M
 $string['confighandlermaterialsplugin'] = 'Nicht alle <b>Plugin-Materialien</b> verfügen über ein Beschreibungsfeld. 
     Diese kommasparierte Liste der Module würd bezüglich der Beschreibung auf verwaiste Dateien geprüft.
     <b>Neue Plugins</b> müssen hier in der Liste ergänzt werden, wenn die Beschreibung unterstützt wird und nach verwaisten Dateien geprüft werden soll.';
-
-
-

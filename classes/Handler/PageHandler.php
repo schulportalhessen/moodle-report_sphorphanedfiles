@@ -35,7 +35,7 @@ class PageHandler extends ItemHandler
                 'content',
                 $page->revision
             );
-        
+
         $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
@@ -45,13 +45,13 @@ class PageHandler extends ItemHandler
             $this->setImplementationmode('xxxxxx');
             if ($file->filearea == 'content' ) $this->setImplementationmode('item');
 
-             $viewOrphanedFiles[] = $this->getSkeleton(
+            $viewOrphanedFiles[] = $this->getSkeleton(
                 $formDelete,
                 $file,
                 $instance,
                 [
                     'modName' => $modName,
-                    'name' => $name,
+                    'name' => $name." id=".$instance->id,
                     'instanceId' => $instance->id,
                     'contextId' => $contextId,
                     'content' => $htmlContent,

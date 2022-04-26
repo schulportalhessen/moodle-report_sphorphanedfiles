@@ -42,7 +42,7 @@ $string['description'] = 'Wenn eine Lehrende Person in einem Editor eine Datei h
 
 $string['isgridlayoutfilehint'] = 'Dieses File wurde eventuell für das GridLayout genutzt und ist aber aktuell nicht in Verwendung.';
 
-$string['header.moduleContent'] = 'Beschreibung, ...';   
+$string['header.moduleContent'] = 'Beschreibung/Inhalt';   
 $string['header.code'] = 'Quelltext:'; 
 
 $string['sphorphanedfiles:view'] = 'Berechtigung zum Anzeigen des Menüeintrags zum Report.'; 
