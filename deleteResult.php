@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/../../config.php');
-
+require_login();
 use report_sphorphanedfiles\Files\FileInfoList;
 
 echo '<html>';
