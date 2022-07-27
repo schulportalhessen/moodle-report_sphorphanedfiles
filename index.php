@@ -19,11 +19,8 @@ $output = $OUTPUT;
 $user = $USER;
 $db = $DB;
 
-global $CFG;
-echo "Hurz";
-
-$isactive = $CFG->report_sphorphanedfiles_isactive;
-$isactiveforadmin = $CFG->report_sphorphanedfiles_isactiveforadmin;
+$isactive = get_config('report_sphorphanedfiles', 'isactive');
+$isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
 // $hascapability = has_capability('report/sphorphanedfiles:view',$context);
 
 if ($isactive || $isactiveforadmin) {
