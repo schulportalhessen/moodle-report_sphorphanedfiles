@@ -201,12 +201,7 @@ class OrphanedView
         $sectionCounter = 0;
 
         foreach ($this->getPage()->getCourseInfo()->get_section_info_all() as $sectionInfo) {
-
-            // Classic View: 'report_sphorphanedfiles/sectionTable'
-            // Multi Selection: 'report_sphorphanedfiles/sectionTableMultipleSelection'
             $mustache_name = 'report_sphorphanedfiles/sectionTable';
-
-            // $mustache_name = 'report_sphorphanedfiles/sectionTableMultipleSelection';
             echo HTML::createSectionOverview(
                 3,
                 HTML::createSectionHeading($sectionInfo, $this->getPage()->getCourse(), $sectionCounter++),
