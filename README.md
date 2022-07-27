@@ -38,6 +38,8 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 [v1.0.7]
 
+- same like v1.0.6
+
 [v1.0.6]
 
 - supports section summary
