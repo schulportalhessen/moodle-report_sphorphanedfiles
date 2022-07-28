@@ -11,7 +11,9 @@ try {
     // Look if the course exists
     $course = $DB->get_record('course', array('id' => $courseId), '*', MUST_EXIST);
 } catch(Exception $e){
-    // wrong courseId;
+    $msg = '';
+    $msg = get_string('invalidcourseidmessage', 'report_sphorphanedfiles');
+    echo $msg;
     die();
 }
 // Only show index.php for logged in users
@@ -20,19 +22,22 @@ require_login($courseId);
 // More access rules
 $isactive = get_config('report_sphorphanedfiles', 'isactive');
 $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
-$coursecontext = \context_course::instance($courseId);
-$hascapability = has_capability('report/sphorphanedfiles:view',$coursecontext);
 
-// Check all accessrules
-if ( ($isactive || $isactiveforadmin) && $hascapability ) {
-    $orphanedViewInstance = new OrphanedView($DB, $courseId, $PAGE, $OUTPUT,$USER);
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $orphanedViewInstance->deleteOrphanedFile();
-    }
-    $orphanedViewInstance->init($isactive, $isactiveforadmin);
-} else {
+$isUserAllowedToUseReport = ($isactive && has_capability('report/sphorphanedfiles:view', context_course::instance($courseId)));
+$isUserAllowedToUseReport = $isUserAllowedToUseReport || ($isactiveforadmin && is_siteadmin());
+
+if (!$isUserAllowedToUseReport){
     $msg = '';
     $msg = get_string('accessruleviolationmessage', 'report_sphorphanedfiles');
     echo $msg;
+    die();
 }
+
+// No show report ore delete files
+$orphanedViewInstance = new OrphanedView($DB, $courseId, $PAGE, $OUTPUT,$USER);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $orphanedViewInstance->deleteOrphanedFile();
+}
+$orphanedViewInstance->init();
+
 
