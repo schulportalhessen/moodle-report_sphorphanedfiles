@@ -71,3 +71,5 @@ $string['confighandlermaterialsplugin'] = 'Not every <b>additional resources</b>
     New additional resources have to be added to this list if they support intro description.';
 
 $string['accessruleviolationmessage'] = 'Report is not activated or missing capability';
+$string['invalidcourseidmessage'] = 'invalid courseid';
+
