@@ -11,6 +11,7 @@ use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\HTML;
 
+defined('MOODLE_INTERNAL') || die;
 /**
  * Class OrphanedView
  */
@@ -153,23 +154,13 @@ class OrphanedView
     }
 
     /**
-     * @param bool $isactive    true, if report is activated 
-     * @param bool $isactiveforadmin    true, if report is activated for siteadmin, regardless of $isactive is false
      * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
      * @throws require_login_exception
      */
-    public function init($isactive, $isactiveforadmin)
+    public function init()
     {
-        $showReport = ($isactive && has_capability('report/sphorphanedfiles:view', context_course::instance($this->courseId)));
-        $showReport =  $showReport || ($isactiveforadmin && is_siteadmin());
-
-        if (!$showReport){
-                echo 'report inactive or missing capability: you are not allowed to view this page';
-                return;
-        }
-
         if ( isset($this->getPage()->getCourse()->format) && $this->getPage()->getCourse()->format === 'grid' ) {
             $this->courseFormatGridEnabled = true;
         }
