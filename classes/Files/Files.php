@@ -9,6 +9,8 @@ use moodle_url;
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\HTML;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class Files
  */

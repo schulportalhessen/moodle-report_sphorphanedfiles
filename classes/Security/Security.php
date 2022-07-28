@@ -9,6 +9,8 @@ use moodle_exception;
 use require_login_exception;
 use stdClass;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class Security
  */

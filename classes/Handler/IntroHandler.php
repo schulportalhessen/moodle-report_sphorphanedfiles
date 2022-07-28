@@ -8,6 +8,8 @@ use dml_exception;
 
 use report_sphorphanedfiles\Files\FileInfo;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class IntroHandler
  * @package report_sphorphanedfiles\Handler

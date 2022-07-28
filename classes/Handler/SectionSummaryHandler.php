@@ -7,6 +7,8 @@ use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 use stdClass;
 
+defined('MOODLE_INTERNAL') || die();
+
 /*
  *  Preparations for later PHP 8 transition.
  * 
