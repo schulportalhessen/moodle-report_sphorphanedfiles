@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Orphaned files';
+$string['pluginname'] = 'Report orphaned files';
 $string['deleteMessage'] = 'Orphaned file successfully deleted';
 $string['header.modName'] = 'Module';
 $string['header.content'] = 'Content';
@@ -66,3 +66,5 @@ $string['handlermaterialsplugin'] = 'Check this moodle additional resources for 
 $string['confighandlermaterialsplugin'] = 'Not every <b>additional resources</b> supports intro description. 
     This comma-separated list of additional resources will be checked for orphaned files in intro description. 
     New additional resources have to be added to this list if they support intro description.';
+
+$string['accessruleviolationmessage'] = 'Report is not activated or missing capability';

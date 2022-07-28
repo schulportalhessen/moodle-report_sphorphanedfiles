@@ -2,34 +2,37 @@
 require_once(__DIR__ . '/../../config.php');
 use report_sphorphanedfiles\View\OrphanedView;
 
-/* Assign global variables to local (parameter) variables.
- * At the moment, this approach is used for documentation
- * purposes.
- * 
- * FIXME: Move to method call. 
- */
-
+// Only show index.php for logged in users
 require_login();
+
+// Read the id of the course
 $courseId = required_param('id', PARAM_INT);
+try {
+    // Look if the course exists
+    $course = $DB->get_record('course', array('id' => $courseId), '*', MUST_EXIST);
+} catch(Exception $e){
+    // wrong courseId;
+    die();
+}
+// Only show index.php for logged in users
 require_login($courseId);
 
-
-$page = $PAGE;
-$output = $OUTPUT;
-$user = $USER;
-$db = $DB;
-
+// More access rules
 $isactive = get_config('report_sphorphanedfiles', 'isactive');
 $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
-// $hascapability = has_capability('report/sphorphanedfiles:view',$context);
+$coursecontext = \context_course::instance($courseId);
+$hascapability = has_capability('report/sphorphanedfiles:view',$coursecontext);
 
-if ($isactive || $isactiveforadmin) {
-    $orphanedViewInstance = new OrphanedView($db, $courseId, $page, $output, $user);
+// Check all accessrules
+if ( ($isactive || $isactiveforadmin) && $hascapability ) {
+    $orphanedViewInstance = new OrphanedView($DB, $courseId, $PAGE, $OUTPUT,$USER);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orphanedViewInstance->deleteOrphanedFile();
     }
     $orphanedViewInstance->init($isactive, $isactiveforadmin);
 } else {
-    echo "Report is not activated or missing capability";
+    $msg = '';
+    $msg = get_string('accessruleviolationmessage', 'report_sphorphanedfiles');
+    echo $msg;
 }
 
