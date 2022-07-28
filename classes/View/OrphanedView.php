@@ -11,7 +11,6 @@ use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\HTML;
 
-defined('MOODLE_INTERNAL') || die;
 /**
  * Class OrphanedView
  */
