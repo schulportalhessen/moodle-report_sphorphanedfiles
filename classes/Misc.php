@@ -2,6 +2,8 @@
 
 namespace report_sphorphanedfiles;
 
+defined('MOODLE_INTERNAL') || die();
+
 class Misc
 {
     /**

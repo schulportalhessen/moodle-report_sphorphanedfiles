@@ -4,6 +4,8 @@ namespace report_sphorphanedfiles\Database;
 
 use moodle_database;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This class provides high-level functionality for the module. Concepts like
  * enumerating files belonging to a specific component are mapped to the

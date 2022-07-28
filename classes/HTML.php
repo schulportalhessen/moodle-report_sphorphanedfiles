@@ -7,6 +7,8 @@ use moodle_url;
 
 use report_sphorphanedfiles\View\Page;
 
+defined('MOODLE_INTERNAL') || die();
+
 class HTML
 {
     public static function createImage(string $url): string

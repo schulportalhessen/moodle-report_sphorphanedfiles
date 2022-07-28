@@ -13,21 +13,33 @@ This report only shows orphaned files that are stored by a teacher in the intro-
 
 ## Capabilitys 
 (README_capability.png)
-A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "teacher". 
+A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "editingteacher". 
 
 ## Settings in websiteadministration
 (README_settings.png)
 
-- report_sphorphanedfiles_isactive: Activate report
+- report_sphorphanedfiles/isactive: Activate report
 
 When activate the report can be started in the coursenavigation.
 
-- report_sphorphanedfiles_isactiveforadmin: Activate report for siteadmin 
+- report_sphorphanedfiles/isactiveforadmin: Activate report for siteadmin 
 
 When activate an admin can start report in the coursenavigation regardless status isactive for normal users.
 
 
 ## Changelog ##
+[v1.0.8]
+
+- issues #1 german strings in english language file
+- issues #4 files should check user is logged in.
+- issues #5 consider adding github actions support
+- issues #6 plugin settings should be using config_plugins table not global $CFG
+- issues #7 missing privacy api
+
+[v1.0.7]
+
+- same like v1.0.6
+
 [v1.0.6]
 
 - supports section summary
