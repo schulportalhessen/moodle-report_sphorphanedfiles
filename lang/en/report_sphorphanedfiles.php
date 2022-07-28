@@ -32,8 +32,11 @@ $string['header.content'] = 'Content';
 $string['header.filename'] = 'Filename';
 $string['header.preview'] = '';
 $string['header.tool'] = 'delete orphanded without request!';
-$string['isallowedtodeleteallfiles'] = 'is allowed to delete all files';
-$string['description'] = 'This report shows orphaned files that are not used in activitys or resources.';
+$string['isallowedtodeleteallfiles'] = 'User is allowed / User has capability to delete all files in this course';
+$string['description'] = 'If a teacher adds a file to the editor and delete the file then the file is still be stored in the 
+background of this context (eg label). The teacher can delete the file with the "manage file" dialog in the editor. This is not very comfortable. 
+This report helps to shows orphaned files that might are not used in descriptions of activitys or resources and helps to delete them.';
+
 $string['isgridlayoutfilehint'] = 'This file maybe was used by gridlayout-plugin but seems to be not in use.';
 
 $string['header.moduleContent'] = 'Description, ...';
