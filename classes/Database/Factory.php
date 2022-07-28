@@ -4,6 +4,8 @@ namespace report_sphorphanedfiles\Database;
 
 use moodle_database;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This is a straightfoward implementation of the Factory Pattern. The
  * class provides access to objects that are necessary for interaction

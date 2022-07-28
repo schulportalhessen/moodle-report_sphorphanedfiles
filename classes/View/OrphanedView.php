@@ -85,10 +85,7 @@ class OrphanedView
         // this method throws an exception if the user is not allowed
         $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
 
-        if (
-            $_SERVER['REQUEST_METHOD'] === 'POST' &&
-            FileInfo::isSufficientForConstruction($_POST)
-        ) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && FileInfo::isSufficientForConstruction($_POST)) {
             $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
                 $this->apiM->security(),
                 new FileInfo($_POST),
@@ -156,23 +153,13 @@ class OrphanedView
     }
 
     /**
-     * @param bool $isactive    true, if report is activated 
-     * @param bool $isactiveforadmin    true, if report is activated for siteadmin, regardless of $isactive is false
      * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
      * @throws require_login_exception
      */
-    public function init($isactive, $isactiveforadmin)
+    public function init()
     {
-        $showReport = ($isactive && has_capability('report/sphorphanedfiles:view', context_course::instance($this->courseId)));
-        $showReport =  $showReport || ($isactiveforadmin && is_siteadmin());
-
-        if (!$showReport){
-                echo 'report inactive or missing capability: you are not allowed to view this page';
-                return;
-        }
-
         if ( isset($this->getPage()->getCourse()->format) && $this->getPage()->getCourse()->format === 'grid' ) {
             $this->courseFormatGridEnabled = true;
         }
@@ -201,12 +188,7 @@ class OrphanedView
         $sectionCounter = 0;
 
         foreach ($this->getPage()->getCourseInfo()->get_section_info_all() as $sectionInfo) {
-
-            // Classic View: 'report_sphorphanedfiles/sectionTable'
-            // Multi Selection: 'report_sphorphanedfiles/sectionTableMultipleSelection'
             $mustache_name = 'report_sphorphanedfiles/sectionTable';
-
-            // $mustache_name = 'report_sphorphanedfiles/sectionTableMultipleSelection';
             echo HTML::createSectionOverview(
                 3,
                 HTML::createSectionHeading($sectionInfo, $this->getPage()->getCourse(), $sectionCounter++),

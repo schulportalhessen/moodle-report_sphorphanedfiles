@@ -2,6 +2,8 @@
 
 namespace report_sphorphanedfiles\Parser;
 
+defined('MOODLE_INTERNAL') || die();
+
 /*
  *  Preparations for later PHP 8 transition.
  * 

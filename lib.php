@@ -38,7 +38,6 @@ defined('MOODLE_INTERNAL') || die;
  */
 function report_sphorphanedfiles_extend_navigation_course($navigation, $course, $context)
 {
-    global $CFG;
     $page = $GLOBALS['PAGE'];
     $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
 
@@ -53,13 +52,16 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
         break;
     }
 
-    if ($CFG->report_sphorphanedfiles_isactive == true) {
+    // ToDo: implement better code. Do not know why I did this as workarround.
+    $isactive = get_config('report_sphorphanedfiles', 'isactive');
+    $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
+    if ($isactive == true) {
         $isactive = true;
     } else {
         $isactive = false;
     }
 
-    if ($CFG->report_sphorphanedfiles_isactiveforadmin == true) {
+    if ($isactiveforadmin == true) {
         $isactiveforadmin = true;
     } else {
         $isactiveforadmin = false;

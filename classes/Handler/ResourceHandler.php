@@ -8,6 +8,8 @@ use stdClass;
 
 use report_sphorphanedfiles\Files\FileInfo;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class ResourceHandler
  * @package report_sphorphanedfiles\Handler

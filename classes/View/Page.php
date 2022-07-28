@@ -4,6 +4,8 @@ namespace report_sphorphanedfiles\View;
 
 use moodle_url;
 
+defined('MOODLE_INTERNAL') || die();
+
 class Page
 {
     private $page;

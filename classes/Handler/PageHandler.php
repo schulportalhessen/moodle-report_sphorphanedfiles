@@ -5,6 +5,8 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class PageHandler
  * @package report_sphorphanedfiles\Handler

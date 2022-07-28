@@ -9,6 +9,8 @@ use moodle_url;
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\HTML;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class Files
  */
@@ -120,6 +122,19 @@ class Files
         return HTML::createLinkInNewTab($this->createURLForFile($storedFile), $storedFile->get_filename());
     }
 
+    /**
+     * Delete a file if the user is allowed to delet this file.
+     * User is allowed to delete if the userid of the file is the userid of the user,
+     * so the user is the owner of the file.
+     * Also a users with the capability moodle/course:manageactivitys is allowed to delete ALL files because he is
+     * has the role editing teacher. (Nonediting teachers does not have this capability.)
+     *
+     * @param Security $security
+     * @param FileInfo $fileInfo
+     * @param $user
+     * @param $course
+     * @return bool
+     */
     public function deleteFileByUserInCourse(Security $security, FileInfo $fileInfo, $user, $course): bool
     {
         $deleteFile = $this->getFileUsingFileInfo($fileInfo);

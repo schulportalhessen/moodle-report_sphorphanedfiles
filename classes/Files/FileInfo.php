@@ -4,6 +4,8 @@ namespace report_sphorphanedfiles\Files;
 
 use InvalidArgumentException;
 
+defined('MOODLE_INTERNAL') || die();
+
 /** 
  * This class provides an OOP-representation of the metadata which is
  * used within the Moodle system for data referencing.

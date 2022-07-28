@@ -9,6 +9,8 @@ use moodle_url;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
  * handler implementations for different Moodle objects -- which should be scanned

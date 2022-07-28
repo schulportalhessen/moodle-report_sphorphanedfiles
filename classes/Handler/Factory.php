@@ -4,6 +4,9 @@ namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Manager;
 use InvalidArgumentException;
+
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * if we have time chain of responsibility
  * Class Factory

@@ -8,6 +8,8 @@ use dml_exception;
 
 use report_sphorphanedfiles\Files\FileInfo;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class IntroHandler
  * @package report_sphorphanedfiles\Handler
@@ -33,18 +35,20 @@ class IntroHandler extends Handler
      */
     public function canHandle(string $component): bool
     {
-        global $CFG;
-
-        if (isset($CFG->report_sphorphanedfiles_handleractivitiescore) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handleractivitiescore))) {
+        $handleractivitiescore = get_config('report_sphorphanedfiles', 'handleractivitiescore');
+        if (isset($handleractivitiescore) && in_array($component, explode(',', $handleractivitiescore))) {
             return true;
         }
-        if (isset($CFG->report_sphorphanedfiles_handleractivitiesplugin) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handleractivitiesplugin))) {
+        $handleractivitiesplugin = get_config('report_sphorphanedfiles', 'handleractivitiesplugin');
+        if (isset($handleractivitiesplugin) && in_array($component, explode(',', $handleractivitiesplugin))) {
             return true;
         }
-        if (isset($CFG->report_sphorphanedfiles_handlermaterialscore) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handlermaterialscore))) {
+        $handlermaterialscore = get_config('report_sphorphanedfiles', 'handlermaterialscore');
+        if (isset($handlermaterialscore) && in_array($component, explode(',', $handlermaterialscore))) {
             return true;
         }
-        if (isset($CFG->report_sphorphanedfiles_handlermaterialsplugin) && in_array($component, explode(',', $CFG->report_sphorphanedfiles_handlermaterialsplugin))) {
+        $handlermaterialsplugin = get_config('report_sphorphanedfiles', 'handlermaterialsplugin');
+        if (isset($handlermaterialsplugin) && in_array($component, explode(',', $handlermaterialsplugin))) {
             return true;
         }
     

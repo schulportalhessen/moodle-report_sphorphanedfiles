@@ -7,6 +7,9 @@ use cm_info;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 use report_sphorphanedfiles\Misc;
+
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
  * handler implementations for different Moodle objects -- which should be scanned

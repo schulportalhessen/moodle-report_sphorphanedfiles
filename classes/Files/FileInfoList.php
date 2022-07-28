@@ -4,6 +4,8 @@ namespace report_sphorphanedfiles\Files;
 
 use report_sphorphanedfiles\HTML;
 
+defined('MOODLE_INTERNAL') || die();
+
 class FileInfoList
 {
     private $items;
