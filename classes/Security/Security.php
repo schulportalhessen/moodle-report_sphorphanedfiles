@@ -9,6 +9,8 @@ use moodle_exception;
 use require_login_exception;
 use stdClass;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Class Security
  */
@@ -29,6 +31,10 @@ class Security
     }
 
     /**
+     * A user that is enrolled in the course and has the the capabilty moodle/course:manageactivities
+     * or is_siteadmin (ToDo: Is this not nessesary because siteadmins DOES have this capability???)
+     * are allowed to delete all file in a course
+     *
      * @param int $courseId
      * @param stdClass $user
      * @return bool

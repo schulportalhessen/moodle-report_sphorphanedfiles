@@ -27,14 +27,14 @@ defined('MOODLE_INTERNAL') || die;
 if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox(
-        'report_sphorphanedfiles_isactive',
+        'report_sphorphanedfiles/isactive',
         get_string('isactive', 'report_sphorphanedfiles'),
         get_string('configisactive', 'report_sphorphanedfiles'),
         0
     ));
 
     $settings->add(new admin_setting_configcheckbox(
-        'report_sphorphanedfiles_isactiveforadmin',
+        'report_sphorphanedfiles/isactiveforadmin',
         get_string('isactiveforadmin', 'report_sphorphanedfiles'),
         get_string('configisactiveforadmin', 'report_sphorphanedfiles'),
         0
@@ -44,7 +44,7 @@ if ($ADMIN->fulltree) {
     // Setting for IntroHandler - only use IntroHandler for Activities that have intro 
     $moodleactivitiescore = 'assign,choice,customcert,data,lti,feedback,forum,glossary,h5pactivity,hotpot,lesson,quiz,scorm,survey,wiki,workshop';
     $configsetting = new  admin_setting_configtext(
-        'report_sphorphanedfiles_handleractivitiescore',
+        'report_sphorphanedfiles/handleractivitiescore',
         new lang_string('handleractivitiescore', 'report_sphorphanedfiles'),
         new lang_string('confighandleractivitiescore', 'report_sphorphanedfiles'),
         $moodleactivitiescore,
@@ -56,7 +56,7 @@ if ($ADMIN->fulltree) {
 
     $moodleactivitiesplugins = 'bigbluebuttonbn,board,checklist,ratingallocate,geogebra,hvp,mootyper,mindmap,pdfannotator,realtimequiz';
     $configsetting = new  admin_setting_configtext(
-        'report_sphorphanedfiles_handleractivitiesplugin',
+        'report_sphorphanedfiles/handleractivitiesplugin',
         new lang_string('handleractivitiesplugin', 'report_sphorphanedfiles'),
         new lang_string('confighandleractivitiesplugin', 'report_sphorphanedfiles'),
         $moodleactivitiesplugins,
@@ -69,7 +69,7 @@ if ($ADMIN->fulltree) {
     // do not add 'label' to this list
     $moodlematerialscore = 'book,folder,imscp,url';
     $configsetting = new  admin_setting_configtext(
-        'report_sphorphanedfiles_handlermaterialscore',
+        'report_sphorphanedfiles/handlermaterialscore',
         new lang_string('handlermaterialscore', 'report_sphorphanedfiles'),
         new lang_string('confighandlermaterialscore', 'report_sphorphanedfiles'),
         $moodlematerialscore,
@@ -81,7 +81,7 @@ if ($ADMIN->fulltree) {
 
     $moodlematerialsplugins = 'lightboxgallery,edusharing,unilabel';
     $configsetting = new  admin_setting_configtext(
-        'report_sphorphanedfiles_handlermaterialsplugin',
+        'report_sphorphanedfiles/handlermaterialsplugin',
         new lang_string('handlermaterialsplugin', 'report_sphorphanedfiles'),
         new lang_string('confighandlermaterialsplugin', 'report_sphorphanedfiles'),
         $moodlematerialsplugins,
