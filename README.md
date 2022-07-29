@@ -28,6 +28,10 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 
 ## Changelog ##
+[v1.0.11]
+
+- bump version
+
 [v1.0.10]
 
 - bump version
