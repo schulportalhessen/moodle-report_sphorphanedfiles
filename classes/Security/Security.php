@@ -32,10 +32,12 @@ class Security
     }
 
 
-
-
-
-
+    /**
+     * @param FileInfo $fileInfo
+     * @param int $courseId
+     * @return bool
+     * @throws coding_exception
+     */
     public function isCourseIdOfFileSameLikeCourseidOfTheCourse(FileInfo $fileInfo, int $courseId): bool
     {
         // get the contextid of the file
