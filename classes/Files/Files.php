@@ -144,15 +144,11 @@ class Files
             if (!$fileToBeDeleted) {
                 echo "file not found, so data might be manipulated or the file is already deleted or something went wrong";
                 return false;
-            }
-            $simulateDeletion = true;
-            if ($simulateDeletion) {
-                echo "... Only simulate deletion!!!";
             } else {
-                die();
+                // echo "... delete nur simmuliert"; die(); // development!!
                 $fileToBeDeleted->delete();
+                return true;
             }
-            return true;
         }
         return false;
     }
