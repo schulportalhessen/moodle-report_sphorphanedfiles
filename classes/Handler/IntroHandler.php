@@ -90,7 +90,7 @@ class IntroHandler extends Handler
 
         // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
         //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
-        //        Interface
+        //        Interface.
         $this->componentName = $instance->modname;
 
         $htmlContent = $this->getIntro($instance);

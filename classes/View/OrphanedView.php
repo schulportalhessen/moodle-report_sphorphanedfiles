@@ -85,10 +85,18 @@ class OrphanedView
         // this method throws an exception if the user is not allowed
         $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && FileInfo::isSufficientForConstruction($_POST)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (FileInfo::isSufficientForConstruction($_POST)) {
+                $fileInfo = new FileInfo($_POST);
+            }
+            // Check for contextmanipulation of the course
+            $isCourseIdOfFileSameLikeCourseidOfTheCourse = $this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileInfo, $this->courseId);
+            if (!$isCourseIdOfFileSameLikeCourseidOfTheCourse) {
+                return;
+            }
             $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
                 $this->apiM->security(),
-                new FileInfo($_POST),
+                $fileInfo,
                 $this->user,
                 $this->courseId
             );
