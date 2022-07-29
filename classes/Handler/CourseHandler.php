@@ -6,6 +6,5 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class CourseHandler extends Handler
 {
-    // ToDo: Implementierung der Suche nach verwaisten Dateien in der Beschreibung
-    //       des Kurses
+    // ToDo: Implementierung der Suche nach verwaisten Dateien in der Beschreibung des Kurses.
 }
