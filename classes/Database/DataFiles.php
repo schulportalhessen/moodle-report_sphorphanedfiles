@@ -23,8 +23,8 @@ class DataFiles
     /**
      * Creates a new instance which is bound to a database using the given
      * database connection.
-     * 
-     * @param moodle_database $dbM The database connection to be used by this 
+     *
+     * @param moodle_database $dbM The database connection to be used by this
      *                             instance.
      */
     public function __construct(moodle_database $dbM)
@@ -34,7 +34,7 @@ class DataFiles
 
     /**
      * Returns the database connection used by the instance.
-     * 
+     *
      * @return moodle_database The database instance.
      */
     public function getDatabase(): moodle_database
@@ -46,19 +46,19 @@ class DataFiles
      * Queries created by this class are based on SELECT statements. The Moodle
      * database subsystem provides functionality for statement construction, i.e.
      * a mechanism that substitutes variables in strings with concrete values.
-     * 
+     *
      * This method creates strings that follow this pattern. For each variable
      * name in the parameter array, a corresponding entry in the result array is
      * created, consisting of the variable's name (SQL world) and its substitution
      * position (Moodle world), i.e. the name prefixed with „:“.
-     * 
+     *
      * Example: „userid“ ---> „userid = :userid“
-     * 
+     *
      * @param array $elements The array of strings which should be interpreted as
      *                        variable names.
-     * 
+     *
      * @return array An array of strings conforming to the described structural
-     *               pattern. 
+     *               pattern.
      */
     protected function createWhereString(array $elements): array
     {
@@ -71,10 +71,10 @@ class DataFiles
      * Prepares the statement to be emitted to the database layer of the Moodle
      * system. Given parameters are combined using AND, forming the final
      * WHERE clause.
-     * 
+     *
      * @param array $params An array whose keys should be used as components of the
      *                      WHERE clause for a SELECT statement.
-     * 
+     *
      * @return string A valid SQL statement ready to be used with the Moodle database
      *                subsystem.
      */
@@ -85,13 +85,13 @@ class DataFiles
         return "SELECT * FROM {files} WHERE {$where}";
     }
 
-    /** 
+    /**
      * Performs a query using the keys and values of the parameter array as part
      * of the command's WHERE clause.
-     * 
+     *
      * @param array $params An array whose keys should be used as components of the
      *                      WHERE clause for the SELECT statement.
-     * 
+     *
      * @return array An array containing the results of the performed query.
      */
     protected function performQuery(array $params): array
@@ -101,23 +101,20 @@ class DataFiles
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     * 
+     *
      * @return array The dictionary containing the given information at the right places.
-     * 
+     *
      */
     protected function prepareContextParameters($contextId, $modName): array
     {
-        return [
-            'component' => sprintf('mod_%s', $modName),
-            'contextid' => $contextId
-        ];
+        return ['component' => sprintf('mod_%s', $modName), 'contextid' => $contextId];
     }
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     * 
+     *
      * @return array The dictionary containing the given information at the right places.
-     * 
+     *
      */
     protected function prepareContextParametersForUser($contextId, $modName, $userId)
     {
@@ -128,15 +125,15 @@ class DataFiles
     }
 
     /**
-     * Retrieves the files associated with a component for the given user (owning the 
+     * Retrieves the files associated with a component for the given user (owning the
      * component).
-     * 
+     *
      * @param int $userId The user to be used for retrieval.
      * @param int $contextId The context, i.e. the „instance-number“, of the component.
      * @param string $modName The component's name.
-     * 
+     *
      * @return array An array listing all files for the component.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesOfUserForComponent(int $userId, int $contextId, string $modName): array
@@ -145,15 +142,15 @@ class DataFiles
     }
 
     /**
-     * Retrieves the files associated with the intro of a component for the given user (owning the 
+     * Retrieves the files associated with the intro of a component for the given user (owning the
      * component).
-     * 
+     *
      * @param int $userId The user to be used for retrieval.
      * @param int $contextId The context, i.e. the „instance-number“, of the component.
      * @param string $modName The component's name.
-     * 
+     *
      * @return array An array listing all files for the component's intro.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesOfUserForComponentIntro(int $userId, int $contextId, string $modName): array
@@ -166,12 +163,12 @@ class DataFiles
 
     /**
      * Retrieves the files associated with a component.
-     * 
+     *
      * @param int $contextId The context, i.e. the „instance-number“, of the component.
      * @param string $modName The component's name.
-     * 
+     *
      * @return array An array listing all files for the component's intro.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesForComponent(int $contextId, string $modName): array
@@ -181,12 +178,12 @@ class DataFiles
 
     /**
      * Retrieves the files associated with the intro of a component.
-     * 
+     *
      * @param int $contextId The context, i.e. the „instance-number“, of the component.
      * @param string $modName The component's name.
-     * 
+     *
      * @return array An array listing all files for the component's intro.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesForComponentIntro(int $contextId, string $modName): array
@@ -199,28 +196,23 @@ class DataFiles
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     * 
+     *
      * @return array The dictionary containing the given information at the right places.
-     * 
+     *
      */
     protected function prepareSectionParameters($itemId, $courseContextId): array
     {
-        return [
-            'itemid' => $itemId,
-            'component' => 'course',
-            'filearea' => 'section',
-            'contextid' => $courseContextId
-        ];
+        return ['itemid' => $itemId, 'component' => 'course', 'filearea' => 'section', 'contextid' => $courseContextId];
     }
 
     /**
      * Retrieves the files associated with the summary of a section.
-     * 
+     *
      * @param int $itemId The id of the item.
      * @param int $courseContextId The context, i.e. the „instance-number“, of the section.
-     * 
+     *
      * @return array An array listing all files for the summary of a section.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesForSectionSummary(int $itemId, int $courseContextId): array
@@ -230,13 +222,13 @@ class DataFiles
 
     /**
      * Retrieves the files associated with the summary of a section for a specific user.
-     * 
+     *
      * @param int $userId The user to be used for retrieval.
      * @param int $itemId The id of the item.
      * @param int $courseContextId The context, i.e. the „instance-number“, of the section.
-     * 
+     *
      * @return array An array listing all files for the summary of a section.
-     * 
+     *
      * @throws \dml_exception
      */
     public function getFilesOfUserForSectionSummary(int $userId, int $courseContextId, int $itemId)

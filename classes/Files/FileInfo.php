@@ -21,16 +21,17 @@ class FileInfo
     private $filepath;
     private $filename;
 
-    /** Create a FileInfo instance using either a string representation (-> serialization)
+    /**
+     * Create a FileInfo instance using either a string representation (-> serialization)
      *  OR a dictionary OR another FileInfo instance containing the relevant information.
-     * 
-     *  @param $data The data (string or dictionary) to be used for instance 
+     *
+     *  @param $data The data (string or dictionary) to be used for instance
      *               initialization.
      */
     public function __construct($data = null)
     {
-        // The world would be simpler, if method and constructor overloading based on
-        // parameter signatures would be possible in PHP :-)
+        // The world would be simpler, if method and constructor overloading based on.
+        // parameter signatures would be possible in PHP :-).
         if (!is_null($data)) {
             if (is_array($data)) {
                 $this->setFromArray($data);

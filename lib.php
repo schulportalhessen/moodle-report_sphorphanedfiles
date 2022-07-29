@@ -15,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Public API of the competency report.
+ * Public API of the sphorphanedfiles report.
  *
- * Defines the APIs used by competency reports
+ * Defines the APIs used by sphorphanedfiles reports
  *
- * @package    report_competency
- * @copyright  2015 Damyon Wiese
+ * @package    report_sphorphanedfiles
+ * @copyright  2022 Schulportal Hessen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * This function extends the navigation with the report items
  * 
- * This functon only works for teacher. Student do not get menuitem added. D not know the reason
+ * This function only works for teacher. Student do not get menuitem added. Do not remember the reason why.
  *
  * @param navigation_node $navigation The navigation node to extend
  * @param stdClass $course The course to object for the report

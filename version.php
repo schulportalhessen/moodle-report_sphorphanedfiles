@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'report_sphorphanedfiles';
-$plugin->release = '1.0.8';
+$plugin->release = '1.0.9';
 $plugin->version = 2022072701;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_RC;
