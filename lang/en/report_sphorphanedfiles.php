@@ -40,9 +40,9 @@ This report helps to shows orphaned files that might are not used in description
 $string['isgridlayoutfilehint'] = 'This file maybe was used by gridlayout-plugin but seems to be not in use.';
 
 $string['header.moduleContent'] = 'Description, ...';
-$string['header.code'] = 'Sourcecode:'; 
+$string['header.code'] = 'Sourcecode:';
 
-$string['sphorphanedfiles:view'] = 'Capability to view menuitem linking to the report.'; 
+$string['sphorphanedfiles:view'] = 'Capability to view menuitem linking to the report.';
 
 $string['isactive'] = 'Activate report';
 $string['configisactive'] = 'When activate the report can be started in the coursenavigation.';
