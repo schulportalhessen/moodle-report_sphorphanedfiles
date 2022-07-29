@@ -38,14 +38,7 @@ class Security
 
     public function isCourseIdOfFileSameLikeCourseidOfTheCourse(FileInfo $fileInfo, int $courseId): bool
     {
-        // Get the courseID of the file that is submitted
-        $fileToBeDeleted = $this->getFileUsingFileInfo($fileInfo);
-        if (!$fileToBeDeleted) {
-            echo "file not found, so data might be manipalted or the file is already deletete or someting went wrong";
-            return false;
-        }
-        // ToDo: only use one oth this two posibilitys to get the contextId of the file.
-        $fileContextId = $fileToBeDeleted->get_contextid();
+        // get the contextid of the file
         $fileContextId = $fileInfo->getContextId();
         // now get the context of the modul where te file belongs to
         $contextOfFile = \context::instance_by_id($fileContextId, MUST_EXIST);
