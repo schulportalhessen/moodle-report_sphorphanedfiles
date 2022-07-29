@@ -28,6 +28,11 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 
 ## Changelog ##
+
+[v1.0.9]
+
+- some coding and dokumentation enhancements
+
 [v1.0.8]
 
 - issues #1 german strings in english language file
