@@ -62,15 +62,20 @@ class ResourceHandler extends Handler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
-                'modName' => $modName,
-                'name' => $name,
-                'instanceId' => $instance->id,
-                'contextId' => $contextId,
-                'content' => $htmlContent,
-                'userAllowedToDelete' => $userAllowedToDelete,
-                'iconHtml' => $iconHtml,
-            ]);
+            $viewOrphanedFiles[] = $this->getSkeleton(
+                $formDelete,
+                $file,
+                $instance,
+                [
+                    'modName' => $modName,
+                    'name' => $name,
+                    'instanceId' => $instance->id,
+                    'contextId' => $contextId,
+                    'content' => $htmlContent,
+                    'userAllowedToDelete' => $userAllowedToDelete,
+                    'iconHtml' => $iconHtml,
+                ]
+            );
         }
 
         return $viewOrphanedFiles;

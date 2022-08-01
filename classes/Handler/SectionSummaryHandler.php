@@ -93,7 +93,7 @@ class SectionSummaryHandler extends ItemHandler
      */
     public function getFileLink(FileInfo $fileInfo)
     {
-                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingFileInfo($fileInfo));
+                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
                 return HTML::createLinkInNewTab($url, $fileInfo->getFileName());  
     }
 

@@ -115,7 +115,7 @@ abstract class Handler extends BaseHandler
      */
     public function getPreviewForFile(FileInfo $fileInfo)
     {
-        $orphanedFile = $this->getManager()->files()->getFileUsingFileInfo($fileInfo);
+        $orphanedFile = $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash());
 
         if ($orphanedFile && $orphanedFile->is_valid_image()) {
             return $this->generateViewFile($orphanedFile);
@@ -124,6 +124,13 @@ abstract class Handler extends BaseHandler
         }
     }
 
+    /**
+     * @param FileInfo $formDelete
+     * @param $file
+     * @param $instance
+     * @param $data
+     * @return array
+     */
     protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array
     {
         $result = $formDelete->addFileReferenceInformation($data);
@@ -132,6 +139,8 @@ abstract class Handler extends BaseHandler
         $result['filename'] = $this->getFileName(new FileInfo($formDelete));
         $result['preview'] = $this->getPreviewForFile(new FileInfo($formDelete));
         $result['filesize'] = Misc::convertByteInMegabyte((int)$file->filesize);
+
+        $result['pathnamehash'] =  $formDelete->getPathnamehash();
 
         return $result;
     }

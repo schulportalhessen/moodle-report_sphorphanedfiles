@@ -50,12 +50,14 @@
                 <div class='ml-1'>{{{filename}}}</div>
                 <div class='ml-1'>({{{filesize}}} MB)</div>
                 </div>
-                {{{preview}}}
+                {{{preview}}}  xxxx-> {{pathnamehash}}
             </td>
             <td>
                 {{#userAllowedToDelete}}
                     <form action="#" method="POST">
                         <input type="hidden" name="fileID" value="{{fileID}}">
+                        <input type="hidden" name="pathnamehash" value="{{pathnamehash}}">
+
                         <div>
                             <button class="btn btn-sm btn-danger p-1"><i class="fa fa-trash fa-fw h4 m-b-0"></i>
                             </button>

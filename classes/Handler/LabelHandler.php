@@ -73,7 +73,10 @@ class LabelHandler extends Handler
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'content' => $htmlContent,
                 'userAllowedToDelete' => $userAllowedToDelete,
-                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
+                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
+
+                'pathnamehash' => $formDelete->getPathnamehash()
+
             ]);
         }
 

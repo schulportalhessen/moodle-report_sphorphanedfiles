@@ -6,6 +6,7 @@ use coding_exception;
 use context_course;
 use moodle_database;
 use moodle_exception;
+use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Files\FileInfo;
 use require_login_exception;
 use stdClass;
@@ -33,15 +34,15 @@ class Security
 
 
     /**
-     * @param FileInfo $fileInfo
+     * @param Files $fileToBeDeleted
      * @param int $courseId
      * @return bool
      * @throws coding_exception
      */
-    public function isCourseIdOfFileSameLikeCourseidOfTheCourse(FileInfo $fileInfo, int $courseId): bool
+    public function isCourseIdOfFileSameLikeCourseidOfTheCourse(\stored_file $fileToBeDeleted, int $courseId): bool
     {
         // get the contextid of the file
-        $fileContextId = $fileInfo->getContextId();
+        $fileContextId = $fileToBeDeleted->get_contextid();
         // now get the context of the modul where te file belongs to
         $contextOfFile = \context::instance_by_id($fileContextId, MUST_EXIST);
         // Now get the context of the course (files that belongs to sectionsummarys for example are allreade coursecontext

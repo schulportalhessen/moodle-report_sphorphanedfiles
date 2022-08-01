@@ -6,6 +6,7 @@ use stdClass;
 use moodle_database;
 use context_course;
 
+use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
@@ -85,22 +86,38 @@ class OrphanedView
         // this method throws an exception if the user is not allowed
         $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (FileInfo::isSufficientForConstruction($_POST)) {
-                $fileInfo = new FileInfo($_POST);
-            }
-            // Check for contextmanipulation of the course
-            $isCourseIdOfFileSameLikeCourseidOfTheCourse = $this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileInfo, $this->courseId);
-            if (!$isCourseIdOfFileSameLikeCourseidOfTheCourse) {
-                return;
-            }
-            $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
-                $this->apiM->security(),
-                $fileInfo,
-                $this->user,
-                $this->courseId
-            );
+        // Deleting a file is requested bei Post-request. The courseid id is already a required paramter. Now read an identifyer
+        // for the file that should be deleted ab check for the capabilitiy and do seurity things
+        // red the variables from the post-request
+        // check the values if they are correct and secure
+        $dummy = $_POST;
+        $pathnamehash = required_param('pathnamehash', PARAM_TEXT);
+        if (!ctype_alnum($pathnamehash)) {
+            echo "error only alphanumerival characters allowed";
+            die();
         }
+
+
+        $fileToBeDeleted = (new Files())->getFileStorage()->get_file_by_hash($pathnamehash);
+        if (!$fileToBeDeleted) {
+            // datei nincht gefunden ... bereits gelöscht oder daten manipuliert
+            die();
+        }
+
+        // Check for contextmanipulation of the course
+        $isCourseIdOfFileSameLikeCourseidOfTheCourse = $this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $this->courseId);
+        if (!$isCourseIdOfFileSameLikeCourseidOfTheCourse) {
+            return;
+        }
+
+
+        $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
+            $this->apiM->security(),
+            $fileToBeDeleted,
+            $this->user,
+            $this->courseId
+        );
+
     }
 
     public function listOrphansForSection($sectionInfo)

@@ -14,6 +14,8 @@ class FileInfo
 {
     private const SERIALIZATION_SEPARATOR = "§";
 
+    private $pathnamehash;
+
     private $contextId;
     private $component;
     private $filearea;
@@ -60,12 +62,19 @@ class FileInfo
             return true;
         }
 
-        return isset($data['filearea']) &&
+        return isset($data['pathnamehash']) &&
+            isset($data['filearea']) &&
             isset($data['itemId'])    &&
             isset($data['contextId']) &&
             isset($data['filepath'])  &&
             isset($data['filename'])  &&
             isset($data['component']);
+    }
+
+
+    public function getPathnamehash()
+    {
+        return $this->pathnamehash;
     }
 
     public function getContextId()
@@ -104,6 +113,7 @@ class FileInfo
     public function toArray(): array
     {
         return [
+            'pathnamehash' => $this->getPathnamehash(),
             'contextId' => $this->getContextId(),
             'component' => $this->getComponent(),
             'filearea'  => $this->getFileArea(),
@@ -123,12 +133,13 @@ class FileInfo
         $infoComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
 
         $this->setFromArray([
-            'contextId' => $infoComponents[0],
-            'component' => $infoComponents[1],
-            'filearea'  => $infoComponents[2],
-            'itemId'    => $infoComponents[3],
-            'filepath'  => $infoComponents[4],
-            'filename'  => $infoComponents[5]
+            'pathnamehash' => $infoComponents[0],
+            'contextId' => $infoComponents[1],
+            'component' => $infoComponents[2],
+            'filearea'  => $infoComponents[3],
+            'itemId'    => $infoComponents[4],
+            'filepath'  => $infoComponents[5],
+            'filename'  => $infoComponents[6]
         ]);
     }
 
@@ -137,6 +148,7 @@ class FileInfo
         if (isset($data[self::FILEREFERENCEKEY])) {
             $this->setFromString($data[self::FILEREFERENCEKEY]);
         } else {
+            $this->pathnamehash = $data['pathnamehash'];
             $this->contextId = $data['contextId'];
             $this->component = $data['component'];
             $this->filearea = $data['filearea'];
@@ -149,6 +161,7 @@ class FileInfo
     public function setFromFileWithContext($file, $contextId): FileInfo
     {
         $this->setFromArray([
+            'pathnamehash' => $file->pathnamehash,
             'contextId' => $contextId,
             'component' => $file->component,
             'filearea'  => $file->filearea,

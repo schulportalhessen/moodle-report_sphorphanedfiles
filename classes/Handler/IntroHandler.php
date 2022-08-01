@@ -51,7 +51,7 @@ class IntroHandler extends Handler
         if (isset($handlermaterialsplugin) && in_array($component, explode(',', $handlermaterialsplugin))) {
             return true;
         }
-    
+
         return false;
     }
 
@@ -86,7 +86,8 @@ class IntroHandler extends Handler
         $courseId,
         $instance,
         $iconHtml
-    ): array {
+    ): array
+    {
 
         // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
         //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
@@ -101,19 +102,23 @@ class IntroHandler extends Handler
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         $componentName = $this->getComponentName();
-        // echo $componentName . ': '.  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
-                'modName' => $componentName,
-                'name' => $name." id=".$instance->id,
-                'instanceId' => $instance->id,
-                'contextId' => $contextId,
-                'content' => $htmlContent,
-                'userAllowedToDelete' => $userAllowedToDelete,
-                'iconHtml' => $iconHtml,
-            ]);
+            $viewOrphanedFiles[] = $this->getSkeleton(
+                $formDelete,
+                $file,
+                $instance,
+                [
+                    'modName' => $componentName,
+                    'name' => $name . " id=" . $instance->id,
+                    'instanceId' => $instance->id,
+                    'contextId' => $contextId,
+                    'content' => $htmlContent,
+                    'userAllowedToDelete' => $userAllowedToDelete,
+                    'iconHtml' => $iconHtml,
+                ]
+            );
         }
 
         return $viewOrphanedFiles;

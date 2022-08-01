@@ -54,12 +54,24 @@ class Files
         );
     }
 
+
+
     /**
      * @return bool|stored_file
      */
-    public function getFileUsingFileInfo(FileInfo $fileInfo)
+    public function getFileUsingPathnamehash(string $pathnamehash)
     {
-        return $this->getFile($fileInfo->toArray());
+        $dummy = $this->fileStorage->get_file_by_hash($pathnamehash);
+        return $dummy;
+    }
+    /**
+     * @return bool|stored_file
+     */
+    public function getFileUsingFileInfo_deprecated(FileInfo $fileInfo)
+    {
+        /// Alter Zugriff über den SEPERATOR encodete Filereferenzkey
+        $dummy = $this->getFile($fileInfo->toArray());
+        return $dummy;
     }
 
     protected function createPathForFileWithItem(stored_file $storedFile)
@@ -131,21 +143,24 @@ class Files
      * has the role editing teacher. (Nonediting teachers does not have this capability.)
      *
      * @param Security $security
-     * @param FileInfo $fileInfo
+     * @param stored_file $fileToBeDeleted
      * @param $user
      * @param $course
      * @return bool
      */
-    public function deleteFileByUserInCourse(Security $security, FileInfo $fileInfo, $user, $course): bool
+    public function deleteFileByUserInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool
     {
-        $isCourseIdOfFileSameLikeCourseidOfTheCourse = $security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileInfo, $course);
+        $isCourseIdOfFileSameLikeCourseidOfTheCourse = $security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course);
         if ($isCourseIdOfFileSameLikeCourseidOfTheCourse && $security->allowedToViewDeleteAllFiles($course, $user)) {
-            $fileToBeDeleted = $this->getFileUsingFileInfo($fileInfo);
+            ///    if ($file = $fs->) {
+            ///     // Make sure the user didn't modify the filehash to delete another file.
+            ///      if ($file->get_component() == 'user' && $file->get_filearea() == 'draft'
+            ///         && $file->get_itemid() == $itemid && $file->get_contextid() == $usercontext->id) {
             if (!$fileToBeDeleted) {
                 echo "file not found, so data might be manipulated or the file is already deleted or something went wrong";
                 return false;
             } else {
-                // echo "... delete nur simmuliert"; die(); // development!!
+                echo "... delete nur simmuliert"; die(); // development!!
                 $fileToBeDeleted->delete();
                 return true;
             }

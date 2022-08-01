@@ -136,9 +136,8 @@ abstract class BaseHandler
 
     public function getFileName(FileInfo $fileInfo)
     {
-        return $this->getManager()->files()->generateFallbackView(
-            $this->getManager()->files()->getFileUsingFileInfo($fileInfo)
-        );
+        $storedfile = $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash());
+        return $this->getManager()->files()->generateFallbackView($storedfile);
     }
 
     public function getModuleURLForInstance($instance)
@@ -160,7 +159,13 @@ abstract class BaseHandler
     abstract protected function enumerateFiles($user, $context, $course, $module): array;
 
     /**
-     * TODO: Documentation
+     * @param $viewOrphanedFiles
+     * @param $contextId
+     * @param $user
+     * @param $courseId
+     * @param $instance
+     * @param $iconHtml
+     * @return array
      */
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $instance, $iconHtml): array;
 }
