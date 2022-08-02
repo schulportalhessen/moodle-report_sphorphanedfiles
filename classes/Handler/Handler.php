@@ -96,12 +96,7 @@ abstract class Handler extends BaseHandler
      */
     protected function enumerateFiles($user, $context, $course, $module): array
     {
-        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
-            $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
-        } else {
-            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponent($user->id, $context, $module) ?? [];
-        }
-
+        $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
         return $this->postFilter($result);
     }
 

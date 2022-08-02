@@ -60,12 +60,7 @@ class IntroHandler extends Handler
      */
     protected function enumerateFiles($user, $context, $course, $module): array
     {
-        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
-            $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
-        } else {
-            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponentIntro($user->id, $context, $module) ?? [];
-        }
-
+        $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
         return $this->postFilter($result);
     }
 
@@ -97,8 +92,7 @@ class IntroHandler extends Handler
         $htmlContent = $this->getIntro($instance);
 
         $name = $instance->name;
-
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         $componentName = $this->getComponentName();
@@ -115,7 +109,7 @@ class IntroHandler extends Handler
                     'instanceId' => $instance->id,
                     'contextId' => $contextId,
                     'content' => $htmlContent,
-                    'userAllowedToDelete' => $userAllowedToDelete,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                     'iconHtml' => $iconHtml,
                 ]
             );

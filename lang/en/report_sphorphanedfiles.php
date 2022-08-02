@@ -43,6 +43,7 @@ $string['header.moduleContent'] = 'Description, ...';
 $string['header.code'] = 'Sourcecode:';
 
 $string['sphorphanedfiles:view'] = 'Capability to view menuitem linking to the report.';
+$string['sphorphanedfiles:delete'] = 'Capability to get an icon added to each orphaned file to be able to delete files.';
 
 $string['isactive'] = 'Activate report';
 $string['configisactive'] = 'When activate the report can be started in the coursenavigation.';

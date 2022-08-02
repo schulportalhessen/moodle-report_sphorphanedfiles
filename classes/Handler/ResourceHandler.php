@@ -56,7 +56,7 @@ class ResourceHandler extends Handler
         $modName = $instance->modname;
         $name = $instance->name;
 
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
         foreach ($orphanedFiles as $file) {
@@ -72,7 +72,7 @@ class ResourceHandler extends Handler
                     'instanceId' => $instance->id,
                     'contextId' => $contextId,
                     'content' => $htmlContent,
-                    'userAllowedToDelete' => $userAllowedToDelete,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                     'iconHtml' => $iconHtml,
                 ]
             );

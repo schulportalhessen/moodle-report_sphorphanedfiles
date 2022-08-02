@@ -29,6 +29,10 @@
     <p>{{translation.description}}</p>
 {{/allowedToViewDeleteAllFiles}}
 
+{{#isUserAllowedToDeleteFiles}}
+  isUserAllowedToDeleteFiles: User darf löschen ...
+{{/isUserAllowedToDeleteFiles}}
+
 {{#afterDeletion}}
 <div class="alert alert-info" role="alert">
     {{deleteMessage}}

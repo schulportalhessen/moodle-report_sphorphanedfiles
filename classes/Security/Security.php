@@ -33,7 +33,8 @@ class Security
     }
 
 
-    /**
+
+        /**
      * @param Files $fileToBeDeleted
      * @param int $courseId
      * @return bool
@@ -76,7 +77,27 @@ class Security
     {
         $coursecontext = context_course::instance($courseId);
         // here you can change the roles or capabilities of who can view and delete the orphaned files
-        return is_enrolled($coursecontext, $user, 'moodle/course:manageactivities') || is_siteadmin();
+        return has_capability('moodle/course:manageactivities', $coursecontext)
+            && has_capability('report/sphorphanedfiles:view', $coursecontext)
+            && has_capability('report/sphorphanedfiles:delete', $coursecontext);
+    }
+
+    /**
+     * User needs two capabilitys to be allowed to delete
+     * moodle/course:manageactivities
+     * report/sphorphanedfiles:delete
+     *
+     * @param $courseId
+     * @param $user
+     * @return bool
+     * @throws coding_exception
+     */
+    public function isUserAllowedToDeleteFiles($courseId, $user): bool
+    {
+        $coursecontext = context_course::instance($courseId);
+        // here you can change the roles or capabilities of who can view and delete the orphaned files
+        return has_capability('moodle/course:manageactivities', $coursecontext)
+            && has_capability('report/sphorphanedfiles:delete', $coursecontext);
     }
 
     /**

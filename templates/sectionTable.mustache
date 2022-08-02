@@ -32,7 +32,7 @@
     </tr>
     </thead>
     <tbody>
-    {{#orphanedFiles}}
+    {{#orphanedFilesList}}
         <tr>
             <td><a href='{{{modurl}}}'>{{{iconHtml}}}{{name}}</a></td>
             <td><details>
@@ -44,16 +44,13 @@
                     </details>
             </td>
            <td><div class='row ml-0'>
-                <div>
-                  <input type="checkbox" name="selectedItems[]" style="display:none;">
-                </div>
                 <div class='ml-1'>{{{filename}}}</div>
                 <div class='ml-1'>({{{filesize}}} MB)</div>
                 </div>
                 {{{preview}}}  xxxx-> {{pathnamehash}}
             </td>
             <td>
-                {{#userAllowedToDelete}}
+                {{#userAllowedToDeleteThisFile}}
                     <form action="#" method="POST">
                         <input type="hidden" name="fileID" value="{{fileID}}">
                         <input type="hidden" name="pathnamehash" value="{{pathnamehash}}">
@@ -63,17 +60,17 @@
                             </button>
                         </div>
                     </form>
-                {{/userAllowedToDelete}}
-                {{^userAllowedToDelete}}
+                {{/userAllowedToDeleteThisFile}}
+                {{^userAllowedToDeleteThisFile}}
                     No
-                {{/userAllowedToDelete}}
+                {{/userAllowedToDeleteThisFile}}
                 {{#isGridlayoutFile}}      
                     {{translation.isgridlayoutfilehint}}
                     <br>
                 {{/isGridlayoutFile}} 
             </td>
         </tr>
-    {{/orphanedFiles}}
+    {{/orphanedFilesList}}
 
 
 

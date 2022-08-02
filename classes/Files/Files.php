@@ -152,10 +152,6 @@ class Files
     {
         $isCourseIdOfFileSameLikeCourseidOfTheCourse = $security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course);
         if ($isCourseIdOfFileSameLikeCourseidOfTheCourse && $security->allowedToViewDeleteAllFiles($course, $user)) {
-            ///    if ($file = $fs->) {
-            ///     // Make sure the user didn't modify the filehash to delete another file.
-            ///      if ($file->get_component() == 'user' && $file->get_filearea() == 'draft'
-            ///         && $file->get_itemid() == $itemid && $file->get_contextid() == $usercontext->id) {
             if (!$fileToBeDeleted) {
                 echo "file not found, so data might be manipulated or the file is already deleted or something went wrong";
                 return false;

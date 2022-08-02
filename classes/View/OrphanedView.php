@@ -2,6 +2,7 @@
 
 namespace report_sphorphanedfiles\View;
 
+use Dompdf\Exception;
 use stdClass;
 use moodle_database;
 use context_course;
@@ -11,6 +12,10 @@ use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\HTML;
+
+use UnexpectedValueException;
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class OrphanedView
@@ -82,34 +87,52 @@ class OrphanedView
      */
     public function deleteOrphanedFile(): void
     {
-        // validate if the user is logged in and allowed to view the course
-        // this method throws an exception if the user is not allowed
-        $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
-
         // Deleting a file is requested bei Post-request. The courseid id is already a required paramter. Now read an identifyer
-        // for the file that should be deleted ab check for the capabilitiy and do seurity things
+        // for the file that should be deleted and check for the capabilitiy and do seurity things
         // red the variables from the post-request
         // check the values if they are correct and secure
-        $dummy = $_POST;
-        $pathnamehash = required_param('pathnamehash', PARAM_TEXT);
-        if (!ctype_alnum($pathnamehash)) {
-            echo "error only alphanumerival characters allowed";
-            die();
+        $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);
+        if (strlen($pathnamehash) > 40 ) {
+            // pathnamehash must be of type VARCHAR (40)
+            throw new UnexpectedValueException('wrong pathnamehash');
+            return;
         }
-
-
+        // Get the file that might should be deleted
         $fileToBeDeleted = (new Files())->getFileStorage()->get_file_by_hash($pathnamehash);
         if (!$fileToBeDeleted) {
-            // datei nincht gefunden ... bereits gelöscht oder daten manipuliert
-            die();
-        }
-
-        // Check for contextmanipulation of the course
-        $isCourseIdOfFileSameLikeCourseidOfTheCourse = $this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $this->courseId);
-        if (!$isCourseIdOfFileSameLikeCourseidOfTheCourse) {
+            // If file was already deleted
+            throw new UnexpectedValueException('file not found');
             return;
         }
 
+        // Check if file has the context that belongs to the course the user has courseaccess
+        if (!$this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $this->courseId)) {
+            throw new UnexpectedValueException('wrong value found');
+            return;
+        }
+
+        // compare fileId from Post with $fileToBeDeleted-Information
+        // ToDo: some more securitychecks on the Post-Parameter
+        $fileID = required_param('fileID', PARAM_TEXT);
+
+        // get the contextid of the file
+        $dataFileToBeDeleted = [];
+        $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();
+        $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();
+        $dataFileToBeDeleted['component'] = $fileToBeDeleted->get_component();
+        $dataFileToBeDeleted['filearea'] = $fileToBeDeleted->get_filearea();
+        $dataFileToBeDeleted['itemId'] = $fileToBeDeleted->get_itemid();
+        $dataFileToBeDeleted['filepath'] = $fileToBeDeleted->get_filepath();
+        $dataFileToBeDeleted['filename'] = $fileToBeDeleted->get_filename();
+
+        $serialisationFileToBeDeleted = (new FileInfo($dataFileToBeDeleted))->toString();
+
+
+        if ($serialisationFileToBeDeleted != $fileID) {
+            // files are not equal ...
+            throw new UnexpectedValueException('wrong value found');
+            return;
+        }
 
         $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
             $this->apiM->security(),
@@ -117,7 +140,6 @@ class OrphanedView
             $this->user,
             $this->courseId
         );
-
     }
 
     public function listOrphansForSection($sectionInfo)
@@ -153,11 +175,11 @@ class OrphanedView
         return $viewOrphanedFiles;
     }
 
-    public function createOrphansList($sectionInfo, $usingTemplate): string
+    public function createOrphansList($sectionInfo): string
     {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
-
-        $cleanedViewOrphanedFiles = []; 
+        $cleanedViewOrphanedFiles = [];
+        // Do not mark plugin gridlayout files as orphaned
         foreach ($viewOrphanedFiles ?? [] as $viewOrphanedFile){
             if (!($this->courseFormatGridEnabled && isset($viewOrphanedFile['isGridlayoutFile']) && $viewOrphanedFile['isGridlayoutFile'])) {
                 $cleanedViewOrphanedFiles[] = $viewOrphanedFile;
@@ -168,10 +190,14 @@ class OrphanedView
             $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles');
             $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'], 'report_sphorphanedfiles', 'header.');
 
-            return $this->getPage()->getOutput()->render_from_template(
-                $usingTemplate,
-                ['orphanedFiles' => $cleanedViewOrphanedFiles, 'translation' => $translations],
+            $dummy = $this->getPage()->getOutput()->render_from_template(
+                'report_sphorphanedfiles/sectionTable',
+                [
+                    'orphanedFilesList' => $cleanedViewOrphanedFiles,
+                    'translation' => $translations
+                ],
             );
+            return $dummy;
         }
 
         return "";
@@ -189,35 +215,36 @@ class OrphanedView
             $this->courseFormatGridEnabled = true;
         }
 
-        // validate if the user is logged in and allowed to view the course
-        // this method throws an exception if the user is not allowed
-        $this->apiM->security()->userIsAllowedToViewTheCourse($this->courseId);
-
         $allowedToViewDeleteAllFiles = $this->apiM->security()->allowedToViewDeleteAllFiles(
             $this->courseId,
             $this->user
         );
 
+        $isUserAllowedToDeleteFiles = $this->apiM->security()->isUserAllowedToDeleteFiles(
+            $this->courseId,
+            $this->user
+        );
         echo $this->getPage()->getOutput()->header();
+        // Render content above the table
         echo $this->getPage()->getOutput()->render_from_template(
             'report_sphorphanedfiles/report',
             [
                 'title' => $this->getPage()->getTitle(),
                 'allowedToViewDeleteAllFiles' => $allowedToViewDeleteAllFiles,
+                'isUserAllowedToDeleteFiles' => $isUserAllowedToDeleteFiles,
                 'afterDeletion' => $this->afterDeletion,
                 'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
                 'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')
             ]
         );
 
+        // Now render each section
         $sectionCounter = 0;
-
         foreach ($this->getPage()->getCourseInfo()->get_section_info_all() as $sectionInfo) {
-            $mustache_name = 'report_sphorphanedfiles/sectionTable';
             echo HTML::createSectionOverview(
                 3,
                 HTML::createSectionHeading($sectionInfo, $this->getPage()->getCourse(), $sectionCounter++),
-                $this->createOrphansList($sectionInfo, $mustache_name)
+                $this->createOrphansList($sectionInfo)
             );
         }
 

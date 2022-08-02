@@ -24,8 +24,10 @@
 
 namespace report_sphorphanedfiles\Handler;
 
+use mod_assign\privacy\useridlist;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
+use function Symfony\Component\String\u;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -58,12 +60,11 @@ class LabelHandler extends Handler
         
         $modName = $instance->modname;
 
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
         // echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-
             $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
                 'modName' => $modName,
                 'name' => get_string('pluginname', 'mod_label') . ' id=' . $instance->id,
@@ -72,7 +73,7 @@ class LabelHandler extends Handler
                 'filename' => $this->getFileName(new FileInfo($formDelete)),
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'content' => $htmlContent,
-                'userAllowedToDelete' => $userAllowedToDelete,
+                'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
 
                 'pathnamehash' => $formDelete->getPathnamehash()
