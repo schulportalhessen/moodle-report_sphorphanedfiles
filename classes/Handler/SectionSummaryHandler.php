@@ -55,7 +55,7 @@ class SectionSummaryHandler extends ItemHandler
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 
-            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
+            $viewOrphanedFiles[] = [
                 'modName' => 'course',
                 'name' => get_string('summary') . ' ' . get_string('section') . ' ' .  $sectionInfo->section,
                 'instanceId' => 'todo',
@@ -66,8 +66,13 @@ class SectionSummaryHandler extends ItemHandler
                 'content' => $sectionHtml,
                 'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
-                'pathnamehash' => $formDelete->getPathnamehash()
-            ]);
+                'post_pathnamehash' => $formDelete->getPathnamehash(),
+                'post_filepath' => $formDelete->getFilePath(),
+                'post_filename' => $formDelete->getFileName(),
+                'post_filearea' => $formDelete->getFileArea(),
+                'post_component' => $formDelete->getComponent(),
+                'post_contextid' => $formDelete->getContextId()
+            ];
         }
 
         return $viewOrphanedFiles;

@@ -77,8 +77,9 @@ class OrphanedView
 
     /**
      * if the page is opened with a POST request,
-     * this means the user has confirmed to delete a single orphaned file,
-     * then we are checking if the file belongs to the user and delete it
+     * this means the user has confirmed to delete a single orphaned file
+     * We have to be sure that the submitted filedata were not manipulated, the file belongs to the course and the user
+     * is allowed to delete the file.
      *
      * @return void
      * @throws coding_exception
@@ -87,16 +88,54 @@ class OrphanedView
      */
     public function deleteOrphanedFile(): void
     {
-        // Deleting a file is requested bei Post-request. The courseid id is already a required paramter. Now read an identifyer
-        // for the file that should be deleted and check for the capabilitiy and do seurity things
-        // red the variables from the post-request
-        // check the values if they are correct and secure
-        $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);
+        // Read all post-parameter as required parameter and(!!!)
+        // ToDo: some more securitychecks on the Post-Parameter
+        $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);//VARCHAR(40)
         if (strlen($pathnamehash) > 40 ) {
-            // pathnamehash must be of type VARCHAR (40)
             throw new UnexpectedValueException('wrong pathnamehash');
             return;
         }
+
+        $contextId = required_param('contextId', PARAM_INT);//BIGINT(10)
+        // $contextId = filter_var($contextId, FILTER_SANITIZE_NUMBER_INT);
+
+        $component = required_param('component', PARAM_TEXT);//VARCHAR(100)
+        if (strlen($component) > 100 ) {
+            throw new UnexpectedValueException('wrong component');
+            return;
+        }
+
+        $filearea = required_param('filearea', PARAM_TEXT);//VARCHAR(50)
+        if (strlen($filearea) > 100 ) {
+            throw new UnexpectedValueException('wrong filearea');
+            return;
+        }
+
+        $itemId = required_param('itemId', PARAM_INT);//BIGINT(10)
+
+        $filepath = required_param('filepath', PARAM_TEXT);//VARCHAR(255)
+        if (strlen($filepath) > 255 ) {
+            throw new UnexpectedValueException('wrong filepath');
+            return;
+        }
+
+        $filename = required_param('filename', PARAM_TEXT);//VARCHAR(255)
+        if (strlen($filename) > 255 ) {
+            throw new UnexpectedValueException('wrong filename');
+            return;
+        }
+
+        $postDataFile = [];
+        $postDataFile['pathnamehash'] = $pathnamehash;
+        $postDataFile['contextId'] = $contextId;
+        $postDataFile['component'] = $component;
+        $postDataFile['filearea'] = $filearea;
+        $postDataFile['itemId'] = $itemId;
+        $postDataFile['filepath'] = $filepath;
+        $postDataFile['filename'] = $filename;
+        $serialisation_PostDataFile = (new FileInfo($postDataFile))->toString();
+
+        //////////////////////////////////////////////////////////////////////////////////////////
         // Get the file that might should be deleted
         $fileToBeDeleted = (new Files())->getFileStorage()->get_file_by_hash($pathnamehash);
         if (!$fileToBeDeleted) {
@@ -104,31 +143,26 @@ class OrphanedView
             throw new UnexpectedValueException('file not found');
             return;
         }
-
         // Check if file has the context that belongs to the course the user has courseaccess
         if (!$this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $this->courseId)) {
             throw new UnexpectedValueException('wrong value found');
             return;
         }
-
-        // compare fileId from Post with $fileToBeDeleted-Information
-        // ToDo: some more securitychecks on the Post-Parameter
-        $fileID = required_param('fileID', PARAM_TEXT);
-
         // get the contextid of the file
         $dataFileToBeDeleted = [];
-        $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();
-        $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();
-        $dataFileToBeDeleted['component'] = $fileToBeDeleted->get_component();
-        $dataFileToBeDeleted['filearea'] = $fileToBeDeleted->get_filearea();
-        $dataFileToBeDeleted['itemId'] = $fileToBeDeleted->get_itemid();
-        $dataFileToBeDeleted['filepath'] = $fileToBeDeleted->get_filepath();
-        $dataFileToBeDeleted['filename'] = $fileToBeDeleted->get_filename();
+        $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();//40
+        $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();//10
+        $dataFileToBeDeleted['component'] = $fileToBeDeleted->get_component();//100
+        $dataFileToBeDeleted['filearea'] = $fileToBeDeleted->get_filearea();//50
+        $dataFileToBeDeleted['itemId'] = $fileToBeDeleted->get_itemid();//10
+        $dataFileToBeDeleted['filepath'] = $fileToBeDeleted->get_filepath();//255
+        $dataFileToBeDeleted['filename'] = $fileToBeDeleted->get_filename();//255
+        // Serialize in order to be able to compare with the $fileID.
+        $serialisation_FileToBeDeleted = (new FileInfo($dataFileToBeDeleted))->toString();
 
-        $serialisationFileToBeDeleted = (new FileInfo($dataFileToBeDeleted))->toString();
-
-
-        if ($serialisationFileToBeDeleted != $fileID) {
+        /////////////////////////////////////////////////////////////////////////
+        // compare file from Post with $fileToBeDeleted-Information
+        if ($serialisation_FileToBeDeleted != $serialisation_PostDataFile) {
             // files are not equal ...
             throw new UnexpectedValueException('wrong value found');
             return;

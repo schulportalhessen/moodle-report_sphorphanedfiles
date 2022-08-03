@@ -40,40 +40,24 @@ function report_sphorphanedfiles_extend_navigation_course($navigation, $course, 
 {
     $page = $GLOBALS['PAGE'];
     $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
-
     $orphanedNode = $page->navigation->find($course->id, navigation_node::TYPE_COURSE);
-    //$orphanedNode->add(get_string('pluginname', 'report_sphorphanedfiles'), $url);
-
     $collection = $orphanedNode->children;
-
     foreach ($collection->getIterator() as $child) {
         $key = $child->key;
         // Add break-condition in order to add menuitem
+        // if ($key = 'xxxx') {
+        //     break;
+        // }
         break;
     }
 
-    // ToDo: implement better code. Do not know why I did this as workarround.
+    // Only show node if report is activated AND user has capability OR report is
+    require_capability('report/sphorphanedfiles:view', $context);
     $isactive = get_config('report_sphorphanedfiles', 'isactive');
     $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
-    if ($isactive == true) {
-        $isactive = true;
-    } else {
-        $isactive = false;
-    }
-
-    if ($isactiveforadmin == true) {
-        $isactiveforadmin = true;
-    } else {
-        $isactiveforadmin = false;
-    }
-
-    $hascapability = has_capability('report/sphorphanedfiles:view',$context);
-    
-    // Only show node if report is activated AND user has capability OR report is
-    // Do not know if this is a bug but report-node is not shown für student by default.
-    if (($isactive && $hascapability) || ($isactiveforadmin && is_siteadmin())) {
+    $isReportActiveForTheUser = ($isactive || ($isactiveforadmin && is_siteadmin()));
+    if ($isReportActiveForTheUser) {
         $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
         $orphanedNode->add_node($node,  $key);
     }
-
 }

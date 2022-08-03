@@ -128,15 +128,18 @@ abstract class Handler extends BaseHandler
      */
     protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array
     {
-        $result = $formDelete->addFileReferenceInformation($data);
-
         $result['modurl'] = $this->getModuleURLForInstance($instance);
         $result['filename'] = $this->getFileName(new FileInfo($formDelete));
         $result['preview'] = $this->getPreviewForFile(new FileInfo($formDelete));
         $result['filesize'] = Misc::convertByteInMegabyte((int)$file->filesize);
 
-        $result['pathnamehash'] =  $formDelete->getPathnamehash();
-
+        $result['post_pathnamehash'] = $formDelete->getPathnamehash();
+        $result['post_contextId'] = $formDelete->getContextId();
+        $result['post_component'] = $formDelete->getComponent();
+        $result['post_filearea'] = $formDelete->getFileArea();
+        $result['post_itemId'] = $formDelete->getItemId();
+        $result['post_filepath'] = $formDelete->getFilePath();
+        $result['post_filename'] = $formDelete->getFileName();
         return $result;
     }
 }

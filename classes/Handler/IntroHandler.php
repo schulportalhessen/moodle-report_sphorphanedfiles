@@ -111,6 +111,14 @@ class IntroHandler extends Handler
                     'content' => $htmlContent,
                     'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                     'iconHtml' => $iconHtml,
+
+                    'post_pathnamehash' => $formDelete->getPathnamehash(),
+                    'post_contextId' => $formDelete->getContextId(),
+                    'post_component' => $formDelete->getComponent(),
+                    'post_filearea' => $formDelete->getFileArea(),
+                    'post_itemId' => $formDelete->getItemId(),
+                    'post_filepath' => $formDelete->getFilePath(),
+                    'post_filename' => $formDelete->getFileName()
                 ]
             );
         }

@@ -47,30 +47,13 @@ class FileInfo
         }
     }
 
-    protected const FILEREFERENCEKEY = 'fileID';
+    //protected const FILEREFERENCEKEY = 'filepath_filename';
 
-    public function addFileReferenceInformation(array $data): array
-    {
-        $data[self::FILEREFERENCEKEY] = $this->toString();
-
-        return $data;
-    }
-
-    public static function isSufficientForConstruction(array $data): bool
-    {
-        if (isset($data[self::FILEREFERENCEKEY])) {
-            return true;
-        }
-
-        return isset($data['pathnamehash']) &&
-            isset($data['filearea']) &&
-            isset($data['itemId'])    &&
-            isset($data['contextId']) &&
-            isset($data['filepath'])  &&
-            isset($data['filename'])  &&
-            isset($data['component']);
-    }
-
+    //public function addFileReferenceInformation_weg(array $data): array
+    //{
+    //    $data[self::FILEREFERENCEKEY] = $this->toString();
+    //    return $data;
+    //}
 
     public function getPathnamehash()
     {
@@ -145,9 +128,9 @@ class FileInfo
 
     public function setFromArray($data)
     {
-        if (isset($data[self::FILEREFERENCEKEY])) {
-            $this->setFromString($data[self::FILEREFERENCEKEY]);
-        } else {
+       // if (isset($data[self::FILEREFERENCEKEY])) {
+       //     $this->setFromString($data[self::FILEREFERENCEKEY]);
+       // } else {
             $this->pathnamehash = $data['pathnamehash'];
             $this->contextId = $data['contextId'];
             $this->component = $data['component'];
@@ -155,7 +138,7 @@ class FileInfo
             $this->itemId   = $data['itemId'];
             $this->filepath = $data['filepath'];
             $this->filename = $data['filename'];
-        }
+        //}
     }
 
     public function setFromFileWithContext($file, $contextId): FileInfo
