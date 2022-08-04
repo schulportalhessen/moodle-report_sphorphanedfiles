@@ -24,10 +24,11 @@
 
 
 <h2>{{title}}</h2>
-{{#allowedToViewDeleteAllFiles}}
+{{#$userAllowedToDeleteFiles}}
     <p>{{translation.isallowedtodeleteallfiles}}</p>
     <p>{{translation.description}}</p>
-{{/allowedToViewDeleteAllFiles}}
+{{/$userAllowedToDeleteFiles}}
+
 
 {{#afterDeletion}}
 <div class="alert alert-info" role="alert">

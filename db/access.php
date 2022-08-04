@@ -34,4 +34,13 @@ $capabilities = [
             'editingteacher' => CAP_ALLOW,
         ],
     ],
+
+    'report/sphorphanedfiles:delete' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+        ],
+    ],
+
 ];
