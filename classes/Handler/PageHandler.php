@@ -38,14 +38,16 @@ class PageHandler extends ItemHandler
                 $page->revision
             );
 
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
-        // echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
+            // Bad workaround
             $this->setImplementationmode('xxxxxx');
-            if ($file->filearea == 'content' ) $this->setImplementationmode('item');
+            if ($file->filearea == 'content' ) {
+                $this->setImplementationmode('item');
+            }
 
             $viewOrphanedFiles[] = $this->getSkeleton(
                 $formDelete,
@@ -57,8 +59,16 @@ class PageHandler extends ItemHandler
                     'instanceId' => $instance->id,
                     'contextId' => $contextId,
                     'content' => $htmlContent,
-                    'userAllowedToDelete' => $userAllowedToDelete,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                     'iconHtml' => $iconHtml,
+
+                    'post_pathnamehash' => $formDelete->getPathnamehash(),
+                    'post_contextId' => $formDelete->getContextId(),
+                    'post_component' => $formDelete->getComponent(),
+                    'post_filearea' => $formDelete->getFileArea(),
+                    'post_itemId' => $formDelete->getItemId(),
+                    'post_filepath' => $formDelete->getFilePath(),
+                    'post_filename' => $formDelete->getFileName()
                 ]
             );
         }

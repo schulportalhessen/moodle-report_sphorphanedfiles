@@ -56,21 +56,34 @@ class ResourceHandler extends Handler
         $modName = $instance->modname;
         $name = $instance->name;
 
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
-                'modName' => $modName,
-                'name' => $name,
-                'instanceId' => $instance->id,
-                'contextId' => $contextId,
-                'content' => $htmlContent,
-                'userAllowedToDelete' => $userAllowedToDelete,
-                'iconHtml' => $iconHtml,
-            ]);
+            $viewOrphanedFiles[] = $this->getSkeleton(
+                $formDelete,
+                $file,
+                $instance,
+                [
+                    'modName' => $modName,
+                    'name' => $name,
+                    'instanceId' => $instance->id,
+                    'contextId' => $contextId,
+                    'content' => $htmlContent,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
+                    'iconHtml' => $iconHtml,
+
+                    'post_pathnamehash' => $formDelete->getPathnamehash(),
+                    'post_contextId' => $formDelete->getContextId(),
+                    'post_component' => $formDelete->getComponent(),
+                    'post_filearea' => $formDelete->getFileArea(),
+                    'post_itemId' => $formDelete->getItemId(),
+                    'post_filepath' => $formDelete->getFilePath(),
+                    'post_filename' => $formDelete->getFileName()
+                ]
+            );
         }
 
         return $viewOrphanedFiles;

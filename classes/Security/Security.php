@@ -6,6 +6,7 @@ use coding_exception;
 use context_course;
 use moodle_database;
 use moodle_exception;
+use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Files\FileInfo;
 use require_login_exception;
 use stdClass;
@@ -32,16 +33,17 @@ class Security
     }
 
 
-    /**
-     * @param FileInfo $fileInfo
+
+        /**
+     * @param Files $fileToBeDeleted
      * @param int $courseId
      * @return bool
      * @throws coding_exception
      */
-    public function isCourseIdOfFileSameLikeCourseidOfTheCourse(FileInfo $fileInfo, int $courseId): bool
+    public function isCourseIdOfFileSameLikeCourseidOfTheCourse(\stored_file $fileToBeDeleted, int $courseId): bool
     {
         // get the contextid of the file
-        $fileContextId = $fileInfo->getContextId();
+        $fileContextId = $fileToBeDeleted->get_contextid();
         // now get the context of the modul where te file belongs to
         $contextOfFile = \context::instance_by_id($fileContextId, MUST_EXIST);
         // Now get the context of the course (files that belongs to sectionsummarys for example are allreade coursecontext
@@ -71,23 +73,33 @@ class Security
      * @param stdClass $user
      * @return bool
      */
-    public function allowedToViewDeleteAllFiles($courseId, $user): bool
+    public function allowedToViewReport($courseId, $user): bool
     {
         $coursecontext = context_course::instance($courseId);
         // here you can change the roles or capabilities of who can view and delete the orphaned files
-        return is_enrolled($coursecontext, $user, 'moodle/course:manageactivities') || is_siteadmin();
+        return has_capability('moodle/course:manageactivities', $coursecontext)
+            && has_capability('report/sphorphanedfiles:view', $coursecontext)
+            && has_capability('report/sphorphanedfiles:delete', $coursecontext);
     }
 
     /**
+     * User needs three capabilitys to be allowed to delete
+     * moodle/course:manageactivities
+     * report/sphorphanedfiles:view'
+     * report/sphorphanedfiles:delete
+     *
+     * @param $courseId
+     * @param $user
+     * @return bool
      * @throws coding_exception
-     * @throws moodle_exception
-     * @throws require_login_exception
      */
-    public function userIsAllowedToViewTheCourse($courseId)
+    public function isUserAllowedToDeleteFiles($courseId, $user): bool
     {
-        $params = ['id' => $courseId];
-        $course = $this->dbM->get_record('course', $params, '*', MUST_EXIST);
-        // validate if the user is allowed to view this course
-        require_login($course);
+        $coursecontext = context_course::instance($courseId);
+        // here you can change the roles or capabilities of who can view and delete the orphaned files
+        return has_capability('moodle/course:manageactivities', $coursecontext)
+            && has_capability('report/sphorphanedfiles:view', $coursecontext)
+            && has_capability('report/sphorphanedfiles:delete', $coursecontext);
     }
+
 }

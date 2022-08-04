@@ -13,7 +13,9 @@ This report only shows orphaned files that are stored by a teacher in the intro-
 
 ## Capabilitys 
 (README_capability.png)
-A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "editingteacher". 
+A new capability "sphorphandfiles:view" is added and is set to "allowed" for the role "editingteacher".
+Plugin also needs the capability moodle/coruse:managemodules
+A new capability "sphorphandfiles:delete" is added and is set to "allowed" for the role "editingteacher".
 
 ## Settings in websiteadministration
 (README_settings.png)
@@ -28,6 +30,15 @@ When activate an admin can start report in the coursenavigation regardless statu
 
 
 ## Changelog ##
+[v2.0.0]
+
+- refactoring  
+- new capability report/sphorphanedfiles:delete  
+
+[v1.0.12]
+
+- refactoring, better capability management, ...
+
 [v1.0.11]
 
 - bump version

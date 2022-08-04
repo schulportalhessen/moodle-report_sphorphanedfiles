@@ -14,6 +14,8 @@ class FileInfo
 {
     private const SERIALIZATION_SEPARATOR = "§";
 
+    private $pathnamehash;
+
     private $contextId;
     private $component;
     private $filearea;
@@ -45,27 +47,17 @@ class FileInfo
         }
     }
 
-    protected const FILEREFERENCEKEY = 'fileID';
+    //protected const FILEREFERENCEKEY = 'filepath_filename';
 
-    public function addFileReferenceInformation(array $data): array
+    //public function addFileReferenceInformation_weg(array $data): array
+    //{
+    //    $data[self::FILEREFERENCEKEY] = $this->toString();
+    //    return $data;
+    //}
+
+    public function getPathnamehash()
     {
-        $data[self::FILEREFERENCEKEY] = $this->toString();
-
-        return $data;
-    }
-
-    public static function isSufficientForConstruction(array $data): bool
-    {
-        if (isset($data[self::FILEREFERENCEKEY])) {
-            return true;
-        }
-
-        return isset($data['filearea']) &&
-            isset($data['itemId'])    &&
-            isset($data['contextId']) &&
-            isset($data['filepath'])  &&
-            isset($data['filename'])  &&
-            isset($data['component']);
+        return $this->pathnamehash;
     }
 
     public function getContextId()
@@ -104,6 +96,7 @@ class FileInfo
     public function toArray(): array
     {
         return [
+            'pathnamehash' => $this->getPathnamehash(),
             'contextId' => $this->getContextId(),
             'component' => $this->getComponent(),
             'filearea'  => $this->getFileArea(),
@@ -123,32 +116,35 @@ class FileInfo
         $infoComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
 
         $this->setFromArray([
-            'contextId' => $infoComponents[0],
-            'component' => $infoComponents[1],
-            'filearea'  => $infoComponents[2],
-            'itemId'    => $infoComponents[3],
-            'filepath'  => $infoComponents[4],
-            'filename'  => $infoComponents[5]
+            'pathnamehash' => $infoComponents[0],
+            'contextId' => $infoComponents[1],
+            'component' => $infoComponents[2],
+            'filearea'  => $infoComponents[3],
+            'itemId'    => $infoComponents[4],
+            'filepath'  => $infoComponents[5],
+            'filename'  => $infoComponents[6]
         ]);
     }
 
     public function setFromArray($data)
     {
-        if (isset($data[self::FILEREFERENCEKEY])) {
-            $this->setFromString($data[self::FILEREFERENCEKEY]);
-        } else {
+       // if (isset($data[self::FILEREFERENCEKEY])) {
+       //     $this->setFromString($data[self::FILEREFERENCEKEY]);
+       // } else {
+            $this->pathnamehash = $data['pathnamehash'];
             $this->contextId = $data['contextId'];
             $this->component = $data['component'];
             $this->filearea = $data['filearea'];
             $this->itemId   = $data['itemId'];
             $this->filepath = $data['filepath'];
             $this->filename = $data['filename'];
-        }
+        //}
     }
 
     public function setFromFileWithContext($file, $contextId): FileInfo
     {
         $this->setFromArray([
+            'pathnamehash' => $file->pathnamehash,
             'contextId' => $contextId,
             'component' => $file->component,
             'filearea'  => $file->filearea,

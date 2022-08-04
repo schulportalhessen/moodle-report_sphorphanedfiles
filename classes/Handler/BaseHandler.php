@@ -86,19 +86,6 @@ abstract class BaseHandler
         return $this->getComponentName() === $type;
     }
 
-    /**
-     * Checks if the given users is allowed to delete (all) files in this course.
-     * 
-     * @param $user   The user for which the check should be performed.
-     * @param $course The course for which to check.
-     * 
-     * @return true if user has appropriate rights, false otherwise.
-     */
-    public function isUserAllowedToViewDeleteAllFilesForCourse($user, $course): bool
-    {
-        return $this->getManager()->security()->allowedToViewDeleteAllFiles($course, $user);
-    }
-
     public function postFilter(array $data): array
     {
         return array_filter(
@@ -136,9 +123,8 @@ abstract class BaseHandler
 
     public function getFileName(FileInfo $fileInfo)
     {
-        return $this->getManager()->files()->generateFallbackView(
-            $this->getManager()->files()->getFileUsingFileInfo($fileInfo)
-        );
+        $storedfile = $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash());
+        return $this->getManager()->files()->generateFallbackView($storedfile);
     }
 
     public function getModuleURLForInstance($instance)
@@ -160,7 +146,13 @@ abstract class BaseHandler
     abstract protected function enumerateFiles($user, $context, $course, $module): array;
 
     /**
-     * TODO: Documentation
+     * @param $viewOrphanedFiles
+     * @param $contextId
+     * @param $user
+     * @param $courseId
+     * @param $instance
+     * @param $iconHtml
+     * @return array
      */
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $instance, $iconHtml): array;
 }
