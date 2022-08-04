@@ -88,7 +88,12 @@ class OrphanedView
      */
     public function deleteOrphanedFile(): void
     {
-        // Read all post-parameter as required parameter and(!!!)
+        // ToDo: Darf user überhautp löschen
+
+
+        // Read all post-parameter as required parameter and for each parameter check
+        // - type
+        // - length
         // ToDo: some more securitychecks on the Post-Parameter
         $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);//VARCHAR(40)
         if (strlen($pathnamehash) > 40 ) {
@@ -106,7 +111,7 @@ class OrphanedView
         }
 
         $filearea = required_param('filearea', PARAM_TEXT);//VARCHAR(50)
-        if (strlen($filearea) > 100 ) {
+        if (strlen($filearea) > 50 ) {
             throw new UnexpectedValueException('wrong filearea');
             return;
         }
@@ -135,7 +140,7 @@ class OrphanedView
         $postDataFile['filename'] = $filename;
         $serialisation_PostDataFile = (new FileInfo($postDataFile))->toString();
 
-        //////////////////////////////////////////////////////////////////////////////////////////
+        // **********************************************************************************************
         // Get the file that might should be deleted
         $fileToBeDeleted = (new Files())->getFileStorage()->get_file_by_hash($pathnamehash);
         if (!$fileToBeDeleted) {
@@ -143,24 +148,20 @@ class OrphanedView
             throw new UnexpectedValueException('file not found');
             return;
         }
-        // Check if file has the context that belongs to the course the user has courseaccess
-        if (!$this->apiM->security()->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $this->courseId)) {
-            throw new UnexpectedValueException('wrong value found');
-            return;
-        }
+
         // get the contextid of the file
         $dataFileToBeDeleted = [];
-        $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();//40
-        $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();//10
-        $dataFileToBeDeleted['component'] = $fileToBeDeleted->get_component();//100
-        $dataFileToBeDeleted['filearea'] = $fileToBeDeleted->get_filearea();//50
-        $dataFileToBeDeleted['itemId'] = $fileToBeDeleted->get_itemid();//10
-        $dataFileToBeDeleted['filepath'] = $fileToBeDeleted->get_filepath();//255
-        $dataFileToBeDeleted['filename'] = $fileToBeDeleted->get_filename();//255
+        $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();
+        $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();
+        $dataFileToBeDeleted['component'] = $fileToBeDeleted->get_component();
+        $dataFileToBeDeleted['filearea'] = $fileToBeDeleted->get_filearea();
+        $dataFileToBeDeleted['itemId'] = $fileToBeDeleted->get_itemid();
+        $dataFileToBeDeleted['filepath'] = $fileToBeDeleted->get_filepath();
+        $dataFileToBeDeleted['filename'] = $fileToBeDeleted->get_filename();
         // Serialize in order to be able to compare with the $fileID.
         $serialisation_FileToBeDeleted = (new FileInfo($dataFileToBeDeleted))->toString();
 
-        /////////////////////////////////////////////////////////////////////////
+        // **********************************************************************************************
         // compare file from Post with $fileToBeDeleted-Information
         if ($serialisation_FileToBeDeleted != $serialisation_PostDataFile) {
             // files are not equal ...
@@ -168,7 +169,7 @@ class OrphanedView
             return;
         }
 
-        $this->afterDeletion = $this->apiM->files()->deleteFileByUserInCourse(
+        $this->afterDeletion = $this->apiM->files()->deleteFileInCourse(
             $this->apiM->security(),
             $fileToBeDeleted,
             $this->user,
@@ -249,12 +250,7 @@ class OrphanedView
             $this->courseFormatGridEnabled = true;
         }
 
-        $allowedToViewDeleteAllFiles = $this->apiM->security()->allowedToViewDeleteAllFiles(
-            $this->courseId,
-            $this->user
-        );
-
-        $isUserAllowedToDeleteFiles = $this->apiM->security()->isUserAllowedToDeleteFiles(
+        $userAllowedToDeleteFiles = $this->apiM->security()->isUserAllowedToDeleteFiles(
             $this->courseId,
             $this->user
         );
@@ -264,8 +260,7 @@ class OrphanedView
             'report_sphorphanedfiles/report',
             [
                 'title' => $this->getPage()->getTitle(),
-                'allowedToViewDeleteAllFiles' => $allowedToViewDeleteAllFiles,
-                'isUserAllowedToDeleteFiles' => $isUserAllowedToDeleteFiles,
+                '$userAllowedToDeleteFiles' => $userAllowedToDeleteFiles,
                 'afterDeletion' => $this->afterDeletion,
                 'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
                 'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')

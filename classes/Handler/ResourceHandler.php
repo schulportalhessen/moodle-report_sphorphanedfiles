@@ -56,7 +56,7 @@ class ResourceHandler extends Handler
         $modName = $instance->modname;
         $name = $instance->name;
 
-        $userAllowedToDeleteThisFile = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
 
         foreach ($orphanedFiles as $file) {

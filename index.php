@@ -15,6 +15,7 @@ $context = context_course::instance($course->id);
 // 5. Only go head for loggedin users
 require_login($courseId);
 //6. Only if a user has the capability to view (and use the report including deletion)
+require_capability('moodle/course:manageactivities', $context);
 require_capability('report/sphorphanedfiles:view', $context);
 //7. Check, if the report is active for the actual user
 $isactive = get_config('report_sphorphanedfiles', 'isactive');

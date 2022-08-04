@@ -73,7 +73,7 @@ class Security
      * @param stdClass $user
      * @return bool
      */
-    public function allowedToViewDeleteAllFiles($courseId, $user): bool
+    public function allowedToViewReport($courseId, $user): bool
     {
         $coursecontext = context_course::instance($courseId);
         // here you can change the roles or capabilities of who can view and delete the orphaned files
@@ -83,8 +83,9 @@ class Security
     }
 
     /**
-     * User needs two capabilitys to be allowed to delete
+     * User needs three capabilitys to be allowed to delete
      * moodle/course:manageactivities
+     * report/sphorphanedfiles:view'
      * report/sphorphanedfiles:delete
      *
      * @param $courseId
@@ -97,19 +98,8 @@ class Security
         $coursecontext = context_course::instance($courseId);
         // here you can change the roles or capabilities of who can view and delete the orphaned files
         return has_capability('moodle/course:manageactivities', $coursecontext)
+            && has_capability('report/sphorphanedfiles:view', $coursecontext)
             && has_capability('report/sphorphanedfiles:delete', $coursecontext);
     }
 
-    /**
-     * @throws coding_exception
-     * @throws moodle_exception
-     * @throws require_login_exception
-     */
-    public function userIsAllowedToViewTheCourse($courseId)
-    {
-        $params = ['id' => $courseId];
-        $course = $this->dbM->get_record('course', $params, '*', MUST_EXIST);
-        // validate if the user is allowed to view this course
-        require_login($course);
-    }
 }

@@ -65,7 +65,8 @@ class LabelHandler extends Handler
         // echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-            $viewOrphanedFiles[] = [
+            $viewOrphanedFiles[] =
+                [
                 'modName' => $modName,
                 'name' => get_string('pluginname', 'mod_label') . ' id=' . $instance->id,
                 'instanceId' => $instance->id,
@@ -83,8 +84,7 @@ class LabelHandler extends Handler
                 'post_itemId' => $formDelete->getItemId(),
                 'post_filepath' => $formDelete->getFilePath(),
                 'post_filename' => $formDelete->getFileName()
-
-            ];
+                ];
         }
 
         return $viewOrphanedFiles;

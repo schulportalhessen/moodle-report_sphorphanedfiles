@@ -86,19 +86,6 @@ abstract class BaseHandler
         return $this->getComponentName() === $type;
     }
 
-    /**
-     * Checks if the given users is allowed to delete (all) files in this course.
-     * 
-     * @param $user   The user for which the check should be performed.
-     * @param $course The course for which to check.
-     * 
-     * @return true if user has appropriate rights, false otherwise.
-     */
-    public function isUserAllowedToViewDeleteAllFilesForCourse($user, $course): bool
-    {
-        return $this->getManager()->security()->allowedToViewDeleteAllFiles($course, $user);
-    }
-
     public function postFilter(array $data): array
     {
         return array_filter(

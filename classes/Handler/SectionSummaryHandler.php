@@ -66,12 +66,14 @@ class SectionSummaryHandler extends ItemHandler
                 'content' => $sectionHtml,
                 'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
                 'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
+
                 'post_pathnamehash' => $formDelete->getPathnamehash(),
-                'post_filepath' => $formDelete->getFilePath(),
-                'post_filename' => $formDelete->getFileName(),
-                'post_filearea' => $formDelete->getFileArea(),
+                'post_contextId' => $formDelete->getContextId(),
                 'post_component' => $formDelete->getComponent(),
-                'post_contextid' => $formDelete->getContextId()
+                'post_filearea' => $formDelete->getFileArea(),
+                'post_itemId' => $formDelete->getItemId(),
+                'post_filepath' => $formDelete->getFilePath(),
+                'post_filename' => $formDelete->getFileName()
             ];
         }
 

@@ -148,15 +148,15 @@ class Files
      * @param $course
      * @return bool
      */
-    public function deleteFileByUserInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool
+    public function deleteFileInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool
     {
-        $isCourseIdOfFileSameLikeCourseidOfTheCourse = $security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course);
-        if ($isCourseIdOfFileSameLikeCourseidOfTheCourse && $security->allowedToViewDeleteAllFiles($course, $user)) {
+        if ($security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course)
+            && $security->isUserAllowedToDeleteFiles($course, $user)) {
             if (!$fileToBeDeleted) {
                 echo "file not found, so data might be manipulated or the file is already deleted or something went wrong";
                 return false;
             } else {
-                echo "... delete nur simmuliert"; die(); // development!!
+                //echo "... delete nur simmuliert"; die(); // development!!
                 $fileToBeDeleted->delete();
                 return true;
             }
