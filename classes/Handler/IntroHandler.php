@@ -51,7 +51,7 @@ class IntroHandler extends Handler
         if (isset($handlermaterialsplugin) && in_array($component, explode(',', $handlermaterialsplugin))) {
             return true;
         }
-    
+
         return false;
     }
 
@@ -60,12 +60,7 @@ class IntroHandler extends Handler
      */
     protected function enumerateFiles($user, $context, $course, $module): array
     {
-        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
-            $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
-        } else {
-            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponentIntro($user->id, $context, $module) ?? [];
-        }
-
+        $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
         return $this->postFilter($result);
     }
 
@@ -86,7 +81,8 @@ class IntroHandler extends Handler
         $courseId,
         $instance,
         $iconHtml
-    ): array {
+    ): array
+    {
 
         // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
         //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
@@ -96,24 +92,35 @@ class IntroHandler extends Handler
         $htmlContent = $this->getIntro($instance);
 
         $name = $instance->name;
-
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         $componentName = $this->getComponentName();
-        // echo $componentName . ': '.  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
 
-            $viewOrphanedFiles[] = $this->getSkeleton($formDelete, $file, $instance, [
-                'modName' => $componentName,
-                'name' => $name." id=".$instance->id,
-                'instanceId' => $instance->id,
-                'contextId' => $contextId,
-                'content' => $htmlContent,
-                'userAllowedToDelete' => $userAllowedToDelete,
-                'iconHtml' => $iconHtml,
-            ]);
+            $viewOrphanedFiles[] = $this->getSkeleton(
+                $formDelete,
+                $file,
+                $instance,
+                [
+                    'modName' => $componentName,
+                    'name' => $name . " id=" . $instance->id,
+                    'instanceId' => $instance->id,
+                    'contextId' => $contextId,
+                    'content' => $htmlContent,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
+                    'iconHtml' => $iconHtml,
+
+                    'post_pathnamehash' => $formDelete->getPathnamehash(),
+                    'post_contextId' => $formDelete->getContextId(),
+                    'post_component' => $formDelete->getComponent(),
+                    'post_filearea' => $formDelete->getFileArea(),
+                    'post_itemId' => $formDelete->getItemId(),
+                    'post_filepath' => $formDelete->getFilePath(),
+                    'post_filename' => $formDelete->getFileName()
+                ]
+            );
         }
 
         return $viewOrphanedFiles;

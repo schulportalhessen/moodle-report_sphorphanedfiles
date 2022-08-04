@@ -37,12 +37,7 @@ class SectionSummaryHandler extends ItemHandler
      */
     protected function enumerateFiles($user, $context, $course, $fileItemIdSectionInfo): array
     {
-        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
-            $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $context) ?? [];
-        } else {
-            $result = $this->apiM->database()->dataFiles()->getFilesOfUserForSectionSummary($user->id, $context, $fileItemIdSectionInfo) ?? [];
-        }
-
+        $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $context) ?? [];
         return $this->postFilter($result);
     }
 
@@ -55,12 +50,12 @@ class SectionSummaryHandler extends ItemHandler
         $iconHtml
     ): array {
         $sectionHtml = file_rewrite_pluginfile_urls($sectionInfo->summary, 'pluginfile.php',  $contextId, 'course', 'section', $sectionInfo->id);
-        $userAllowedToDelete = $this->isUserAllowedToViewDeleteAllFilesForCourse($user, $courseId);
+        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $sectionInfo->id);
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFile($file);
 
-            $viewOrphanedFiles[] = $formDelete->addFileReferenceInformation([
+            $viewOrphanedFiles[] = [
                 'modName' => 'course',
                 'name' => get_string('summary') . ' ' . get_string('section') . ' ' .  $sectionInfo->section,
                 'instanceId' => 'todo',
@@ -69,9 +64,17 @@ class SectionSummaryHandler extends ItemHandler
                 'isGridlayoutFile' => $this->detectGrid($file),
                 'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
                 'content' => $sectionHtml,
-                'userAllowedToDelete' => $userAllowedToDelete,
-                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize)
-            ]);
+                'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
+                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
+
+                'post_pathnamehash' => $formDelete->getPathnamehash(),
+                'post_contextId' => $formDelete->getContextId(),
+                'post_component' => $formDelete->getComponent(),
+                'post_filearea' => $formDelete->getFileArea(),
+                'post_itemId' => $formDelete->getItemId(),
+                'post_filepath' => $formDelete->getFilePath(),
+                'post_filename' => $formDelete->getFileName()
+            ];
         }
 
         return $viewOrphanedFiles;
@@ -93,7 +96,7 @@ class SectionSummaryHandler extends ItemHandler
      */
     public function getFileLink(FileInfo $fileInfo)
     {
-                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingFileInfo($fileInfo));
+                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
                 return HTML::createLinkInNewTab($url, $fileInfo->getFileName());  
     }
 

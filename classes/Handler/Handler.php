@@ -96,12 +96,7 @@ abstract class Handler extends BaseHandler
      */
     protected function enumerateFiles($user, $context, $course, $module): array
     {
-        if ($this->isUserAllowedToViewDeleteAllFilesForCourse($user, $course)) {
-            $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
-        } else {
-            $result = $this->getManager()->database()->dataFiles()->getFilesOfUserForComponent($user->id, $context, $module) ?? [];
-        }
-
+        $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
         return $this->postFilter($result);
     }
 
@@ -115,7 +110,7 @@ abstract class Handler extends BaseHandler
      */
     public function getPreviewForFile(FileInfo $fileInfo)
     {
-        $orphanedFile = $this->getManager()->files()->getFileUsingFileInfo($fileInfo);
+        $orphanedFile = $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash());
 
         if ($orphanedFile && $orphanedFile->is_valid_image()) {
             return $this->generateViewFile($orphanedFile);
@@ -124,15 +119,20 @@ abstract class Handler extends BaseHandler
         }
     }
 
+    /**
+     * @param FileInfo $formDelete
+     * @param $file
+     * @param $instance
+     * @param $data
+     * @return array containing all information about the file
+     */
     protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array
     {
-        $result = $formDelete->addFileReferenceInformation($data);
-
+        $result = $data;
         $result['modurl'] = $this->getModuleURLForInstance($instance);
         $result['filename'] = $this->getFileName(new FileInfo($formDelete));
         $result['preview'] = $this->getPreviewForFile(new FileInfo($formDelete));
         $result['filesize'] = Misc::convertByteInMegabyte((int)$file->filesize);
-
         return $result;
     }
 }

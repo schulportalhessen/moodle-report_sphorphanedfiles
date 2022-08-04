@@ -38,42 +38,27 @@ defined('MOODLE_INTERNAL') || die;
  */
 function report_sphorphanedfiles_extend_navigation_course($navigation, $course, $context)
 {
-    $page = $GLOBALS['PAGE'];
-    $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
-
-    $orphanedNode = $page->navigation->find($course->id, navigation_node::TYPE_COURSE);
-    //$orphanedNode->add(get_string('pluginname', 'report_sphorphanedfiles'), $url);
-
-    $collection = $orphanedNode->children;
-
-    foreach ($collection->getIterator() as $child) {
-        $key = $child->key;
-        // Add break-condition in order to add menuitem
-        break;
-    }
-
-    // ToDo: implement better code. Do not know why I did this as workarround.
+    // Only show node if report is activated AND user has capability OR report is
     $isactive = get_config('report_sphorphanedfiles', 'isactive');
     $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
-    if ($isactive == true) {
-        $isactive = true;
-    } else {
-        $isactive = false;
-    }
+    $isReportActiveForTheUser = ($isactive || ($isactiveforadmin && is_siteadmin()));
+    if ($isReportActiveForTheUser
+        && has_capability('moodle/course:manageactivities', $context)
+        && has_capability('report/sphorphanedfiles:view', $context)) {
 
-    if ($isactiveforadmin == true) {
-        $isactiveforadmin = true;
-    } else {
-        $isactiveforadmin = false;
-    }
-
-    $hascapability = has_capability('report/sphorphanedfiles:view',$context);
-    
-    // Only show node if report is activated AND user has capability OR report is
-    // Do not know if this is a bug but report-node is not shown für student by default.
-    if (($isactive && $hascapability) || ($isactiveforadmin && is_siteadmin())) {
+        $page = $GLOBALS['PAGE'];
+        $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
+        $orphanedNode = $page->navigation->find($course->id, navigation_node::TYPE_COURSE);
+        $collection = $orphanedNode->children;
+        foreach ($collection->getIterator() as $child) {
+            $key = $child->key;
+            // Add break-condition in order to add menuitem
+            // if ($key = 'here the name of the node where to add the new menueentry could be added') {
+            //     break;
+            // }
+            break;
+        }
         $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook',  new pix_icon('i/report', 'grades'));
         $orphanedNode->add_node($node,  $key);
     }
-
 }

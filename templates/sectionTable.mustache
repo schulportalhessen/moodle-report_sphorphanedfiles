@@ -32,7 +32,7 @@
     </tr>
     </thead>
     <tbody>
-    {{#orphanedFiles}}
+    {{#orphanedFilesList}}
         <tr>
             <td><a href='{{{modurl}}}'>{{{iconHtml}}}{{name}}</a></td>
             <td><details>
@@ -44,41 +44,40 @@
                     </details>
             </td>
            <td><div class='row ml-0'>
-                <div>
-                  <input type="checkbox" name="selectedItems[]" style="display:none;">
-                </div>
                 <div class='ml-1'>{{{filename}}}</div>
                 <div class='ml-1'>({{{filesize}}} MB)</div>
                 </div>
                 {{{preview}}}
             </td>
             <td>
-                {{#userAllowedToDelete}}
+                {{#userAllowedToDeleteThisFile}}
                     <form action="#" method="POST">
-                        <input type="hidden" name="fileID" value="{{fileID}}">
+                        <!-- <input type="hidden" name="fileID" value="{{filepath_filename}}"> -->
+
+                        <input type="hidden" name="pathnamehash" value="{{post_pathnamehash}}">
+                        <input type="hidden" name="contextId" value="{{post_contextId}}">
+                        <input type="hidden" name="component" value="{{post_component}}">
+                        <input type="hidden" name="filearea" value="{{post_filearea}}">
+                        <input type="hidden" name="itemId" value="{{post_itemId}}">
+                        <input type="hidden" name="filepath" value="{{post_filepath}}">
+                        <input type="hidden" name="filename" value="{{post_filename}}">
+
                         <div>
                             <button class="btn btn-sm btn-danger p-1"><i class="fa fa-trash fa-fw h4 m-b-0"></i>
                             </button>
                         </div>
                     </form>
-                {{/userAllowedToDelete}}
-                {{^userAllowedToDelete}}
+                {{/userAllowedToDeleteThisFile}}
+                {{^userAllowedToDeleteThisFile}}
                     No
-                {{/userAllowedToDelete}}
+                {{/userAllowedToDeleteThisFile}}
                 {{#isGridlayoutFile}}      
                     {{translation.isgridlayoutfilehint}}
                     <br>
                 {{/isGridlayoutFile}} 
             </td>
         </tr>
-    {{/orphanedFiles}}
-
-
-
-
-
-
-
+    {{/orphanedFilesList}}
 
     </tbody>
 </table>
