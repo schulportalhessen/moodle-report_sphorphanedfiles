@@ -230,7 +230,7 @@ class OrphanedView
                 [
                     'orphanedFilesList' => $cleanedViewOrphanedFiles,
                     'translation' => $translations
-                ],
+                ]
             );
             return $dummy;
         }
