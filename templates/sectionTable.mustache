@@ -17,9 +17,43 @@
 {{!
     @template report_sphorphanedfiles/sectionTable
 
-    Moodle template competency breakdown report.
-
-    This template includes ajax functionality, so it cannot be shown in the template library.
+    Example context (json):
+    {
+      "orphanedFilesList": [
+        {
+          "modName": "label",
+          "name": "Textfeld id=65",
+          "instanceId": "65",
+          "contextId": 104,
+          "filename": "<span><a target=\"_blank\" href=\"http:\/\/localhost:8000\/pluginfile.php\/104\/mod_label\/intro\/brot.jpeg\">brot.jpeg<\/a><\/span>",
+          "preview": "<div class=\"courseimage\"><img height=\"100px\" src=\"http:\/\/localhost:8000\/pluginfile.php\/104\/mod_label\/intro\/brot.jpeg\" \/><\/div>",
+          "content": "<div class=\"no-overflow\"><p dir=\"ltr\" style=\"text-align: left;\">Textfeld mit Bild:<\/p><p dir=\"ltr\" style=\"text-align: left;\"><br><\/p><\/div>",
+          "userAllowedToDeleteThisFile": true,
+          "filesize": "0,66",
+          "post_pathnamehash": "62e97d354081ac180871f97d31725811f4933293",
+          "post_contextId": 104,
+          "post_component": "mod_label",
+          "post_filearea": "intro",
+          "post_itemId": "0",
+          "post_filepath": "\/",
+          "post_filename": "brot.jpeg"
+        }
+      ],
+      "translation": {
+        "isallowedtodeleteallfiles": "User is allowed \/ User has capability to delete all files in this course",
+        "description": "If a teacher adds a file to the editor and delete the file then the file is still be stored in the \nbackground of this context (eg label). The teacher can delete the file with the \"manage file\" dialog in the editor. This is not very comfortable. \nThis report helps to shows orphaned files that might are not used in descriptions of activitys or resources and helps to delete them.",
+        "isgridlayoutfilehint": "This file maybe was used by gridlayout-plugin but seems to be not in use.",
+        "header": {
+          "modName": "Module",
+          "content": "Content",
+          "filename": "Filename",
+          "preview": "",
+          "tool": "delete orphanded without request!",
+          "moduleContent": "Description, ...",
+          "code": "Sourcecode:"
+        }
+      }
+    }
 }}
 
 <table class="table table-hover table-bordered">
