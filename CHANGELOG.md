@@ -1,4 +1,8 @@
 ## Changelog ##
+[v2.0.3]
+
+- add example to mustache  
+
 [v2.0.2]  
 
 - fix: no new line for opening brace  

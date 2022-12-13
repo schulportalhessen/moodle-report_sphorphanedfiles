@@ -233,15 +233,15 @@ class OrphanedView
         if (!empty($cleanedViewOrphanedFiles)) {
             $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles');
             $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'], 'report_sphorphanedfiles', 'header.');
-
-            $dummy = $this->getPage()->getOutput()->render_from_template(
+            $data = [
+                'orphanedFilesList' => $cleanedViewOrphanedFiles,
+                'translation' => $translations
+            ];
+            // $dummy = json_encode($data);
+            return $this->getPage()->getOutput()->render_from_template(
                 'report_sphorphanedfiles/sectionTable',
-                [
-                    'orphanedFilesList' => $cleanedViewOrphanedFiles,
-                    'translation' => $translations
-                ]
+                $data
             );
-            return $dummy;
         }
 
         return "";
@@ -264,15 +264,17 @@ class OrphanedView
         );
         echo $this->getPage()->getOutput()->header();
         // Render content above the table
+        $data = [
+            'title' => $this->getPage()->getTitle(),
+            '$userAllowedToDeleteFiles' => $userAllowedToDeleteFiles,
+            'afterDeletion' => $this->afterDeletion,
+            'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
+            'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')
+        ];
+        // $dummy = json_encode($data);
         echo $this->getPage()->getOutput()->render_from_template(
             'report_sphorphanedfiles/report',
-            [
-                'title' => $this->getPage()->getTitle(),
-                '$userAllowedToDeleteFiles' => $userAllowedToDeleteFiles,
-                'afterDeletion' => $this->afterDeletion,
-                'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
-                'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')
-            ]
+            $data
         );
 
         // Now render each section
