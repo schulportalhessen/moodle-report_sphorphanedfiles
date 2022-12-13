@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\Files;
 
@@ -6,7 +20,7 @@ use InvalidArgumentException;
 
 defined('MOODLE_INTERNAL') || die();
 
-/** 
+/**
  * This class provides an OOP-representation of the metadata which is
  * used within the Moodle system for data referencing.
  */
@@ -27,11 +41,10 @@ class FileInfo
      * Create a FileInfo instance using either a string representation (-> serialization)
      *  OR a dictionary OR another FileInfo instance containing the relevant information.
      *
-     *  @param $data The data (string or dictionary) to be used for instance
+     * @param $data The data (string or dictionary) to be used for instance
      *               initialization.
      */
-    public function __construct($data = null)
-    {
+    public function __construct($data = null) {
         // The world would be simpler, if method and constructor overloading based on.
         // parameter signatures would be possible in PHP :-).
         if (!is_null($data)) {
@@ -55,109 +68,96 @@ class FileInfo
     //    return $data;
     //}
 
-    public function getPathnamehash()
-    {
+    public function getPathnamehash() {
         return $this->pathnamehash;
     }
 
-    public function getContextId()
-    {
+    public function getContextId() {
         return $this->contextId;
     }
 
-    public function getComponent()
-    {
+    public function getComponent() {
         return $this->component;
     }
 
     /**
      * @return
      */
-    public function getFileArea(): ?string
-    {
+    public function getFileArea(): ?string {
         return $this->filearea;
     }
 
-    public function getItemId()
-    {
+    public function getItemId() {
         return $this->itemId;
     }
 
-    public function getFilePath()
-    {
+    public function getFilePath() {
         return $this->filepath;
     }
 
-    public function getFileName()
-    {
+    public function getFileName() {
         return $this->filename;
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         return [
             'pathnamehash' => $this->getPathnamehash(),
             'contextId' => $this->getContextId(),
             'component' => $this->getComponent(),
-            'filearea'  => $this->getFileArea(),
-            'itemId'    => $this->getItemId(),
-            'filepath'  => $this->getFilePath(),
-            'filename'  => $this->getFileName()
+            'filearea' => $this->getFileArea(),
+            'itemId' => $this->getItemId(),
+            'filepath' => $this->getFilePath(),
+            'filename' => $this->getFileName()
         ];
     }
 
-    public function toString(): string
-    {
+    public function toString(): string {
         return implode(FileInfo::SERIALIZATION_SEPARATOR, $this->toArray());
     }
 
-    public function setFromString($data)
-    {
+    public function setFromString($data) {
         $infoComponents = explode(FileInfo::SERIALIZATION_SEPARATOR, $data);
 
         $this->setFromArray([
             'pathnamehash' => $infoComponents[0],
             'contextId' => $infoComponents[1],
             'component' => $infoComponents[2],
-            'filearea'  => $infoComponents[3],
-            'itemId'    => $infoComponents[4],
-            'filepath'  => $infoComponents[5],
-            'filename'  => $infoComponents[6]
+            'filearea' => $infoComponents[3],
+            'itemId' => $infoComponents[4],
+            'filepath' => $infoComponents[5],
+            'filename' => $infoComponents[6]
         ]);
     }
 
-    public function setFromArray($data)
-    {
-       // if (isset($data[self::FILEREFERENCEKEY])) {
-       //     $this->setFromString($data[self::FILEREFERENCEKEY]);
-       // } else {
-            $this->pathnamehash = $data['pathnamehash'];
-            $this->contextId = $data['contextId'];
-            $this->component = $data['component'];
-            $this->filearea = $data['filearea'];
-            $this->itemId   = $data['itemId'];
-            $this->filepath = $data['filepath'];
-            $this->filename = $data['filename'];
+    public function setFromArray($data) {
+        // if (isset($data[self::FILEREFERENCEKEY])) {
+        //     $this->setFromString($data[self::FILEREFERENCEKEY]);
+        // } else {
+        $this->pathnamehash = $data['pathnamehash'];
+        $this->contextId = $data['contextId'];
+        $this->component = $data['component'];
+        $this->filearea = $data['filearea'];
+        $this->itemId = $data['itemId'];
+        $this->filepath = $data['filepath'];
+        $this->filename = $data['filename'];
         //}
     }
 
-    public function setFromFileWithContext($file, $contextId): FileInfo
-    {
+    public function setFromFileWithContext($file, $contextId): FileInfo {
         $this->setFromArray([
             'pathnamehash' => $file->pathnamehash,
             'contextId' => $contextId,
             'component' => $file->component,
-            'filearea'  => $file->filearea,
-            'itemId'    => $file->itemid,
-            'filepath'  => $file->filepath,
-            'filename'  => $file->filename
+            'filearea' => $file->filearea,
+            'itemId' => $file->itemid,
+            'filepath' => $file->filepath,
+            'filename' => $file->filename
         ]);
 
         return $this;
     }
 
-    public function setFromFile($file): FileInfo
-    {
+    public function setFromFile($file): FileInfo {
         $this->setFromFileWithContext($file, $file->contextid);
 
         return $this;

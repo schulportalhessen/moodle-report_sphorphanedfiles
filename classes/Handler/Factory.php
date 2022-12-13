@@ -50,8 +50,7 @@ class Factory
      * Factory constructor.
      * @param Manager $apiM
      */
-    public function __construct(Manager $apiM)
-    {
+    public function __construct(Manager $apiM) {
         $this->apiM = $apiM;
     }
 
@@ -59,8 +58,7 @@ class Factory
      * Handler to handle module label
      * @return LabelHandler
      */
-    public function labelHandler(): LabelHandler
-    {
+    public function labelHandler(): LabelHandler {
         return new LabelHandler($this->apiM);
     }
 
@@ -68,8 +66,7 @@ class Factory
      * Handler to handle the summarys of sections
      * @return SectionSummaryHandler
      */
-    public function sectionSummaryHandler(): SectionSummaryHandler
-    {
+    public function sectionSummaryHandler(): SectionSummaryHandler {
         return new SectionSummaryHandler($this->apiM);
     }
 
@@ -77,8 +74,7 @@ class Factory
      * This is a common handler for intro of material and activity e.g. choice, assign ...
      * @return IntroHandler
      */
-    public function introHandler(): IntroHandler
-    {
+    public function introHandler(): IntroHandler {
         return new IntroHandler($this->apiM);
     }
 
@@ -86,8 +82,7 @@ class Factory
      * Handler to handle module page
      * @return PageHandler
      */
-    public function pageHandler(): PageHandler
-    {
+    public function pageHandler(): PageHandler {
         return new PageHandler($this->apiM);
     }
 
@@ -95,8 +90,7 @@ class Factory
      * Handler to handle modules that ar not activitys but materials/resources
      * @return ResourceHandler
      */
-    public function resourceHandler(): ResourceHandler
-    {
+    public function resourceHandler(): ResourceHandler {
         return new ResourceHandler($this->apiM);
     }
 
@@ -104,8 +98,7 @@ class Factory
      * get array with implemented and usable handlers
      * @return array|null
      */
-    public function getHandler(): array
-    {
+    public function getHandler(): array {
         if (self::$handlers === null)
             self::$handlers = [
                 $this->labelHandler(),
@@ -119,12 +112,11 @@ class Factory
     }
 
     /**
-     * Checks id handler for an module exists
+     * Checks if handler for an module exists
      * @param $instance
      * @return bool
      */
-    public function hasHandlerFor($instance): bool
-    {
+    public function hasHandlerFor($instance): bool {
         foreach ($this->getHandler() as $handler)
             if ($handler->canHandle($instance->modname)) {
                 return true;
@@ -138,8 +130,7 @@ class Factory
      * @param $instance
      * @return Handler
      */
-    public function getHandlerFor($instance): Handler
-    {
+    public function getHandlerFor($instance): Handler {
         foreach ($this->getHandler() as $handler)
             if ($handler->canHandle($instance->modname)) {
                 return $handler;

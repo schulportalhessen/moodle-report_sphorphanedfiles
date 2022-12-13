@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\Files;
 
@@ -26,24 +40,21 @@ class Files
     /**
      * Files constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->fileStorage = get_file_storage();
     }
 
     /**
      * @return file_storage
      */
-    public function getFileStorage(): file_storage
-    {
+    public function getFileStorage(): file_storage {
         return $this->fileStorage;
     }
 
     /**
      * @return bool|stored_file
      */
-    public function getFile(array $fileInfo)
-    {
+    public function getFile(array $fileInfo) {
         return $this->getFileStorage()->get_file(
             $fileInfo['contextId'],
             $fileInfo['component'],
@@ -55,56 +66,50 @@ class Files
     }
 
 
+    /**
+     * @return bool|stored_file
+     */
+    public function getFileUsingPathnamehash(string $pathnamehash) {
+        $dummy = $this->fileStorage->get_file_by_hash($pathnamehash);
+        return $dummy;
+    }
 
     /**
      * @return bool|stored_file
      */
-    public function getFileUsingPathnamehash(string $pathnamehash)
-    {
-        $dummy = $this->fileStorage->get_file_by_hash($pathnamehash);
-        return $dummy;
-    }
-    /**
-     * @return bool|stored_file
-     */
-    public function getFileUsingFileInfo_deprecated(FileInfo $fileInfo)
-    {
+    public function getFileUsingFileInfo_deprecated(FileInfo $fileInfo) {
         /// Alter Zugriff über den SEPERATOR encodete Filereferenzkey
         $dummy = $this->getFile($fileInfo->toArray());
         return $dummy;
     }
 
-    protected function createPathForFileWithItem(stored_file $storedFile)
-    {
+    protected function createPathForFileWithItem(stored_file $storedFile) {
         if ($storedFile->get_filepath() === '/') {
             return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_filename();
+                self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+                self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
+                self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() .
+                self::DIRECTORY_SEPARATOR . $storedFile->get_filename();
         } else {
             return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
-            self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() . 
-            $storedFile->get_filepath() . $storedFile->get_filename();
+                self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
+                self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() .
+                self::DIRECTORY_SEPARATOR . $storedFile->get_itemid() .
+                $storedFile->get_filepath() . $storedFile->get_filename();
         }
     }
 
-    protected function createPathForFile(stored_file $storedFile)
-    {
+    protected function createPathForFile(stored_file $storedFile) {
         return self::DIRECTORY_SEPARATOR . $storedFile->get_contextid() .
             self::DIRECTORY_SEPARATOR . $storedFile->get_component() .
             self::DIRECTORY_SEPARATOR . $storedFile->get_filearea() . $storedFile->get_filepath() . $storedFile->get_filename();
     }
 
-    protected function createURLForFile(stored_file $storedFile)
-    {
+    protected function createURLForFile(stored_file $storedFile) {
         return new moodle_url('/pluginfile.php' . $this->createPathForFile($storedFile));
     }
 
-    public function createURLForFileWithItem(stored_file $storedFile)
-    {
+    public function createURLForFileWithItem(stored_file $storedFile) {
         return new moodle_url('/pluginfile.php' . $this->createPathForFileWithItem($storedFile));
     }
 
@@ -112,8 +117,7 @@ class Files
      * @param stored_file $storedFile
      * @return string
      */
-    public function generateViewFile(stored_file $storedFile)
-    {
+    public function generateViewFile(stored_file $storedFile) {
         return HTML::createImage($this->createURLForFile($storedFile));
     }
 
@@ -121,8 +125,7 @@ class Files
      * @param stored_file $storedFile
      * @return string
      */
-    public function generateViewFileForWithItemId(stored_file $storedFile)
-    {
+    public function generateViewFileForWithItemId(stored_file $storedFile) {
         return HTML::createImage($this->createURLForFileWithItem($storedFile));
     }
 
@@ -130,8 +133,7 @@ class Files
      * @param stored_file $storedFile
      * @return string
      */
-    public function generateFallbackView(stored_file $storedFile)
-    {
+    public function generateFallbackView(stored_file $storedFile) {
         return HTML::createLinkInNewTab($this->createURLForFile($storedFile), $storedFile->get_filename());
     }
 
@@ -148,8 +150,7 @@ class Files
      * @param $course
      * @return bool
      */
-    public function deleteFileInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool
-    {
+    public function deleteFileInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool {
         if ($security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course)
             && $security->isUserAllowedToDeleteFiles($course, $user)) {
             if (!$fileToBeDeleted) {

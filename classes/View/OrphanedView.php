@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\View;
 
@@ -46,7 +60,7 @@ class OrphanedView
 
     /**
      * indicates if a course uses gridformat-plugin
-     * 
+     *
      * @var bool
      */
     private $courseFormatGridEnabled = false;
@@ -59,8 +73,7 @@ class OrphanedView
      * @param bootstrap_renderer $output
      * @param stdClass $user
      */
-    public function __construct($db, int $courseId, $page, $output, $user)
-    {
+    public function __construct($db, int $courseId, $page, $output, $user) {
         $this->courseId = $courseId;
         $this->user = $user;
         $this->apiM = new Manager($db);
@@ -70,8 +83,7 @@ class OrphanedView
         $this->page = new Page($page, $course, $courseId, $output);
     }
 
-    public function getPage(): Page
-    {
+    public function getPage(): Page {
         return $this->page;
     }
 
@@ -86,8 +98,7 @@ class OrphanedView
      * @throws moodle_exception
      * @throws require_login_exception
      */
-    public function deleteOrphanedFile(): void
-    {
+    public function deleteOrphanedFile(): void {
         // ToDo: Darf user überhautp löschen
 
 
@@ -96,7 +107,7 @@ class OrphanedView
         // - length
         // ToDo: some more securitychecks on the Post-Parameter
         $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);//VARCHAR(40)
-        if (strlen($pathnamehash) > 40 ) {
+        if (strlen($pathnamehash) > 40) {
             throw new UnexpectedValueException('wrong pathnamehash');
             return;
         }
@@ -105,13 +116,13 @@ class OrphanedView
         // $contextId = filter_var($contextId, FILTER_SANITIZE_NUMBER_INT);
 
         $component = required_param('component', PARAM_TEXT);//VARCHAR(100)
-        if (strlen($component) > 100 ) {
+        if (strlen($component) > 100) {
             throw new UnexpectedValueException('wrong component');
             return;
         }
 
         $filearea = required_param('filearea', PARAM_TEXT);//VARCHAR(50)
-        if (strlen($filearea) > 50 ) {
+        if (strlen($filearea) > 50) {
             throw new UnexpectedValueException('wrong filearea');
             return;
         }
@@ -119,13 +130,13 @@ class OrphanedView
         $itemId = required_param('itemId', PARAM_INT);//BIGINT(10)
 
         $filepath = required_param('filepath', PARAM_TEXT);//VARCHAR(255)
-        if (strlen($filepath) > 255 ) {
+        if (strlen($filepath) > 255) {
             throw new UnexpectedValueException('wrong filepath');
             return;
         }
 
         $filename = required_param('filename', PARAM_TEXT);//VARCHAR(255)
-        if (strlen($filename) > 255 ) {
+        if (strlen($filename) > 255) {
             throw new UnexpectedValueException('wrong filename');
             return;
         }
@@ -177,8 +188,7 @@ class OrphanedView
         );
     }
 
-    public function listOrphansForSection($sectionInfo)
-    {
+    public function listOrphansForSection($sectionInfo) {
         $courseContextId = context_course::instance($this->courseId)->id;
 
         $viewOrphanedFiles = [];
@@ -210,12 +220,11 @@ class OrphanedView
         return $viewOrphanedFiles;
     }
 
-    public function createOrphansList($sectionInfo): string
-    {
+    public function createOrphansList($sectionInfo): string {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
         $cleanedViewOrphanedFiles = [];
         // Do not mark plugin gridlayout files as orphaned
-        foreach ($viewOrphanedFiles ?? [] as $viewOrphanedFile){
+        foreach ($viewOrphanedFiles ?? [] as $viewOrphanedFile) {
             if (!($this->courseFormatGridEnabled && isset($viewOrphanedFile['isGridlayoutFile']) && $viewOrphanedFile['isGridlayoutFile'])) {
                 $cleanedViewOrphanedFiles[] = $viewOrphanedFile;
             }
@@ -244,9 +253,8 @@ class OrphanedView
      * @throws moodle_exception
      * @throws require_login_exception
      */
-    public function init()
-    {
-        if ( isset($this->getPage()->getCourse()->format) && $this->getPage()->getCourse()->format === 'grid' ) {
+    public function init() {
+        if (isset($this->getPage()->getCourse()->format) && $this->getPage()->getCourse()->format === 'grid') {
             $this->courseFormatGridEnabled = true;
         }
 
