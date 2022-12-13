@@ -18,7 +18,7 @@
  * Course list block settings
  *
  * @package    report_sphorphanedfiles
- * @copyright  
+ * @copyright  Andreas Schenkel, Schulportal Hessen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -41,8 +41,9 @@ if ($ADMIN->fulltree) {
     ));
 
 
-    // Setting for IntroHandler - only use IntroHandler for Activities that have intro 
-    $moodleactivitiescore = 'assign,choice,customcert,data,lti,feedback,forum,glossary,h5pactivity,hotpot,lesson,quiz,scorm,survey,wiki,workshop';
+    // Setting for IntroHandler - only use IntroHandler for Activities that have intro.
+    $moodleactivitiescore = 'assign,choice,customcert,data,lti,feedback,forum,glossary,' .
+        'h5pactivity,hotpot,lesson,quiz,scorm,survey,wiki,workshop';
     $configsetting = new  admin_setting_configtext(
         'report_sphorphanedfiles/handleractivitiescore',
         new lang_string('handleractivitiescore', 'report_sphorphanedfiles'),
@@ -54,7 +55,8 @@ if ($ADMIN->fulltree) {
     $configsetting->set_force_ltr(true);
     $settings->add($configsetting);
 
-    $moodleactivitiesplugins = 'bigbluebuttonbn,board,checklist,ratingallocate,geogebra,hvp,mootyper,mindmap,pdfannotator,realtimequiz';
+    $moodleactivitiesplugins = 'bigbluebuttonbn,board,checklist,ratingallocate,geogebra,' .
+        'hvp,mootyper,mindmap,pdfannotator,realtimequiz';
     $configsetting = new  admin_setting_configtext(
         'report_sphorphanedfiles/handleractivitiesplugin',
         new lang_string('handleractivitiesplugin', 'report_sphorphanedfiles'),
@@ -66,7 +68,7 @@ if ($ADMIN->fulltree) {
     $configsetting->set_force_ltr(true);
     $settings->add($configsetting);
 
-    // do not add 'label' to this list
+    // Do not add 'label' to this list.
     $moodlematerialscore = 'book,folder,imscp,url';
     $configsetting = new  admin_setting_configtext(
         'report_sphorphanedfiles/handlermaterialscore',

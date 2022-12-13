@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\Handler;
 
@@ -25,16 +39,14 @@ class IntroHandler extends Handler
     /**
      * @return string
      */
-    public function getComponentName(): string
-    {
+    public function getComponentName(): string {
         return $this->componentName;
     }
 
     /**
      * @override
      */
-    public function canHandle(string $component): bool
-    {
+    public function canHandle(string $component): bool {
         $handleractivitiescore = get_config('report_sphorphanedfiles', 'handleractivitiescore');
         if (isset($handleractivitiescore) && in_array($component, explode(',', $handleractivitiescore))) {
             return true;
@@ -58,8 +70,7 @@ class IntroHandler extends Handler
     /**
      * @override
      */
-    protected function enumerateFiles($user, $context, $course, $module): array
-    {
+    protected function enumerateFiles($user, $context, $course, $module): array {
         $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
         return $this->postFilter($result);
     }
@@ -81,8 +92,7 @@ class IntroHandler extends Handler
         $courseId,
         $instance,
         $iconHtml
-    ): array
-    {
+    ): array {
 
         // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
         //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
@@ -92,7 +102,7 @@ class IntroHandler extends Handler
         $htmlContent = $this->getIntro($instance);
 
         $name = $instance->name;
-        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
+        $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
 
         $componentName = $this->getComponentName();

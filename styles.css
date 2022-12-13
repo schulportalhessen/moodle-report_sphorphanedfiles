@@ -1,6 +1,19 @@
-.orphandfilesh3{
-   padding:10px;
+.orphandfilesh3 {
+    padding:10px;
 }
-.orphandfilesth{
+.orphandfilesth {
     background-color:#ddd;
  }
+
+.report_sphorphandfiles-modName {
+    width: 150px;
+}
+.report_sphorphandfiles-content {
+    width: 500px;
+}
+.report_sphorphandfiles-filename {
+    width: 400px;
+}
+.report_sphorphandfiles-tool {
+    width: 100px;
+}

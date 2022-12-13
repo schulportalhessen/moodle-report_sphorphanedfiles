@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\Database;
 
@@ -27,8 +41,7 @@ class DataFiles
      * @param moodle_database $dbM The database connection to be used by this
      *                             instance.
      */
-    public function __construct(moodle_database $dbM)
-    {
+    public function __construct(moodle_database $dbM) {
         $this->dbM = $dbM;
     }
 
@@ -37,8 +50,7 @@ class DataFiles
      *
      * @return moodle_database The database instance.
      */
-    public function getDatabase(): moodle_database
-    {
+    public function getDatabase(): moodle_database {
         return $this->dbM;
     }
 
@@ -60,8 +72,7 @@ class DataFiles
      * @return array An array of strings conforming to the described structural
      *               pattern.
      */
-    protected function createWhereString(array $elements): array
-    {
+    protected function createWhereString(array $elements): array {
         return array_map(function ($element) {
             return $element . " = :" . $element;
         }, $elements);
@@ -78,8 +89,7 @@ class DataFiles
      * @return string A valid SQL statement ready to be used with the Moodle database
      *                subsystem.
      */
-    protected function prepareStatement(array $params): string
-    {
+    protected function prepareStatement(array $params): string {
         $where = implode(" AND ", $this->createWhereString(array_keys($params)));
 
         return "SELECT * FROM {files} WHERE {$where}";
@@ -94,8 +104,7 @@ class DataFiles
      *
      * @return array An array containing the results of the performed query.
      */
-    protected function performQuery(array $params): array
-    {
+    protected function performQuery(array $params): array {
         $sql = $this->prepareStatement($params);
         return $this->getDatabase()->get_records_sql($sql, $params);
     }
@@ -106,8 +115,7 @@ class DataFiles
      * @return array The dictionary containing the given information at the right places.
      *
      */
-    protected function prepareContextParameters($contextId, $modName): array
-    {
+    protected function prepareContextParameters($contextId, $modName): array {
         return ['component' => sprintf('mod_%s', $modName), 'contextid' => $contextId];
     }
 
@@ -122,8 +130,7 @@ class DataFiles
      *
      * @throws \dml_exception
      */
-    public function getFilesForComponent(int $contextId, string $modName): array
-    {
+    public function getFilesForComponent(int $contextId, string $modName): array {
         return $this->performQuery($this->prepareContextParameters($contextId, $modName));
     }
 
@@ -137,8 +144,7 @@ class DataFiles
      *
      * @throws \dml_exception
      */
-    public function getFilesForComponentIntro(int $contextId, string $modName): array
-    {
+    public function getFilesForComponentIntro(int $contextId, string $modName): array {
         $params = $this->prepareContextParameters($contextId, $modName);
         $params['filearea'] = 'intro';
 
@@ -151,8 +157,7 @@ class DataFiles
      * @return array The dictionary containing the given information at the right places.
      *
      */
-    protected function prepareSectionParameters($itemId, $courseContextId): array
-    {
+    protected function prepareSectionParameters($itemId, $courseContextId): array {
         return ['itemid' => $itemId, 'component' => 'course', 'filearea' => 'section', 'contextid' => $courseContextId];
     }
 
@@ -166,19 +171,16 @@ class DataFiles
      *
      * @throws \dml_exception
      */
-    public function getFilesForSectionSummary(int $itemId, int $courseContextId): array
-    {
+    public function getFilesForSectionSummary(int $itemId, int $courseContextId): array {
         return $this->performQuery($this->prepareSectionParameters($itemId, $courseContextId));
     }
 
 
-    public function getCourse($courseId)
-    {
+    public function getCourse($courseId) {
         return $this->getDatabase()->get_record('course', ['id' => $courseId], '*', MUST_EXIST);
     }
 
-    public function getPage($instance)
-    {
+    public function getPage($instance) {
         return $this->getDatabase()->get_record('page', ['id' => $instance->instance], '*');
     }
 }
