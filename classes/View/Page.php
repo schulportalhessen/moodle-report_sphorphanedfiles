@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace report_sphorphanedfiles\View;
 
@@ -13,8 +27,7 @@ class Page
     private $title;
     private $course;
 
-    public function __construct($page, $course, $courseId, $output)
-    {
+    public function __construct($page, $course, $courseId, $output) {
         $this->page = $page;
         $this->output = $output;
         $this->course = $course;
@@ -26,33 +39,27 @@ class Page
         $page->set_pagelayout('incourse');
     }
 
-    public function getOutput()
-    {
+    public function getOutput() {
         return $this->output;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
-    public function getCourse()
-    {
+    public function getCourse() {
         return $this->course;
     }
 
-    public function getCourseInfo()
-    {
+    public function getCourseInfo() {
         return get_fast_modinfo($this->getCourse());
     }
 
-    protected function getPage()
-    {
+    protected function getPage() {
         return $this->page;
     }
 
-    public function getIconURL($instance)
-    {
+    public function getIconURL($instance) {
         return $this->getPage()->theme->image_url('icon', $instance->modname)->out();
     }
 }

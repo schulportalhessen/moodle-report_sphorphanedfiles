@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
+ * Version file
+ *
  * @package     report_sphorphanedfiles
  * @copyright   Schulportal Hessen (SPH)
  * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
@@ -25,7 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'report_sphorphanedfiles';
-$plugin->release = '2.0.1';
-$plugin->version = 2022110900;
+$plugin->release = '2.0.2';
+$plugin->version = 2022121300;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_RC;

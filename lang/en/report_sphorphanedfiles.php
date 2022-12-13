@@ -17,7 +17,7 @@
 /**
  * Plugin strings are defined here.
  *
- * @package     report_sph_orphaned_files
+ * @package     report_sphorphanedfiles
  * @category    string
  * @copyright   SPH <andreas.schenkel@schulportal.hessen.de>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

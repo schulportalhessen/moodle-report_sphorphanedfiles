@@ -24,15 +24,13 @@
 
 namespace report_sphorphanedfiles\Handler;
 
-use mod_assign\privacy\useridlist;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
-use function Symfony\Component\String\u;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Class LabelHandler 
+ * Class LabelHandler
  */
 class LabelHandler extends Handler
 {
@@ -55,35 +53,35 @@ class LabelHandler extends Handler
         $courseId,
         $instance,
         $iconHtml
-    ) : array {
+    ): array {
         $htmlContent = $instance->content;
-        
+
         $modName = $instance->modname;
 
-        $userAllowedToDeleteThisFile =  $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
+        $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
         // echo "$modName: " .  count($orphanedFiles) . '<br />';
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
             $viewOrphanedFiles[] =
                 [
-                'modName' => $modName,
-                'name' => get_string('pluginname', 'mod_label') . ' id=' . $instance->id,
-                'instanceId' => $instance->id,
-                'contextId' => $contextId,
-                'filename' => $this->getFileName(new FileInfo($formDelete)),
-                'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
-                'content' => $htmlContent,
-                'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
-                'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
+                    'modName' => $modName,
+                    'name' => get_string('pluginname', 'mod_label') . ' id=' . $instance->id,
+                    'instanceId' => $instance->id,
+                    'contextId' => $contextId,
+                    'filename' => $this->getFileName(new FileInfo($formDelete)),
+                    'preview' => $this->getPreviewForFile(new FileInfo($formDelete)),
+                    'content' => $htmlContent,
+                    'userAllowedToDeleteThisFile' => $userAllowedToDeleteThisFile,
+                    'filesize' => Misc::convertByteInMegabyte((int)$file->filesize),
 
-                'post_pathnamehash' => $formDelete->getPathnamehash(),
-                'post_contextId' => $formDelete->getContextId(),
-                'post_component' => $formDelete->getComponent(),
-                'post_filearea' => $formDelete->getFileArea(),
-                'post_itemId' => $formDelete->getItemId(),
-                'post_filepath' => $formDelete->getFilePath(),
-                'post_filename' => $formDelete->getFileName()
+                    'post_pathnamehash' => $formDelete->getPathnamehash(),
+                    'post_contextId' => $formDelete->getContextId(),
+                    'post_component' => $formDelete->getComponent(),
+                    'post_filearea' => $formDelete->getFileArea(),
+                    'post_itemId' => $formDelete->getItemId(),
+                    'post_filepath' => $formDelete->getFilePath(),
+                    'post_filename' => $formDelete->getFileName()
                 ];
         }
 
