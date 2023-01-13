@@ -26,7 +26,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-
 /**
  * This function extends the navigation with the report items
  *
@@ -37,27 +36,15 @@ defined('MOODLE_INTERNAL') || die;
  * @param stdClass $context The context of the course
  */
 function report_sphorphanedfiles_extend_navigation_course($navigation, $course, $context) {
-    // Only show node if report is activated AND user has capability OR report is
+    // Only show node if report is activated AND user has capability.
     $isactive = get_config('report_sphorphanedfiles', 'isactive');
     $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
     $isReportActiveForTheUser = ($isactive || ($isactiveforadmin && is_siteadmin()));
-    if ($isReportActiveForTheUser
-        && has_capability('moodle/course:manageactivities', $context)
-        && has_capability('report/sphorphanedfiles:view', $context)) {
-
-        $page = $GLOBALS['PAGE'];
+    if ($isReportActiveForTheUser &&
+        has_capability('moodle/course:manageactivities', $context) &&
+        has_capability('report/sphorphanedfiles:view', $context)) {
         $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
-        $orphanedNode = $page->navigation->find($course->id, navigation_node::TYPE_COURSE);
-        $collection = $orphanedNode->children;
-        foreach ($collection->getIterator() as $child) {
-            $key = $child->key;
-            // Add break-condition in order to add menuitem
-            // if ($key = 'here the name of the node where to add the new menueentry could be added') {
-            //     break;
-            // }
-            break;
-        }
-        $node = $orphanedNode->create(get_string('pluginname', 'report_sphorphanedfiles'), $url, navigation_node::NODETYPE_LEAF, null, 'gradebook', new pix_icon('i/report', 'grades'));
-        $orphanedNode->add_node($node, $key);
+        $navigation->add(get_string('pluginname', 'report_sphorphanedfiles'),
+            $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
     }
 }

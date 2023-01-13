@@ -1,4 +1,9 @@
 ## Changelog ##
+[v2.0.4]
+First version to support moodle 4.1
+
+- fix missing node link to show report
+
 [v2.0.3]
 
 - add example to mustache  
