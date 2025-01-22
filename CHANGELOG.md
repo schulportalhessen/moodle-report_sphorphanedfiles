@@ -1,4 +1,7 @@
 ## Changelog ##
+[v2.0.5]
+- fix wrongparametertypeinsettings
+
 [v2.0.4]
 First version to support moodle 4.1
 
