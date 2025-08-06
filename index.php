@@ -28,7 +28,7 @@ use report_sphorphanedfiles\View\OrphanedView;
 
 defined('MOODLE_INTERNAL') || die();
 
-// 1. Only show index.php for logged in users
+// 1. Only show index.php for logged-in users
 require_login();
 // 2. Read the id of the course
 $courseId = required_param('id', PARAM_INT);

@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 // modules is provided.
 //
 // The following code is safe to execute in PHP 8 environments as a check is
-// performed before a „substitute“ is provided.
+// performed before a "substitute" is provided.
 //
 //
 

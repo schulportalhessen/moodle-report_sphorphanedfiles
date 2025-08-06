@@ -1,4 +1,8 @@
 ## Changelog ##
+
+[v2.0.6]
+Branches for MOODLE_401_STABLE and MOODLE_405_STABLE and MOODLE_500_STABLE
+
 [v2.0.5]
 - fix wrongparametertypeinsettings
 

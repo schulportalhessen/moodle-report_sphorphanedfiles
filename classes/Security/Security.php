@@ -60,7 +60,7 @@ class Security
         // Now get the context of the course (files that belongs to sectionsummarys for example are allreade coursecontext
         $courseContext = $contextOfFile->get_course_context();
 
-        // now get the context of the course the module and there for the file belongs to
+        // now get the context of the course the module and therefor the file belongs to
         $courseContextId = $courseContext->id;
         // now get the courseid of the file that we get by post and is stored in fileinfo
         $courseIdOfFile = $courseContext->instanceid;
@@ -76,7 +76,7 @@ class Security
     }
 
     /**
-     * A user that is enrolled in the course and has the the capabilty moodle/course:manageactivities
+     * A user that is enrolled in the course and has the capabilty moodle/course:manageactivities
      * or is_siteadmin (ToDo: Is this not nessesary because siteadmins DOES have this capability???)
      * are allowed to delete all file in a course
      *
@@ -95,7 +95,7 @@ class Security
     /**
      * User needs three capabilitys to be allowed to delete
      * moodle/course:manageactivities
-     * report/sphorphanedfiles:view'
+     * report/sphorphanedfiles:view
      * report/sphorphanedfiles:delete
      *
      * @param $courseId
