@@ -49,7 +49,7 @@ if ($ADMIN->fulltree) {
         new lang_string('handleractivitiescore', 'report_sphorphanedfiles'),
         new lang_string('confighandleractivitiescore', 'report_sphorphanedfiles'),
         $moodleactivitiescore,
-        true,
+        PARAM_TEXT,
         120
     );
     $configsetting->set_force_ltr(true);
@@ -62,7 +62,7 @@ if ($ADMIN->fulltree) {
         new lang_string('handleractivitiesplugin', 'report_sphorphanedfiles'),
         new lang_string('confighandleractivitiesplugin', 'report_sphorphanedfiles'),
         $moodleactivitiesplugins,
-        true,
+        PARAM_TEXT,
         120
     );
     $configsetting->set_force_ltr(true);
@@ -75,7 +75,7 @@ if ($ADMIN->fulltree) {
         new lang_string('handlermaterialscore', 'report_sphorphanedfiles'),
         new lang_string('confighandlermaterialscore', 'report_sphorphanedfiles'),
         $moodlematerialscore,
-        true,
+        PARAM_TEXT,
         120
     );
     $configsetting->set_force_ltr(true);
@@ -87,7 +87,7 @@ if ($ADMIN->fulltree) {
         new lang_string('handlermaterialsplugin', 'report_sphorphanedfiles'),
         new lang_string('confighandlermaterialsplugin', 'report_sphorphanedfiles'),
         $moodlematerialsplugins,
-        true,
+        PARAM_TEXT,
         120
     );
     $configsetting->set_force_ltr(true);
