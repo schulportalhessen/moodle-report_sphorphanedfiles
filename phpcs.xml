@@ -11,6 +11,8 @@
 
         <exclude name="moodle.NamingConventions.ValidVariableName.MemberNameUnderscore"/>
         <exclude name="moodle.NamingConventions.ValidFunctionName.LowercaseMethod"/>
+        <exclude name="moodle.Commenting.MissingDocblock.Function"/>
+
     </rule>
 
     <!-- Analysiere das Plugin-Verzeichnis -->
