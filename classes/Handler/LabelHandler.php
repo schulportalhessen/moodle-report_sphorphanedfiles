@@ -30,8 +30,7 @@ use report_sphorphanedfiles\Files\FileInfo;
 /**
  * Class LabelHandler
  */
-class LabelHandler extends Handler
-{
+class LabelHandler extends Handler {
     /**
      * Get the array with the orphaned files view.
      *

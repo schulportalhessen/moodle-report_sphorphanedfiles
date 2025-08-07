@@ -15,7 +15,7 @@
         <exclude name="moodle.Commenting.DocblockDescription.Missing"/>
         <exclude name="moodle.Commenting.Package.Missing"/>
         <exclude name="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase"/>
-
+        <exclude name="Squiz.Classes.SelfMemberReference.NotUsed"/>
 
     </rule>
 
