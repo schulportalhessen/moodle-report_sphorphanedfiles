@@ -31,6 +31,10 @@ use stdClass;
  *  The following code is safe to execute in PHP 8 environments as a check is
  *  performed before a „substitute“ is provided.
  *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle) {
@@ -47,9 +51,6 @@ if (!function_exists('str_contains')) {
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class SectionSummaryHandler extends ItemHandler {
-    /**
-     * @override
-     */
     protected function enumerateFiles($user, $context, $course, $fileItemIdSectionInfo): array {
         $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $context) ?? [];
         return $this->postFilter($result);
@@ -106,9 +107,6 @@ class SectionSummaryHandler extends ItemHandler {
         return false;
     }
 
-    /**
-     * @override
-     */
     public function getFileLink(FileInfo $fileInfo) {
         $url = $this->apiM->files()->createURLForFileWithItem(
             $this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));

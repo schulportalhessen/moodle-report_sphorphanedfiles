@@ -22,9 +22,6 @@ use report_sphorphanedfiles\HTML;
 abstract class ItemHandler extends Handler {
     protected $implementationmode = 'item';
 
-    /**
-     * @override
-     */
     protected function generateViewFile($orphanedFile) {
         if ($this->implementationmode == 'item') {
             return $this->apiM->files()->generateViewFileForWithItemId($orphanedFile);

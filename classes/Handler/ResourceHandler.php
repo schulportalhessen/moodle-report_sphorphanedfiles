@@ -29,9 +29,6 @@ use report_sphorphanedfiles\Files\FileInfo;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ResourceHandler extends Handler {
-    /**
-     * @override
-     */
     public function enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent): array {
         // Unklar:
         // Remove file area content, because content files can´t be orphaned in mod resource.
