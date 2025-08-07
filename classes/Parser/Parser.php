@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace report_sphorphanedfiles\Parser;
 
 //
@@ -38,9 +46,6 @@ if (!function_exists('str_contains')) {
  * Class Parser
  *
  * @package report_sphorphanedfiles
- * @copyright   Schulportal Hessen (SPH)
- * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class Parser {
     /**
