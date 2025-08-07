@@ -23,14 +23,14 @@ use stdClass;
 
 /*
  *  Preparations for later PHP 8 transition.
- * 
+ *
  *  We are currently using PHP 7.x which is not the latest PHP version.
  *  Functionality that is built-in in PHP 8 and might be useful in our
  *  modules is provided.
- * 
+ *
  *  The following code is safe to execute in PHP 8 environments as a check is
  *  performed before a „substitute“ is provided.
- * 
+ *
  */
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle) {
@@ -40,6 +40,11 @@ if (!function_exists('str_contains')) {
 
 /**
  * Class SectionSummaryHandler
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class SectionSummaryHandler extends ItemHandler {
     /**
@@ -82,7 +87,7 @@ class SectionSummaryHandler extends ItemHandler {
                 'post_filearea' => $formDelete->getFileArea(),
                 'post_itemId' => $formDelete->getItemId(),
                 'post_filepath' => $formDelete->getFilePath(),
-                'post_filename' => $formDelete->getFileName()
+                'post_filename' => $formDelete->getFileName(),
             ];
         }
 

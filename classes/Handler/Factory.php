@@ -14,23 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Defines the APIs used by sphorphanedfiles reports
- *
- * @package    report_sphorphanedfiles
- * @copyright  2022 Schulportal Hessen
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Manager;
 use InvalidArgumentException;
 
 /**
- * If we have time chain of responsibility
- *
  * Class Factory
+ * If we have time chain of responsibility.
+ * Defines the APIs used by sphorphanedfiles reports
+ *
+ * @package    report_sphorphanedfiles
+ * @copyright  2022 Schulportal Hessen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class Factory {
     /**

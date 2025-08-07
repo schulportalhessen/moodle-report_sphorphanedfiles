@@ -23,7 +23,10 @@ use report_sphorphanedfiles\Files\FileInfo;
 
 /**
  * Class ResourceHandler
- * @package report_sphorphanedfiles\Handler
+ *
+ * @package    report_sphorphanedfiles
+ * @copyright  2022 Schulportal Hessen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ResourceHandler extends Handler {
     /**

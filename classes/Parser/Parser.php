@@ -36,6 +36,11 @@ if (!function_exists('str_contains')) {
 
 /**
  * Class Parser
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class Parser {
     /**

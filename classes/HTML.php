@@ -20,6 +20,10 @@ use html_writer;
 use moodle_url;
 use report_sphorphanedfiles\View\Page;
 
+/**
+ * Class html
+ *
+ */
 class HTML {
     public static function createImage(string $url): string {
         return html_writer::tag(
