@@ -47,11 +47,8 @@ class Security {
         $this->dbM = $dbM;
     }
 
-
     /**
-     * Checks
-     *
-     * @param Files $fileToBeDeleted
+     * @param \stored_file $fileToBeDeleted
      * @param int $courseId
      * @return bool
      * @throws coding_exception
@@ -102,8 +99,8 @@ class Security {
      * report/sphorphanedfiles:view
      * report/sphorphanedfiles:delete
      *
-     * @param $courseId
-     * @param $user
+     * @param int $courseId
+     * @param stdClass $user
      * @return bool
      * @throws coding_exception
      */

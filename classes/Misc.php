@@ -26,8 +26,8 @@ namespace report_sphorphanedfiles;
  */
 class Misc {
     /**
-     * @param stored_file $storedFile
-     * @return float
+     * @param int $byte
+     * @return int|string
      */
     public static function convertByteInMegabyte(int $byte) {
         if ($byte === 0) {

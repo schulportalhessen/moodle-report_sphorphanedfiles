@@ -59,13 +59,13 @@ abstract class ItemHandler extends Handler {
         }
     }
 
-
     /**
      * Set the value of implementationmode
      *
-     * @return  self
+     * @param string $implementationmode
+     * @return $this
      */
-    public function setImplementationmode($implementationmode) {
+    public function setImplementationmode(string $implementationmode): ItemHandler {
         $this->implementationmode = $implementationmode;
 
         return $this;

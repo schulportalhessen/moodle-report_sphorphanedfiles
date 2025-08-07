@@ -109,12 +109,12 @@ abstract class BaseHandler {
     /**
      * Enumerates all files that are orphaned with respect to the given HTML content.
      *
-     * @param $user The user for which the enumeration has to be generated.
-     *
-     *
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     *
+     * @param $user
+     * @param $context
+     * @param $course
+     * @param $htmlContent
+     * @param $module
+     * @return array An array containing the relevant files OR an empty array if no such files exist.
      */
     public function enumerateOrphanedFilesFromString($user, $context, $course, $htmlContent, $module): array {
         return $this->getManager()->parser()->extractOrphanedFilesFromString(
