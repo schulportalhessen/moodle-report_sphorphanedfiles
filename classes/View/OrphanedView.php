@@ -238,7 +238,7 @@ class OrphanedView {
             );
             $data = [
                 'orphanedFilesList' => $cleanedViewOrphanedFiles,
-                'translation' => $translations
+                'translation' => $translations,
             ];
             // Temporarily disabled: $dummy = json_encode($data).
             return $this->getPage()->getOutput()->render_from_template(

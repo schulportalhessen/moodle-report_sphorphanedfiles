@@ -14,6 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+/**
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Misc;
@@ -31,10 +40,6 @@ use stdClass;
  *  The following code is safe to execute in PHP 8 environments as a check is
  *  performed before a „substitute“ is provided.
  *
- * @package report_sphorphanedfiles
- * @copyright   Schulportal Hessen (SPH)
- * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle) {

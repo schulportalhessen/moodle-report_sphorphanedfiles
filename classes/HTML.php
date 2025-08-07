@@ -23,6 +23,9 @@ use report_sphorphanedfiles\View\Page;
 /**
  * Class html
  *
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class HTML {
     public static function createImage(string $url): string {

@@ -5,6 +5,7 @@
     <!-- Moodle standard als Basis -->
     <rule ref="moodle">
         <exclude name="moodle.NamingConventions.ValidVariableName.VariableNameLowerCase"/>
+        <exclude name="moodle.NamingConventions.ValidVariableName.VariableNameUnderscore"/>
         <exclude name="moodle.NamingConventions.ValidFunctionName.PublicUnderscore"/>
         <exclude name="moodle.NamingConventions.ValidVariableName.MemberNameUnderscore"/>
         <exclude name="moodle.NamingConventions.ValidFunctionName.LowercaseMethod"/>
@@ -14,6 +15,7 @@
         <exclude name="moodle.Commenting.DocblockDescription.Missing"/>
         <exclude name="moodle.Commenting.Package.Missing"/>
         <exclude name="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase"/>
+
 
     </rule>
 
