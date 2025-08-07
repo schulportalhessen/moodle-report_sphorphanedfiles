@@ -95,8 +95,11 @@ jobs:
         continue-on-error: true
         run: moodle-plugin-ci phpmd
 
+      - name: Debug – Hinweis zur Plugin-Konfiguration
+        run: echo "Nutze aktuell custom phpcs.xml im Plugin-Verzeichnis"
+
       - name: Code Style
-        run: moodle-plugin-ci phpcs --max-warnings=0
+        run: cd plugin && moodle-plugin-ci phpcs --max-warnings=0 --standard=phpcs.xml
 
       - name: PHPDoc Checker
         run: moodle-plugin-ci phpdoc --max-warnings=0
