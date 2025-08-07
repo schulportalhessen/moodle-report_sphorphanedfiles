@@ -27,8 +27,6 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class LabelHandler
  */
@@ -60,7 +58,7 @@ class LabelHandler extends Handler
 
         $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
-        // echo "$modName: " .  count($orphanedFiles) . '<br />';
+        // Only for debugging: echo "$modName: " .  count($orphanedFiles) . '<br />'.
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
             $viewOrphanedFiles[] =
@@ -81,7 +79,7 @@ class LabelHandler extends Handler
                     'post_filearea' => $formDelete->getFileArea(),
                     'post_itemId' => $formDelete->getItemId(),
                     'post_filepath' => $formDelete->getFilePath(),
-                    'post_filename' => $formDelete->getFileName()
+                    'post_filename' => $formDelete->getFileName(),
                 ];
         }
 

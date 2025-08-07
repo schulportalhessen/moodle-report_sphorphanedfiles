@@ -18,8 +18,6 @@ namespace report_sphorphanedfiles\Database;
 
 use moodle_database;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This is a straightfoward implementation of the Factory Pattern.
  *
@@ -30,8 +28,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2022 Schulportal Hessen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class Factory
-{
+class Factory {
     /**
      * The database connection used by the factory.
      *
