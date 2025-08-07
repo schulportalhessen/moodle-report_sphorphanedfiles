@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-
     $settings->add(new admin_setting_configcheckbox(
         'report_sphorphanedfiles/isactive',
         get_string('isactive', 'report_sphorphanedfiles'),
@@ -92,5 +91,4 @@ if ($ADMIN->fulltree) {
     );
     $configsetting->set_force_ltr(true);
     $settings->add($configsetting);
-
 }
