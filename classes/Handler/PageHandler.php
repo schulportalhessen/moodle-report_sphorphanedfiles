@@ -40,7 +40,7 @@ class PageHandler extends ItemHandler {
         $modName = $instance->modname;
         $name = $instance->name;
 
-        // Sonderfall, weil PAge auch HTML-Content hat
+        // Sonderfall, weil PAge auch HTML-Content hat.
         $page = $this->getManager()->database()->dataFiles()->getPage($instance);
         $htmlContent .= '<h4>Seiteninhalt</h4>'
             . file_rewrite_pluginfile_urls(
@@ -57,7 +57,7 @@ class PageHandler extends ItemHandler {
 
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
-            // Bad workaround
+            // Bad workaround.
             $this->setImplementationmode('xxxxxx');
             if ($file->filearea == 'content') {
                 $this->setImplementationmode('item');
