@@ -19,33 +19,26 @@ namespace report_sphorphanedfiles\Handler;
 use stdClass;
 use cm_info;
 use dml_exception;
-
 use report_sphorphanedfiles\Files\FileInfo;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class IntroHandler
- * @package report_sphorphanedfiles\Handler
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class IntroHandler extends Handler
-{
-
+class IntroHandler extends Handler {
     /**
      * @var string
      */
     private $componentName;
 
-    /**
-     * @return string
-     */
     public function getComponentName(): string {
         return $this->componentName;
     }
 
-    /**
-     * @override
-     */
     public function canHandle(string $component): bool {
         $handleractivitiescore = get_config('report_sphorphanedfiles', 'handleractivitiescore');
         if (isset($handleractivitiescore) && in_array($component, explode(',', $handleractivitiescore))) {
@@ -67,24 +60,11 @@ class IntroHandler extends Handler
         return false;
     }
 
-    /**
-     * @override
-     */
     protected function enumerateFiles($user, $context, $course, $module): array {
         $result = $this->getManager()->database()->dataFiles()->getFilesForComponentIntro($context, $module) ?? [];
         return $this->postFilter($result);
     }
 
-    /**
-     * @param array $viewOrphanedFiles
-     * @param int $contextId
-     * @param stdClass $user
-     * @param int $courseId
-     * @param cm_info $instance
-     * @param cm_info $iconHtml
-     * @return array
-     * @throws dml_exception
-     */
     public function getViewOrphanedFiles(
         $viewOrphanedFiles,
         $contextId,
@@ -95,15 +75,21 @@ class IntroHandler extends Handler
     ): array {
 
         // FIXME: Das ist nicht die optimal passende Stelle für die Instanzvariablen-
-        //        zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
-        //        Interface.
+        // zuweisung. Verdeckte Abhängigkeit: getIntro nutzt getComponentName-
+        // Interface.
         $this->componentName = $instance->modname;
 
         $htmlContent = $this->getIntro($instance);
 
         $name = $instance->name;
         $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
-        $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $this->getComponentName());
+        $orphanedFiles = $this->enumerateOrphanedFilesFromString(
+            $user,
+            $contextId,
+            $courseId,
+            $htmlContent,
+            $this->getComponentName()
+        );
 
         $componentName = $this->getComponentName();
         foreach ($orphanedFiles as $file) {
@@ -128,7 +114,7 @@ class IntroHandler extends Handler
                     'post_filearea' => $formDelete->getFileArea(),
                     'post_itemId' => $formDelete->getItemId(),
                     'post_filepath' => $formDelete->getFilePath(),
-                    'post_filename' => $formDelete->getFileName()
+                    'post_filename' => $formDelete->getFileName(),
                 ]
             );
         }

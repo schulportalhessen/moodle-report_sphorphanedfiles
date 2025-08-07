@@ -27,15 +27,12 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Manager;
 use InvalidArgumentException;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * If we have time chain of responsibility
  *
  * Class Factory
  */
-class Factory
-{
+class Factory {
     /**
      * @var null
      */
@@ -99,15 +96,15 @@ class Factory
      * @return array|null
      */
     public function getHandler(): array {
-        if (self::$handlers === null)
+        if (self::$handlers === null) {
             self::$handlers = [
                 $this->labelHandler(),
                 $this->pageHandler(),
                 $this->resourceHandler(),
                 $this->sectionSummaryHandler(),
-                $this->introHandler()
+                $this->introHandler(),
             ];
-
+        }
         return static::$handlers;
     }
 
@@ -117,10 +114,11 @@ class Factory
      * @return bool
      */
     public function hasHandlerFor($instance): bool {
-        foreach ($this->getHandler() as $handler)
+        foreach ($this->getHandler() as $handler) {
             if ($handler->canHandle($instance->modname)) {
                 return true;
             }
+        }
 
         return false;
     }
@@ -131,10 +129,11 @@ class Factory
      * @return Handler
      */
     public function getHandlerFor($instance): Handler {
-        foreach ($this->getHandler() as $handler)
+        foreach ($this->getHandler() as $handler) {
             if ($handler->canHandle($instance->modname)) {
                 return $handler;
             }
+        }
 
         throw new InvalidArgumentException();
     }

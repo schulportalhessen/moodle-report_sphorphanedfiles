@@ -17,13 +17,9 @@
 namespace report_sphorphanedfiles\Handler;
 
 use ReflectionClass;
-
 use moodle_url;
-
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
@@ -32,9 +28,13 @@ defined('MOODLE_INTERNAL') || die();
  *
  * All functionality common to any kind of handler should reside inside this class
  * to avoid code redundancy.
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class BaseHandler
-{
+abstract class BaseHandler {
     private const URLPattern = "/mod/%s/view.php?id=%s";
 
     /**
@@ -81,7 +81,7 @@ abstract class BaseHandler
      *
      */
     public function getComponentName(): string {
-        // Safety in case of class renaming. Always use the exact name of the suffix of the 
+        // Safety in case of class renaming. Always use the exact name of the suffix of the
         // base class, defined by the first occurence of an uppercase character when
         // scanned from right to left, not any hard-coded string.
         $reversedBaseClassName = strrev((new ReflectionClass(self::class))->getShortName());
@@ -151,6 +151,8 @@ abstract class BaseHandler
     abstract protected function enumerateFiles($user, $context, $course, $module): array;
 
     /**
+     * Get orphaned files.
+     *
      * @param $viewOrphanedFiles
      * @param $contextId
      * @param $user

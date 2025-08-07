@@ -17,12 +17,9 @@
 namespace report_sphorphanedfiles\Handler;
 
 use cm_info;
-
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 use report_sphorphanedfiles\Misc;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
@@ -31,9 +28,13 @@ defined('MOODLE_INTERNAL') || die();
  *
  * All functionality common to any kind of handler should reside inside this class
  * to avoid code redundancy.
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class Handler extends BaseHandler
-{
+abstract class Handler extends BaseHandler {
     private $user;
     private $course;
     private $instance;
@@ -97,9 +98,6 @@ abstract class Handler extends BaseHandler
         return "";
     }
 
-    /**
-     * @override
-     */
     protected function enumerateFiles($user, $context, $course, $module): array {
         $result = $this->getManager()->database()->dataFiles()->getFilesForComponent($context, $module) ?? [];
         return $this->postFilter($result);
@@ -109,9 +107,6 @@ abstract class Handler extends BaseHandler
         return $this->getManager()->files()->generateViewFile($orphanedFile);
     }
 
-    /**
-     * @override
-     */
     public function getPreviewForFile(FileInfo $fileInfo) {
         $orphanedFile = $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash());
 
@@ -123,6 +118,8 @@ abstract class Handler extends BaseHandler
     }
 
     /**
+     * Collect information about the file in one array
+     *
      * @param FileInfo $formDelete
      * @param $file
      * @param $instance

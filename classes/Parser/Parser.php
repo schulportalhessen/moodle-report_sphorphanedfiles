@@ -16,8 +16,6 @@
 
 namespace report_sphorphanedfiles\Parser;
 
-defined('MOODLE_INTERNAL') || die();
-
 //
 // Preparations for later PHP 8 transition.
 //
@@ -39,8 +37,7 @@ if (!function_exists('str_contains')) {
 /**
  * Class Parser
  */
-class Parser
-{
+class Parser {
     /**
      * @param string $htmlContent
      * @return array|null

@@ -21,8 +21,6 @@ use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /*
  *  Preparations for later PHP 8 transition.
  * 
@@ -43,8 +41,7 @@ if (!function_exists('str_contains')) {
 /**
  * Class SectionSummaryHandler
  */
-class SectionSummaryHandler extends ItemHandler
-{
+class SectionSummaryHandler extends ItemHandler {
     /**
      * @override
      */

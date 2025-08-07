@@ -19,10 +19,7 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 
-defined('MOODLE_INTERNAL') || die();
-
-abstract class ItemHandler extends Handler
-{
+abstract class ItemHandler extends Handler {
     protected $implementationmode = 'item';
 
     /**

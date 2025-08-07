@@ -16,10 +16,7 @@
 
 namespace report_sphorphanedfiles;
 
-defined('MOODLE_INTERNAL') || die();
-
-class Misc
-{
+class Misc {
     /**
      * @param stored_file $storedFile
      * @return float

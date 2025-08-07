@@ -19,17 +19,13 @@ namespace report_sphorphanedfiles\Handler;
 use cm_info;
 use dml_exception;
 use stdClass;
-
 use report_sphorphanedfiles\Files\FileInfo;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class ResourceHandler
  * @package report_sphorphanedfiles\Handler
  */
-class ResourceHandler extends Handler
-{
+class ResourceHandler extends Handler {
     /**
      * @override
      */

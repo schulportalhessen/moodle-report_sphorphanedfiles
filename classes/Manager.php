@@ -24,13 +24,10 @@ use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\Handler\Factory as HandlerFactory;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class manager
  */
-class Manager
-{
+class Manager {
     /**
      * @var moodle_database
      */
