@@ -39,9 +39,9 @@ class Misc {
     }
 
     public static function translate($data, $translationFile, $prefix = "") {
-        foreach ($data as $item)
+        foreach ($data as $item) {
             $result[$item] = get_string($prefix . $item, $translationFile);
-
+        }
         return $result;
     }
 }

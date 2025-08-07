@@ -88,7 +88,7 @@ class ResourceHandler extends Handler {
                     'post_filearea' => $formDelete->getFileArea(),
                     'post_itemId' => $formDelete->getItemId(),
                     'post_filepath' => $formDelete->getFilePath(),
-                    'post_filename' => $formDelete->getFileName()
+                    'post_filename' => $formDelete->getFileName(),
                 ]
             );
         }
