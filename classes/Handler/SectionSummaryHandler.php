@@ -63,7 +63,8 @@ class SectionSummaryHandler extends ItemHandler {
         $courseId,
         $iconHtml
     ): array {
-        $sectionHtml = file_rewrite_pluginfile_urls($sectionInfo->summary, 'pluginfile.php', $contextId, 'course', 'section', $sectionInfo->id);
+        $sectionHtml = file_rewrite_pluginfile_urls(
+            $sectionInfo->summary, 'pluginfile.php', $contextId, 'course', 'section', $sectionInfo->id);
         $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $sectionInfo->id);
         foreach ($orphanedFiles as $file) {
@@ -109,8 +110,8 @@ class SectionSummaryHandler extends ItemHandler {
      * @override
      */
     public function getFileLink(FileInfo $fileInfo) {
-        $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
+        $url = $this->apiM->files()->createURLForFileWithItem(
+            $this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
         return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
     }
-
 }

@@ -41,7 +41,9 @@ abstract class ItemHandler extends Handler {
         if ('item' === $this->implementationmode) {
             // Content-Modus.
             if ($fileInfo->getFileArea() === 'content') {
-                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
+                $url = $this->apiM->files()->createURLForFileWithItem(
+                    $this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash())
+                );
                 return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
             }
         } else {
