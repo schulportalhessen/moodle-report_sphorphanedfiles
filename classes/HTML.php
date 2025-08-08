@@ -36,6 +36,7 @@ class HTML {
                 [
                     'height' => '100', // Nur die Zahl, ohne "px".
                     'src' => $url,
+                    'alt' => '', // Leeres alt-Attribut.
                 ]
             ),
             ['class' => 'courseimage']
