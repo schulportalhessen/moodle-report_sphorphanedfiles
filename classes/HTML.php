@@ -34,7 +34,7 @@ class HTML {
             html_writer::empty_tag(
                 'img',
                 [
-                    'height' => '100px',
+                    'height' => '100', // Nur die Zahl, ohne "px".
                     'src' => $url,
                 ]
             ),
