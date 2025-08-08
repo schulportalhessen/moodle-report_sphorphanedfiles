@@ -43,7 +43,7 @@ class FileInfo {
      * Create a FileInfo instance using either a string representation (-> serialization)
      *  OR a dictionary OR another FileInfo instance containing the relevant information.
      *
-     * @param $data The data (string or dictionary) to be used for instance
+     * @param mixed $data The data (string or dictionary) to be used for instance
      *               initialization.
      */
     public function __construct($data = null) {

@@ -52,6 +52,7 @@ class Files {
     }
 
     /**
+     * @param array $fileInfo
      * @return bool|stored_file
      */
     public function getFile(array $fileInfo) {
@@ -67,6 +68,7 @@ class Files {
 
 
     /**
+     * @param string $pathnamehash
      * @return bool|stored_file
      */
     public function getFileUsingPathnamehash(string $pathnamehash) {
@@ -75,6 +77,7 @@ class Files {
     }
 
     /**
+     * @param FileInfo $fileInfo
      * @return bool|stored_file
      */
     public function getFileUsingFileInfo_deprecated(FileInfo $fileInfo) {
@@ -146,8 +149,8 @@ class Files {
      *
      * @param Security $security
      * @param stored_file $fileToBeDeleted
-     * @param $user
-     * @param $course
+     * @param mixed $user
+     * @param mixed $course
      * @return bool
      */
     public function deleteFileInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool {

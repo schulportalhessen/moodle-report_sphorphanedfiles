@@ -34,12 +34,12 @@ class LabelHandler extends Handler {
     /**
      * Get the array with the orphaned files view.
      *
-     * @param $viewOrphanedFiles
-     * @param $contextId
-     * @param $user
-     * @param $courseId
-     * @param $instance
-     * @param $iconHtml
+     * @param mixed $viewOrphanedFiles
+     * @param mixed $contextId
+     * @param mixed $user
+     * @param mixed $courseId
+     * @param mixed $instance
+     * @param mixed $iconHtml
      * @return array
      * @throws \coding_exception
      */

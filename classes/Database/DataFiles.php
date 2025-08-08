@@ -112,9 +112,9 @@ class DataFiles {
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     *
+     * @param mixed $contextId
+     * @param mixed $modName
      * @return array The dictionary containing the given information at the right places.
-     *
      */
     protected function prepareContextParameters($contextId, $modName): array {
         return ['component' => sprintf('mod_%s', $modName), 'contextid' => $contextId];
@@ -154,7 +154,8 @@ class DataFiles {
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     *
+     * @param mixed $itemId
+     * @param mixed $courseContextId
      * @return array The dictionary containing the given information at the right places.
      *
      */
@@ -179,7 +180,7 @@ class DataFiles {
     /**
      * Get the course.
      *
-     * @param $courseId
+     * @param mixed $courseId
      * @return false|mixed|\stdClass
      * @throws \dml_exception
      */
@@ -190,7 +191,7 @@ class DataFiles {
     /**
      * Get the page.
      *
-     * @param $instance
+     * @param mixed $instance
      * @return false|mixed|\stdClass
      * @throws \dml_exception
      */

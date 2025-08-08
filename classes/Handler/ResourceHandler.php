@@ -47,6 +47,7 @@ class ResourceHandler extends Handler {
      * @param stdClass $user
      * @param int $courseId
      * @param cm_info $instance
+     * @param mixed $iconHtml
      * @return array
      * @throws dml_exception
      */

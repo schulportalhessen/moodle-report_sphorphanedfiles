@@ -33,10 +33,10 @@ class Page {
     private $course;
 
     /**
-     * @param $page
-     * @param $course
-     * @param $courseId
-     * @param $output
+     * @param mixed $page
+     * @param mixed $course
+     * @param mixed $courseId
+     * @param mixed $output
      * @throws \coding_exception
      * @throws \core\exception\moodle_exception
      */

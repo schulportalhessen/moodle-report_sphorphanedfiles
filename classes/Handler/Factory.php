@@ -106,7 +106,7 @@ class Factory {
 
     /**
      * Checks if handler for an module exists
-     * @param $instance
+     * @param mixed $instance
      * @return bool
      */
     public function hasHandlerFor($instance): bool {
@@ -121,7 +121,7 @@ class Factory {
 
     /**
      * get the responsible handler for a module
-     * @param $instance
+     * @param mixed $instance
      * @return Handler
      */
     public function getHandlerFor($instance): Handler {

@@ -121,9 +121,9 @@ abstract class Handler extends BaseHandler {
      * Collect information about the file in one array
      *
      * @param FileInfo $formDelete
-     * @param $file
-     * @param $instance
-     * @param $data
+     * @param mixed $file
+     * @param mixed $instance
+     * @param mixed $data
      * @return array containing all information about the file
      */
     protected function getSkeleton(FileInfo $formDelete, $file, $instance, $data): array {

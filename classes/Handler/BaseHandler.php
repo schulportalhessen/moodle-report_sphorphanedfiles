@@ -109,11 +109,11 @@ abstract class BaseHandler {
     /**
      * Enumerates all files that are orphaned with respect to the given HTML content.
      *
-     * @param $user
-     * @param $context
-     * @param $course
-     * @param $htmlContent
-     * @param $module
+     * @param mixed $user
+     * @param mixed $context
+     * @param mixed $course
+     * @param mixed $htmlContent
+     * @param mixed $module
      * @return array An array containing the relevant files OR an empty array if no such files exist.
      */
     public function enumerateOrphanedFilesFromString($user, $context, $course, $htmlContent, $module): array {
@@ -139,26 +139,25 @@ abstract class BaseHandler {
 
     /**
      * Enumerates all files the given user is allowed to perform Moodle actions on, the
-     * special file „.“ is filtered and therefore not an element of the returned array.
+     * special file '.' is filtered and therefore not an element of the returned array.
      *
-     * @param $user The user for which the enumeration has to be generated.
-     *
-     *
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     *
+     * @param mixed $user The user for which the enumeration has to be generated.
+     * @param mixed $context
+     * @param mixed $course
+     * @param mixed $module
+     * @return array An array containing the relevant files OR an empty array if no such files exist.
      */
     abstract protected function enumerateFiles($user, $context, $course, $module): array;
 
     /**
      * Get orphaned files.
      *
-     * @param $viewOrphanedFiles
-     * @param $contextId
-     * @param $user
-     * @param $courseId
-     * @param $instance
-     * @param $iconHtml
+     * @param mixed $viewOrphanedFiles
+     * @param mixed $contextId
+     * @param mixed $user
+     * @param mixed $courseId
+     * @param mixed $instance
+     * @param mixed $iconHtml
      * @return array
      */
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $instance, $iconHtml): array;
