@@ -196,13 +196,14 @@ class OrphanedView {
 
         $modInfo = $sectionInfo->modinfo;
 
-        foreach ($modInfo->instances as $instances) {
-            foreach ($instances as $instance) {
-                if ($sectionInfo->id === $instance->section) {
-                    if ($instance->deletioninprogress !== '1') {
-                        if ($this->apiM->handler()->hasHandlerFor($instance)) {
-                            $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)
-                                ->bind($this->user, $this->courseId, $instance, $this->getPage())
+        // ToDo: Redundante Itteration refactorn.
+        foreach ($modInfo->get_instances() as $moduleinstances) {
+            foreach ($moduleinstances as $cm) {
+                if ($sectionInfo->id === $cm->sectionid) {
+                    if ($cm->deletioninprogress !== '1') {
+                        if ($this->apiM->handler()->hasHandlerFor($cm)) {
+                            $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($cm)
+                                ->bind($this->user, $this->courseId, $cm, $this->getPage())
                                 ->addOrphans($viewOrphanedFiles);
                         }
                     }
