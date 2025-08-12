@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace report_sphorphanedfiles\Handler;
 
 use report_sphorphanedfiles\Misc;
@@ -21,18 +29,16 @@ use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /*
  *  Preparations for later PHP 8 transition.
- * 
+ *
  *  We are currently using PHP 7.x which is not the latest PHP version.
  *  Functionality that is built-in in PHP 8 and might be useful in our
  *  modules is provided.
- * 
+ *
  *  The following code is safe to execute in PHP 8 environments as a check is
  *  performed before a „substitute“ is provided.
- * 
+ *
  */
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle) {
@@ -42,12 +48,13 @@ if (!function_exists('str_contains')) {
 
 /**
  * Class SectionSummaryHandler
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class SectionSummaryHandler extends ItemHandler
-{
-    /**
-     * @override
-     */
+class SectionSummaryHandler extends ItemHandler {
     protected function enumerateFiles($user, $context, $course, $fileItemIdSectionInfo): array {
         $result = $this->apiM->database()->dataFiles()->getFilesForSectionSummary($fileItemIdSectionInfo, $context) ?? [];
         return $this->postFilter($result);
@@ -61,7 +68,8 @@ class SectionSummaryHandler extends ItemHandler
         $courseId,
         $iconHtml
     ): array {
-        $sectionHtml = file_rewrite_pluginfile_urls($sectionInfo->summary, 'pluginfile.php', $contextId, 'course', 'section', $sectionInfo->id);
+        $sectionHtml = file_rewrite_pluginfile_urls(
+            $sectionInfo->summary, 'pluginfile.php', $contextId, 'course', 'section', $sectionInfo->id);
         $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $sectionHtml, $sectionInfo->id);
         foreach ($orphanedFiles as $file) {
@@ -85,7 +93,7 @@ class SectionSummaryHandler extends ItemHandler
                 'post_filearea' => $formDelete->getFileArea(),
                 'post_itemId' => $formDelete->getItemId(),
                 'post_filepath' => $formDelete->getFilePath(),
-                'post_filename' => $formDelete->getFileName()
+                'post_filename' => $formDelete->getFileName(),
             ];
         }
 
@@ -103,12 +111,9 @@ class SectionSummaryHandler extends ItemHandler
         return false;
     }
 
-    /**
-     * @override
-     */
     public function getFileLink(FileInfo $fileInfo) {
-        $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
+        $url = $this->apiM->files()->createURLForFileWithItem(
+            $this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
         return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
     }
-
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Moodle Ruleset">
+    <description>My custom coding standard for Moodle plugin</description>
+
+    <!-- Moodle standard als Basis -->
+    <rule ref="moodle">
+        <exclude name="moodle.NamingConventions.ValidVariableName.VariableNameLowerCase"/>
+        <exclude name="moodle.NamingConventions.ValidVariableName.VariableNameUnderscore"/>
+        <exclude name="moodle.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+        <exclude name="moodle.NamingConventions.ValidVariableName.MemberNameUnderscore"/>
+        <exclude name="moodle.NamingConventions.ValidFunctionName.LowercaseMethod"/>
+        <exclude name="moodle.Commenting.MissingDocblock.Function"/>
+        <exclude name="moodle.Commenting.MissingDocblock.Constant"/>
+        <exclude name="moodle.Commenting.VariableComment.Missing"/>
+        <exclude name="moodle.Commenting.DocblockDescription.Missing"/>
+        <exclude name="moodle.Commenting.Package.Missing"/>
+        <exclude name="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase"/>
+        <exclude name="Squiz.Classes.SelfMemberReference.NotUsed"/>
+
+    </rule>
+
+    <!-- Analysiere das Plugin-Verzeichnis -->
+    <file>./</file>
+</ruleset>

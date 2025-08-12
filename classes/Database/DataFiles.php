@@ -18,16 +18,17 @@ namespace report_sphorphanedfiles\Database;
 
 use moodle_database;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This class provides high-level functionality for the module. Concepts like
  * enumerating files belonging to a specific component are mapped to the
  * relevant SQL queries, therefore encapsulating low-level database access inside
  * this class.
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class DataFiles
-{
+class DataFiles {
     /**
      * @var moodle_database The database connection an instance of this class
      *                      operates on.
@@ -111,9 +112,9 @@ class DataFiles
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     *
+     * @param mixed $contextId
+     * @param mixed $modName
      * @return array The dictionary containing the given information at the right places.
-     *
      */
     protected function prepareContextParameters($contextId, $modName): array {
         return ['component' => sprintf('mod_%s', $modName), 'contextid' => $contextId];
@@ -153,7 +154,8 @@ class DataFiles
 
     /**
      * Provides a dictionary with preset keys having the given values.
-     *
+     * @param mixed $itemId
+     * @param mixed $courseContextId
      * @return array The dictionary containing the given information at the right places.
      *
      */
@@ -175,11 +177,24 @@ class DataFiles
         return $this->performQuery($this->prepareSectionParameters($itemId, $courseContextId));
     }
 
-
+    /**
+     * Get the course.
+     *
+     * @param mixed $courseId
+     * @return false|mixed|\stdClass
+     * @throws \dml_exception
+     */
     public function getCourse($courseId) {
         return $this->getDatabase()->get_record('course', ['id' => $courseId], '*', MUST_EXIST);
     }
 
+    /**
+     * Get the page.
+     *
+     * @param mixed $instance
+     * @return false|mixed|\stdClass
+     * @throws \dml_exception
+     */
     public function getPage($instance) {
         return $this->getDatabase()->get_record('page', ['id' => $instance->instance], '*');
     }

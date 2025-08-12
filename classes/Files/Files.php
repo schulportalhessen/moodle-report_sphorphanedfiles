@@ -19,18 +19,18 @@ namespace report_sphorphanedfiles\Files;
 use file_storage;
 use stored_file;
 use moodle_url;
-
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\HTML;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class Files
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class Files
-{
+class Files {
     private const DIRECTORY_SEPARATOR = "/";
     /**
      * @var file_storage
@@ -52,6 +52,7 @@ class Files
     }
 
     /**
+     * @param array $fileInfo
      * @return bool|stored_file
      */
     public function getFile(array $fileInfo) {
@@ -67,6 +68,7 @@ class Files
 
 
     /**
+     * @param string $pathnamehash
      * @return bool|stored_file
      */
     public function getFileUsingPathnamehash(string $pathnamehash) {
@@ -75,10 +77,11 @@ class Files
     }
 
     /**
+     * @param FileInfo $fileInfo
      * @return bool|stored_file
      */
     public function getFileUsingFileInfo_deprecated(FileInfo $fileInfo) {
-        /// Alter Zugriff über den SEPERATOR encodete Filereferenzkey
+        // Alter Zugriff über den SEPERATOR encodete Filereferenzkey.
         $dummy = $this->getFile($fileInfo->toArray());
         return $dummy;
     }
@@ -146,23 +149,24 @@ class Files
      *
      * @param Security $security
      * @param stored_file $fileToBeDeleted
-     * @param $user
-     * @param $course
+     * @param mixed $user
+     * @param mixed $course
      * @return bool
      */
     public function deleteFileInCourse(Security $security, stored_file $fileToBeDeleted, $user, $course): bool {
-        if ($security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course)
-            && $security->isUserAllowedToDeleteFiles($course, $user)) {
+        if (
+            $security->isCourseIdOfFileSameLikeCourseidOfTheCourse($fileToBeDeleted, $course) &&
+            $security->isUserAllowedToDeleteFiles($course, $user)
+        ) {
             if (!$fileToBeDeleted) {
                 echo "file not found, so data might be manipulated or the file is already deleted or something went wrong";
                 return false;
             } else {
-                //echo "... delete nur simmuliert"; die(); // development!!
+                // In development die().
                 $fileToBeDeleted->delete();
                 return true;
             }
         }
         return false;
     }
-
 }

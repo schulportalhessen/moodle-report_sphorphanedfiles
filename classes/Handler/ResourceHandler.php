@@ -19,25 +19,19 @@ namespace report_sphorphanedfiles\Handler;
 use cm_info;
 use dml_exception;
 use stdClass;
-
 use report_sphorphanedfiles\Files\FileInfo;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class ResourceHandler
- * @package report_sphorphanedfiles\Handler
+ *
+ * @package    report_sphorphanedfiles
+ * @copyright  2022 Schulportal Hessen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class ResourceHandler extends Handler
-{
-    /**
-     * @override
-     */
+class ResourceHandler extends Handler {
     public function enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent): array {
-        //
         // Unklar:
-        // Remove file area content, because content files can´t be orphaned in mod resource
-        //
+        // Remove file area content, because content files can´t be orphaned in mod resource.
         return array_filter(
             parent::enumerateOrphanedFilesFromString($user, $contextId, $modName, $courseId, $htmlContent),
             function ($file, $key) {
@@ -53,6 +47,7 @@ class ResourceHandler extends Handler
      * @param stdClass $user
      * @param int $courseId
      * @param cm_info $instance
+     * @param mixed $iconHtml
      * @return array
      * @throws dml_exception
      */
@@ -94,7 +89,7 @@ class ResourceHandler extends Handler
                     'post_filearea' => $formDelete->getFileArea(),
                     'post_itemId' => $formDelete->getItemId(),
                     'post_filepath' => $formDelete->getFilePath(),
-                    'post_filename' => $formDelete->getFileName()
+                    'post_filename' => $formDelete->getFileName(),
                 ]
             );
         }

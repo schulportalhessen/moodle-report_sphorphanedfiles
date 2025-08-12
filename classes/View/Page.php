@@ -18,15 +18,28 @@ namespace report_sphorphanedfiles\View;
 
 use moodle_url;
 
-defined('MOODLE_INTERNAL') || die();
-
-class Page
-{
+/**
+ * Class Page that is used by OrphanedView.php
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class Page {
     private $page;
     private $output;
     private $title;
     private $course;
 
+    /**
+     * @param mixed $page
+     * @param mixed $course
+     * @param mixed $courseId
+     * @param mixed $output
+     * @throws \coding_exception
+     * @throws \core\exception\moodle_exception
+     */
     public function __construct($page, $course, $courseId, $output) {
         $this->page = $page;
         $this->output = $output;

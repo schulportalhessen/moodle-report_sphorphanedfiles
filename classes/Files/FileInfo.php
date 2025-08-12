@@ -18,14 +18,16 @@ namespace report_sphorphanedfiles\Files;
 
 use InvalidArgumentException;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This class provides an OOP-representation of the metadata which is
  * used within the Moodle system for data referencing.
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class FileInfo
-{
+class FileInfo {
     private const SERIALIZATION_SEPARATOR = "§";
 
     private $pathnamehash;
@@ -41,7 +43,7 @@ class FileInfo
      * Create a FileInfo instance using either a string representation (-> serialization)
      *  OR a dictionary OR another FileInfo instance containing the relevant information.
      *
-     * @param $data The data (string or dictionary) to be used for instance
+     * @param mixed $data The data (string or dictionary) to be used for instance
      *               initialization.
      */
     public function __construct($data = null) {
@@ -60,14 +62,6 @@ class FileInfo
         }
     }
 
-    //protected const FILEREFERENCEKEY = 'filepath_filename';
-
-    //public function addFileReferenceInformation_weg(array $data): array
-    //{
-    //    $data[self::FILEREFERENCEKEY] = $this->toString();
-    //    return $data;
-    //}
-
     public function getPathnamehash() {
         return $this->pathnamehash;
     }
@@ -81,7 +75,9 @@ class FileInfo
     }
 
     /**
-     * @return
+     * Get the filearea.
+     *
+     * @return string|null
      */
     public function getFileArea(): ?string {
         return $this->filearea;
@@ -107,7 +103,7 @@ class FileInfo
             'filearea' => $this->getFileArea(),
             'itemId' => $this->getItemId(),
             'filepath' => $this->getFilePath(),
-            'filename' => $this->getFileName()
+            'filename' => $this->getFileName(),
         ];
     }
 
@@ -125,14 +121,11 @@ class FileInfo
             'filearea' => $infoComponents[3],
             'itemId' => $infoComponents[4],
             'filepath' => $infoComponents[5],
-            'filename' => $infoComponents[6]
+            'filename' => $infoComponents[6],
         ]);
     }
 
     public function setFromArray($data) {
-        // if (isset($data[self::FILEREFERENCEKEY])) {
-        //     $this->setFromString($data[self::FILEREFERENCEKEY]);
-        // } else {
         $this->pathnamehash = $data['pathnamehash'];
         $this->contextId = $data['contextId'];
         $this->component = $data['component'];
@@ -140,7 +133,6 @@ class FileInfo
         $this->itemId = $data['itemId'];
         $this->filepath = $data['filepath'];
         $this->filename = $data['filename'];
-        //}
     }
 
     public function setFromFileWithContext($file, $contextId): FileInfo {
@@ -151,7 +143,7 @@ class FileInfo
             'filearea' => $file->filearea,
             'itemId' => $file->itemid,
             'filepath' => $file->filepath,
-            'filename' => $file->filename
+            'filename' => $file->filename,
         ]);
 
         return $this;

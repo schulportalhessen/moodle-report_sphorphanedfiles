@@ -17,20 +17,21 @@
 namespace report_sphorphanedfiles;
 
 use moodle_database;
-
 use report_sphorphanedfiles\Database\Factory as DatabaseFactory;
 use report_sphorphanedfiles\Parser\Parser;
 use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Security\Security;
 use report_sphorphanedfiles\Handler\Factory as HandlerFactory;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class manager
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class Manager
-{
+class Manager {
     /**
      * @var moodle_database
      */

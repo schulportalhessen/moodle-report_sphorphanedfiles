@@ -17,13 +17,9 @@
 namespace report_sphorphanedfiles\Handler;
 
 use ReflectionClass;
-
 use moodle_url;
-
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * This class should always be used as super class for all handlers, i.e. concrete
@@ -32,9 +28,13 @@ defined('MOODLE_INTERNAL') || die();
  *
  * All functionality common to any kind of handler should reside inside this class
  * to avoid code redundancy.
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class BaseHandler
-{
+abstract class BaseHandler {
     private const URLPattern = "/mod/%s/view.php?id=%s";
 
     /**
@@ -81,7 +81,7 @@ abstract class BaseHandler
      *
      */
     public function getComponentName(): string {
-        // Safety in case of class renaming. Always use the exact name of the suffix of the 
+        // Safety in case of class renaming. Always use the exact name of the suffix of the
         // base class, defined by the first occurence of an uppercase character when
         // scanned from right to left, not any hard-coded string.
         $reversedBaseClassName = strrev((new ReflectionClass(self::class))->getShortName());
@@ -109,12 +109,12 @@ abstract class BaseHandler
     /**
      * Enumerates all files that are orphaned with respect to the given HTML content.
      *
-     * @param $user The user for which the enumeration has to be generated.
-     *
-     *
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     *
+     * @param mixed $user
+     * @param mixed $context
+     * @param mixed $course
+     * @param mixed $htmlContent
+     * @param mixed $module
+     * @return array An array containing the relevant files OR an empty array if no such files exist.
      */
     public function enumerateOrphanedFilesFromString($user, $context, $course, $htmlContent, $module): array {
         return $this->getManager()->parser()->extractOrphanedFilesFromString(
@@ -139,24 +139,25 @@ abstract class BaseHandler
 
     /**
      * Enumerates all files the given user is allowed to perform Moodle actions on, the
-     * special file „.“ is filtered and therefore not an element of the returned array.
+     * special file '.' is filtered and therefore not an element of the returned array.
      *
-     * @param $user The user for which the enumeration has to be generated.
-     *
-     *
-     * @return array An array containing the relevant files OR an empty array if no such
-     *               files exist.
-     *
+     * @param mixed $user The user for which the enumeration has to be generated.
+     * @param mixed $context
+     * @param mixed $course
+     * @param mixed $module
+     * @return array An array containing the relevant files OR an empty array if no such files exist.
      */
     abstract protected function enumerateFiles($user, $context, $course, $module): array;
 
     /**
-     * @param $viewOrphanedFiles
-     * @param $contextId
-     * @param $user
-     * @param $courseId
-     * @param $instance
-     * @param $iconHtml
+     * Get orphaned files.
+     *
+     * @param mixed $viewOrphanedFiles
+     * @param mixed $contextId
+     * @param mixed $user
+     * @param mixed $courseId
+     * @param mixed $instance
+     * @param mixed $iconHtml
      * @return array
      */
     abstract public function getViewOrphanedFiles($viewOrphanedFiles, $contextId, $user, $courseId, $instance, $iconHtml): array;

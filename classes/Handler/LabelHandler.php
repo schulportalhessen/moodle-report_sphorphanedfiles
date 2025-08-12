@@ -27,22 +27,19 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\Files\FileInfo;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class LabelHandler
  */
-class LabelHandler extends Handler
-{
+class LabelHandler extends Handler {
     /**
      * Get the array with the orphaned files view.
      *
-     * @param $viewOrphanedFiles
-     * @param $contextId
-     * @param $user
-     * @param $courseId
-     * @param $instance
-     * @param $iconHtml
+     * @param mixed $viewOrphanedFiles
+     * @param mixed $contextId
+     * @param mixed $user
+     * @param mixed $courseId
+     * @param mixed $instance
+     * @param mixed $iconHtml
      * @return array
      * @throws \coding_exception
      */
@@ -60,7 +57,7 @@ class LabelHandler extends Handler
 
         $userAllowedToDeleteThisFile = $this->apiM->security()->isUserAllowedToDeleteFiles($courseId, $user);
         $orphanedFiles = $this->enumerateOrphanedFilesFromString($user, $contextId, $courseId, $htmlContent, $modName);
-        // echo "$modName: " .  count($orphanedFiles) . '<br />';
+        // Only for debugging: echo "$modName: " .  count($orphanedFiles) . '<br />'.
         foreach ($orphanedFiles as $file) {
             $formDelete = (new FileInfo())->setFromFileWithContext($file, $contextId);
             $viewOrphanedFiles[] =
@@ -81,7 +78,7 @@ class LabelHandler extends Handler
                     'post_filearea' => $formDelete->getFileArea(),
                     'post_itemId' => $formDelete->getItemId(),
                     'post_filepath' => $formDelete->getFilePath(),
-                    'post_filename' => $formDelete->getFileName()
+                    'post_filename' => $formDelete->getFileName(),
                 ];
         }
 

@@ -18,21 +18,25 @@ namespace report_sphorphanedfiles;
 
 use html_writer;
 use moodle_url;
-
 use report_sphorphanedfiles\View\Page;
 
-defined('MOODLE_INTERNAL') || die();
-
-class HTML
-{
+/**
+ * Class html
+ *
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class HTML {
     public static function createImage(string $url): string {
         return html_writer::tag(
             'div',
             html_writer::empty_tag(
                 'img',
                 [
-                    'height' => '100px',
-                    'src' => $url
+                    'height' => '100', // Nur die Zahl, ohne "px".
+                    'src' => $url,
+                    'alt' => '', // Leeres alt-Attribut.
                 ]
             ),
             ['class' => 'courseimage']
@@ -52,7 +56,7 @@ class HTML
             [
                 'src' => $page->getIconURL($instance),
                 'style' => 'width: 20px; height: 20px; margin-right: 4px;',
-                'class' => 'iconlarge activityicon'
+                'class' => 'iconlarge activityicon',
             ]
         );
     }
@@ -60,7 +64,9 @@ class HTML
     public static function createSectionHeading($sectionInfo, $course, $sectionCounter): string {
         $description = $sectionInfo->name;
         if (is_null($description) || $description === '') {
-            $formatsectionname = get_string_manager()->string_exists('sectionname', 'format_' . $course->format) ? get_string('sectionname', 'format_' . $course->format) : '';
+            $formatsectionname = get_string_manager()->string_exists('sectionname', 'format_' . $course->format)
+                ? get_string('sectionname', 'format_' . $course->format)
+                : '';
 
             $description = $formatsectionname . ' ' . $sectionCounter;
         }
@@ -77,10 +83,10 @@ class HTML
 
     public static function createSectionOverview(int $distance, string $head, string $body): string {
         return html_writer::tag(
-                'div',
-                $head . $body,
-                ['class' => 'border shadow p-1']
-            ) . str_repeat(html_writer::empty_tag('br'), $distance);
+            'div',
+            $head . $body,
+            ['class' => 'border shadow p-1']
+        ) . str_repeat(html_writer::empty_tag('br'), $distance);
     }
 
     public static function createList(array $data, bool $ordered = false) {

@@ -25,13 +25,15 @@ use report_sphorphanedfiles\Files\FileInfo;
 use require_login_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class Security
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class Security
-{
+class Security {
     /**
      * @var moodle_database
      */
@@ -45,30 +47,29 @@ class Security
         $this->dbM = $dbM;
     }
 
-
     /**
-     * @param Files $fileToBeDeleted
+     * @param \stored_file $fileToBeDeleted
      * @param int $courseId
      * @return bool
      * @throws coding_exception
      */
     public function isCourseIdOfFileSameLikeCourseidOfTheCourse(\stored_file $fileToBeDeleted, int $courseId): bool {
-        // get the contextid of the file
+        // Get the contextid of the file.
         $fileContextId = $fileToBeDeleted->get_contextid();
-        // now get the context of the modul where te file belongs to
+        // Now get the context of the modul where te file belongs to.
         $contextOfFile = \context::instance_by_id($fileContextId, MUST_EXIST);
-        // Now get the context of the course (files that belongs to sectionsummarys for example are allreade coursecontext
+        // Now get the context of the course (files that belongs to sectionsummarys for example are allreade coursecontext.
         $courseContext = $contextOfFile->get_course_context();
 
-        // now get the context of the course the module and therefor the file belongs to
+        // Now get the context of the course the module and therefor the file belongs to.
         $courseContextId = $courseContext->id;
-        // now get the courseid of the file that we get by post and is stored in fileinfo
+        // Now get the courseid of the file that we get by post and is stored in fileinfo.
         $courseIdOfFile = $courseContext->instanceid;
 
-        // Compare the courseID of the file with the course id of the user
+        // Compare the courseID of the file with the course id of the user,
         // echo '$course ' . $course . "<br>";
         // echo '$courseIdOfFile ' . $courseIdOfFile . "<br>";
-        // Only if course has the same id as the courseid of the file
+        // Only if course has the same id as the courseid of the file.
         if ($courseId != $courseIdOfFile) {
             return false;
         }
@@ -86,7 +87,7 @@ class Security
      */
     public function allowedToViewReport($courseId, $user): bool {
         $coursecontext = context_course::instance($courseId);
-        // here you can change the roles or capabilities of who can view and delete the orphaned files
+        // Here you can change the roles or capabilities of who can view and delete the orphaned files.
         return has_capability('moodle/course:manageactivities', $coursecontext)
             && has_capability('report/sphorphanedfiles:view', $coursecontext)
             && has_capability('report/sphorphanedfiles:delete', $coursecontext);
@@ -98,17 +99,16 @@ class Security
      * report/sphorphanedfiles:view
      * report/sphorphanedfiles:delete
      *
-     * @param $courseId
-     * @param $user
+     * @param int $courseId
+     * @param stdClass $user
      * @return bool
      * @throws coding_exception
      */
     public function isUserAllowedToDeleteFiles($courseId, $user): bool {
         $coursecontext = context_course::instance($courseId);
-        // here you can change the roles or capabilities of who can view and delete the orphaned files
+        // Here you can change the roles or capabilities of who can view and delete the orphaned files.
         return has_capability('moodle/course:manageactivities', $coursecontext)
             && has_capability('report/sphorphanedfiles:view', $coursecontext)
             && has_capability('report/sphorphanedfiles:delete', $coursecontext);
     }
-
 }

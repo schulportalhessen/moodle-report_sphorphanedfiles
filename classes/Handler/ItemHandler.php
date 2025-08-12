@@ -19,15 +19,17 @@ namespace report_sphorphanedfiles\Handler;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\HTML;
 
-defined('MOODLE_INTERNAL') || die();
-
-abstract class ItemHandler extends Handler
-{
+/**
+ * Class ItemHandler
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class ItemHandler extends Handler {
     protected $implementationmode = 'item';
 
-    /**
-     * @override
-     */
     protected function generateViewFile($orphanedFile) {
         if ($this->implementationmode == 'item') {
             return $this->apiM->files()->generateViewFileForWithItemId($orphanedFile);
@@ -42,26 +44,28 @@ abstract class ItemHandler extends Handler
      */
     public function getFileName(FileInfo $fileInfo) {
         if ('item' === $this->implementationmode) {
-            // Content-Modus
+            // Content-Modus.
             if ($fileInfo->getFileArea() === 'content') {
-                $url = $this->apiM->files()->createURLForFileWithItem($this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash()));
+                $url = $this->apiM->files()->createURLForFileWithItem(
+                    $this->apiM->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash())
+                );
                 return HTML::createLinkInNewTab($url, $fileInfo->getFileName());
             }
         } else {
-            // Intro-Modus
+            // Intro-Modus.
             return $this->getManager()->files()->generateFallbackView(
                 $this->getManager()->files()->getFileUsingPathnamehash($fileInfo->getPathnamehash())
             );
         }
     }
 
-
     /**
      * Set the value of implementationmode
      *
-     * @return  self
+     * @param string $implementationmode
+     * @return $this
      */
-    public function setImplementationmode($implementationmode) {
+    public function setImplementationmode(string $implementationmode): ItemHandler {
         $this->implementationmode = $implementationmode;
 
         return $this;

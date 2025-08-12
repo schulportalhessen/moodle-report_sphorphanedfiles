@@ -24,8 +24,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * This function extends the navigation with the report items
  *
@@ -33,18 +31,26 @@ defined('MOODLE_INTERNAL') || die;
  *
  * @param navigation_node $navigation The navigation node to extend
  * @param stdClass $course The course to object for the report
- * @param stdClass $context The context of the course
+ * @param context $context The context of the course
  */
 function report_sphorphanedfiles_extend_navigation_course($navigation, $course, $context) {
     // Only show node if report is activated AND user has capability.
     $isactive = get_config('report_sphorphanedfiles', 'isactive');
     $isactiveforadmin = get_config('report_sphorphanedfiles', 'isactiveforadmin');
     $isReportActiveForTheUser = ($isactive || ($isactiveforadmin && is_siteadmin()));
-    if ($isReportActiveForTheUser &&
+    if (
+        $isReportActiveForTheUser &&
         has_capability('moodle/course:manageactivities', $context) &&
-        has_capability('report/sphorphanedfiles:view', $context)) {
-        $url = new moodle_url('/report/sphorphanedfiles/index.php', array('id' => $course->id));
-        $navigation->add(get_string('pluginname', 'report_sphorphanedfiles'),
-            $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        has_capability('report/sphorphanedfiles:view', $context)
+    ) {
+        $url = new moodle_url('/report/sphorphanedfiles/index.php', ['id' => $course->id]);
+        $navigation->add(
+            get_string('pluginname', 'report_sphorphanedfiles'),
+            $url,
+            navigation_node::TYPE_SETTING,
+            null,
+            null,
+            new pix_icon('i/report', '')
+        );
     }
 }

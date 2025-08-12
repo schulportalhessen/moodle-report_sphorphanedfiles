@@ -16,26 +16,25 @@
 
 namespace report_sphorphanedfiles\View;
 
-use Dompdf\Exception;
 use stdClass;
 use moodle_database;
 use context_course;
-
 use report_sphorphanedfiles\Files\Files;
 use report_sphorphanedfiles\Files\FileInfo;
 use report_sphorphanedfiles\Manager;
 use report_sphorphanedfiles\Misc;
 use report_sphorphanedfiles\HTML;
-
 use UnexpectedValueException;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class OrphanedView
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class OrphanedView
-{
+class OrphanedView {
     private $page;
 
     /**
@@ -59,7 +58,7 @@ class OrphanedView
     private $afterDeletion = false;
 
     /**
-     * indicates if a course uses gridformat-plugin
+     * Indicates if a course uses gridformat-plugin
      *
      * @var bool
      */
@@ -88,7 +87,7 @@ class OrphanedView
     }
 
     /**
-     * if the page is opened with a POST request,
+     * If the page is opened with a POST request,
      * this means the user has confirmed to delete a single orphaned file
      * We have to be sure that the submitted filedata were not manipulated, the file belongs to the course and the user
      * is allowed to delete the file.
@@ -99,43 +98,39 @@ class OrphanedView
      * @throws require_login_exception
      */
     public function deleteOrphanedFile(): void {
-        // ToDo: Darf user überhautp löschen
-
-
-        // Read all post-parameter as required parameter and for each parameter check
+        // Read all post-parameter as required parameter and for each parameter check-
         // - type
         // - length
-        // ToDo: some more securitychecks on the Post-Parameter
-        $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);//VARCHAR(40)
+        // ToDo: some more securitychecks on the Post-Parameter.
+        $pathnamehash = required_param('pathnamehash', PARAM_ALPHANUM);
         if (strlen($pathnamehash) > 40) {
             throw new UnexpectedValueException('wrong pathnamehash');
             return;
         }
 
-        $contextId = required_param('contextId', PARAM_INT);//BIGINT(10)
-        // $contextId = filter_var($contextId, FILTER_SANITIZE_NUMBER_INT);
+        $contextId = required_param('contextId', PARAM_INT);
 
-        $component = required_param('component', PARAM_TEXT);//VARCHAR(100)
+        $component = required_param('component', PARAM_TEXT);
         if (strlen($component) > 100) {
             throw new UnexpectedValueException('wrong component');
             return;
         }
 
-        $filearea = required_param('filearea', PARAM_TEXT);//VARCHAR(50)
+        $filearea = required_param('filearea', PARAM_TEXT);
         if (strlen($filearea) > 50) {
             throw new UnexpectedValueException('wrong filearea');
             return;
         }
 
-        $itemId = required_param('itemId', PARAM_INT);//BIGINT(10)
+        $itemId = required_param('itemId', PARAM_INT);
 
-        $filepath = required_param('filepath', PARAM_TEXT);//VARCHAR(255)
+        $filepath = required_param('filepath', PARAM_TEXT);
         if (strlen($filepath) > 255) {
             throw new UnexpectedValueException('wrong filepath');
             return;
         }
 
-        $filename = required_param('filename', PARAM_TEXT);//VARCHAR(255)
+        $filename = required_param('filename', PARAM_TEXT);
         if (strlen($filename) > 255) {
             throw new UnexpectedValueException('wrong filename');
             return;
@@ -151,16 +146,15 @@ class OrphanedView
         $postDataFile['filename'] = $filename;
         $serialisation_PostDataFile = (new FileInfo($postDataFile))->toString();
 
-        // **********************************************************************************************
-        // Get the file that might should be deleted
+        // Get the file that might should be deleted.
         $fileToBeDeleted = (new Files())->getFileStorage()->get_file_by_hash($pathnamehash);
         if (!$fileToBeDeleted) {
-            // If file was already deleted
+            // If file was already deleted.
             throw new UnexpectedValueException('file not found');
             return;
         }
 
-        // get the contextid of the file
+        // Get the contextid of the file.
         $dataFileToBeDeleted = [];
         $dataFileToBeDeleted['pathnamehash'] = $fileToBeDeleted->get_pathnamehash();
         $dataFileToBeDeleted['contextId'] = $fileToBeDeleted->get_contextid();
@@ -172,10 +166,9 @@ class OrphanedView
         // Serialize in order to be able to compare with the $fileID.
         $serialisation_FileToBeDeleted = (new FileInfo($dataFileToBeDeleted))->toString();
 
-        // **********************************************************************************************
-        // compare file from Post with $fileToBeDeleted-Information
+        // Compare file from Post with $fileToBeDeleted-Information.
         if ($serialisation_FileToBeDeleted != $serialisation_PostDataFile) {
-            // files are not equal ...
+            // Files are not equal ...
             throw new UnexpectedValueException('wrong value found');
             return;
         }
@@ -198,18 +191,19 @@ class OrphanedView
             $sectionInfo,
             $this->user,
             $this->courseId,
-            '' // Intentionally left blank: In case of a section summary, there is no iconHtml information
+            '' // Intentionally left blank: In case of a section summary, there is no iconHtml information.
         );
 
         $modInfo = $sectionInfo->modinfo;
 
-        foreach ($modInfo->instances as $instances) {
-            foreach ($instances as $instance) {
-                if ($sectionInfo->id === $instance->section) {
-                    if ($instance->deletioninprogress !== '1') {
-                        if ($this->apiM->handler()->hasHandlerFor($instance)) {
-                            $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($instance)
-                                ->bind($this->user, $this->courseId, $instance, $this->getPage())
+        // ToDo: Redundante Itteration refactorn.
+        foreach ($modInfo->get_instances() as $moduleinstances) {
+            foreach ($moduleinstances as $cm) {
+                if ($sectionInfo->id === $cm->sectionid) {
+                    if ($cm->deletioninprogress !== '1') {
+                        if ($this->apiM->handler()->hasHandlerFor($cm)) {
+                            $viewOrphanedFiles = $this->apiM->handler()->getHandlerFor($cm)
+                                ->bind($this->user, $this->courseId, $cm, $this->getPage())
                                 ->addOrphans($viewOrphanedFiles);
                         }
                     }
@@ -223,21 +217,31 @@ class OrphanedView
     public function createOrphansList($sectionInfo): string {
         $viewOrphanedFiles = $this->listOrphansForSection($sectionInfo);
         $cleanedViewOrphanedFiles = [];
-        // Do not mark plugin gridlayout files as orphaned
+        // Do not mark plugin gridlayout files as orphaned.
         foreach ($viewOrphanedFiles ?? [] as $viewOrphanedFile) {
-            if (!($this->courseFormatGridEnabled && isset($viewOrphanedFile['isGridlayoutFile']) && $viewOrphanedFile['isGridlayoutFile'])) {
+            if (
+                !($this->courseFormatGridEnabled && isset($viewOrphanedFile['isGridlayoutFile']) &&
+                    $viewOrphanedFile['isGridlayoutFile'])
+            ) {
                 $cleanedViewOrphanedFiles[] = $viewOrphanedFile;
             }
         }
 
         if (!empty($cleanedViewOrphanedFiles)) {
-            $translations = Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles');
-            $translations['header'] = Misc::translate(['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'], 'report_sphorphanedfiles', 'header.');
+            $translations = Misc::translate(
+                ['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'],
+                'report_sphorphanedfiles'
+            );
+            $translations['header'] = Misc::translate(
+                ['modName', 'content', 'filename', 'preview', 'tool', 'moduleContent', 'code'],
+                'report_sphorphanedfiles',
+                'header.'
+            );
             $data = [
                 'orphanedFilesList' => $cleanedViewOrphanedFiles,
-                'translation' => $translations
+                'translation' => $translations,
             ];
-            // $dummy = json_encode($data);
+            // Temporarily disabled: $dummy = json_encode($data).
             return $this->getPage()->getOutput()->render_from_template(
                 'report_sphorphanedfiles/sectionTable',
                 $data
@@ -248,6 +252,8 @@ class OrphanedView
     }
 
     /**
+     * Initialize.
+     *
      * @throws coding_exception
      * @throws dml_exception
      * @throws moodle_exception
@@ -263,21 +269,24 @@ class OrphanedView
             $this->user
         );
         echo $this->getPage()->getOutput()->header();
-        // Render content above the table
+        // Render content above the table.
         $data = [
             'title' => $this->getPage()->getTitle(),
             '$userAllowedToDeleteFiles' => $userAllowedToDeleteFiles,
             'afterDeletion' => $this->afterDeletion,
             'deleteMessage' => get_string('deleteMessage', 'report_sphorphanedfiles'),
-            'translation' => Misc::translate(['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'], 'report_sphorphanedfiles')
+            'translation' => Misc::translate(
+                ['isallowedtodeleteallfiles', 'description', 'isgridlayoutfilehint'],
+                'report_sphorphanedfiles'
+            ),
         ];
-        // $dummy = json_encode($data);
+        // Temporarily disabled: $dummy = json_encode($data).
         echo $this->getPage()->getOutput()->render_from_template(
             'report_sphorphanedfiles/report',
             $data
         );
 
-        // Now render each section
+        // Now render each section.
         $sectionCounter = 0;
         foreach ($this->getPage()->getCourseInfo()->get_section_info_all() as $sectionInfo) {
             echo HTML::createSectionOverview(

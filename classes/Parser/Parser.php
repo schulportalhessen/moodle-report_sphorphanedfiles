@@ -14,9 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_sphorphanedfiles\Parser;
+/**
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-defined('MOODLE_INTERNAL') || die();
+namespace report_sphorphanedfiles\Parser;
 
 //
 // Preparations for later PHP 8 transition.
@@ -38,15 +44,16 @@ if (!function_exists('str_contains')) {
 
 /**
  * Class Parser
+ *
+ * @package report_sphorphanedfiles
  */
-class Parser
-{
+class Parser {
     /**
      * @param string $htmlContent
      * @return array|null
      */
     public function extractFileNamesFromString(string $htmlContent): ?array {
-        // search for all images
+        // Search for all images.
         preg_match_all("/<img\s.*?src=(?:'|\")([^'\">]+)(?:'|\")/", $htmlContent, $matchesImg);
 
         $files = [];
@@ -54,13 +61,13 @@ class Parser
             $files[] = urldecode($usedFile);
         }
 
-        // search for all links
+        // Search for all links.
         preg_match_all("/<a\s.*?href=(?:'|\")([^'\">]+)(?:'|\")/", $htmlContent, $matchesHref);
         foreach ($matchesHref[1] ?? [] as $usedFile) {
             $files[] = urldecode($usedFile);
         }
 
-        // search all links in text
+        // Search all links in text.
         $urlstart = '(?:http(s)?://|(?<!://)(www\.))';
         $domainsegment = '(?:[\pLl0-9][\pLl0-9-]*[\pLl0-9]|[\pLl0-9])';
         $numericip = '(?:(?:[0-9]{1,3}\.){3}[0-9]{1,3})';
@@ -102,8 +109,7 @@ class Parser
                 ) {
                     // This is NOT an orphaned file -- it is used in the content -- so
                     // it is removed from the list.
-                    //
-                    // TODO: Check if the file is an alias --> SQL query?
+                    // ToDo: Check if the file is an alias ... SQL query.
                     unset($allFiles[$index]);
                 }
             }

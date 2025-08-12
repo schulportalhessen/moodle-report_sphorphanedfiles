@@ -16,13 +16,18 @@
 
 namespace report_sphorphanedfiles;
 
-defined('MOODLE_INTERNAL') || die();
-
-class Misc
-{
+/**
+ * Class Misc
+ *
+ * @package report_sphorphanedfiles
+ * @copyright   Schulportal Hessen (SPH)
+ * @author      Andreas Schenkel <andreas.schenkel@schulportal.hessen.de>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class Misc {
     /**
-     * @param stored_file $storedFile
-     * @return float
+     * @param int $byte
+     * @return int|string
      */
     public static function convertByteInMegabyte(int $byte) {
         if ($byte === 0) {
@@ -34,9 +39,9 @@ class Misc
     }
 
     public static function translate($data, $translationFile, $prefix = "") {
-        foreach ($data as $item)
+        foreach ($data as $item) {
             $result[$item] = get_string($prefix . $item, $translationFile);
-
+        }
         return $result;
     }
 }
