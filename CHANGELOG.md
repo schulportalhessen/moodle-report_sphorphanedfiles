@@ -1,4 +1,7 @@
 ## Changelog ##
+[v2.0.7]
+- Switch to one branch for moodle 4.x and 5.0 MOODLE_500_STABLE
+- bump version
 
 [v2.0.6]
 - Branches for MOODLE_401_STABLE and MOODLE_405_STABLE and MOODLE_500_STABLE
